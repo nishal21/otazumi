@@ -230,15 +230,13 @@ vercel
 
 ## 📖 Documentation
 
-Comprehensive guides for all features:
+All documentation is included in this README. For specific topics:
 
-| Document | Description |
-|----------|-------------|
-| **[EMAIL_SYSTEM.md](EMAIL_SYSTEM.md)** | Complete email system setup and configuration |
-| **[PROFILE_SYSTEM.md](PROFILE_SYSTEM.md)** | User profiles, avatars, and NeonDB setup |
-| **[REGISTRATION_SYSTEM.md](REGISTRATION_SYSTEM.md)** | Daily signup limits and email quota management |
-| **[PROXY_SETUP.md](PROXY_SETUP.md)** | CORS proxy and worker configuration |
-| **[FAQ.md](FAQ.md)** | Frequently asked questions |
+- **Email System**: See [Email Configuration](#️-configuration) section below
+- **User Profiles**: 20 anime avatars, cloud sync with NeonDB, local storage support
+- **Registration Limits**: 300 signups/day to maintain email reliability (Gmail 500/day quota)
+- **CORS Proxy**: Required for streaming - see [Required External Services](#required-external-services)
+- **FAQ**: Check the FAQ section on the live website
 
 ## ⚙️ Configuration
 
