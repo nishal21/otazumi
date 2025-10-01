@@ -1,0 +1,116 @@
+.swiper {
+  width: 100%;
+}
+.swiper-slide {
+  font-size: 18px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+}
+.button-prev,
+.button-next {
+  width: 36px;
+  height: 36px;
+  background-color: #1a1a1a;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.button-prev:hover,
+.button-next:hover {
+  background-color: #2a2a2a;
+}
+
+.button-prev::after,
+.button-next::after {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border: 2px solid #ffffff;
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.button-prev::after {
+  transform: rotate(-135deg);
+  margin-left: 3px;
+}
+
+.button-next::after {
+  transform: rotate(45deg);
+  margin-right: 3px;
+}
+
+.swiper-horizontal > .swiper-pagination-bullets {
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: auto !important;
+  display: flex !important;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-pagination-bullet {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1 !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #ffbade !important;
+  width: 24px !important;
+  border-radius: 12px !important;
+}
+
+.swiper-pagination {
+  bottom: 20px !important;
+}
+
+.swiper-pagination-bullet {
+  background: white !important;
+  opacity: 0.5;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+}
+
+@media only screen and (max-width: 575px) {
+  .swiper-horizontal > .swiper-pagination-bullets {
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    display: flex !important;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row !important;
+    height: auto !important;
+  }
+  .button-prev,
+  .button-next {
+    width: 32px;
+    height: 32px;
+  }
+  .swiper-pagination-bullet {
+    width: 6px !important;
+    height: 6px !important;
+  }
+  .swiper-pagination-bullet-active {
+    width: 16px !important;
+    border-radius: 8px !important;
+  }
+}

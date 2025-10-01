@@ -1,0 +1,17 @@
+{
+  "name": "cors-proxy",
+  "version": "1.0.0",
+  "description": "Simple CORS proxy for Otazumi anime streaming",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "keywords": ["cors", "proxy", "cloudflare-workers"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hono": "^4.9.9"
+  }
+}
