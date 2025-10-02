@@ -1,6 +1,6 @@
 import { FaChevronLeft } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning } from "@fortawesome/free-solid-svg-icons";
+import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "@/src/context/LanguageContext";
 import { useAuth } from "@/src/context/AuthContext";
 import { useEffect, useRef } from "react";
@@ -21,6 +21,7 @@ const MENU_ITEMS = [
   { name: "OVAs", path: "/ova", icon: faCirclePlay },
   { name: "ONAs", path: "/ona", icon: faPlay },
   { name: "Specials", path: "/special", icon: faClock },
+  { name: "❤️ Support Developer", path: "/support", icon: faHandHoldingHeart, highlight: true },
 ];
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -130,10 +131,10 @@ const Sidebar = ({ isOpen, onClose }) => {
               <Link
                 key={index}
                 to={item.path}
-                className="menu-item"
+                className={`menu-item ${item.highlight ? 'bg-gradient-to-r from-pink-600/20 to-purple-600/20 border border-pink-500/30 hover:from-pink-600/30 hover:to-purple-600/30' : ''}`}
               >
-                <FontAwesomeIcon icon={item.icon} className="text-lg w-5" />
-                <span className="font-medium">{item.name}</span>
+                <FontAwesomeIcon icon={item.icon} className={`text-lg w-5 ${item.highlight ? 'text-pink-400' : ''}`} />
+                <span className={`font-medium ${item.highlight ? 'text-pink-300' : ''}`}>{item.name}</span>
               </Link>
             ))}
           </nav>

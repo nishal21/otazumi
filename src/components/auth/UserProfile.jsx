@@ -27,6 +27,7 @@ import { UserDataService } from '../../services/userDataService';
 import { useLanguage } from '../../context/LanguageContext';
 import { AuthService } from '../../services/authService';
 import { DownloadService } from '../../services/downloadService';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import AvatarSelector from './AvatarSelector';
 import { getAvatarById, defaultAvatar } from '../../config/avatars';
 import Avatar from '../ui/Avatar/Avatar';
@@ -171,6 +172,7 @@ const EmailVerificationStatus = ({ user }) => {
 const UserProfile = ({ isOpen, onClose }) => {
   const { user, isAuthenticated, logout, updatePreferences, updateUser } = useAuth();
   const { language } = useLanguage();
+  
   const [activeTab, setActiveTab] = useState('profile');
   const [favorites, setFavorites] = useState([]);
   const [watchlist, setWatchlist] = useState([]);
@@ -178,6 +180,10 @@ const UserProfile = ({ isOpen, onClose }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAvatarSelectorOpen, setIsAvatarSelectorOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(defaultAvatar);
+  
+  // Prevent body scroll when modal is open, but only if AvatarSelector is not open
+  // AvatarSelector handles its own scroll locking
+  useBodyScrollLock(isOpen && !isAvatarSelectorOpen);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
   const [saveSuccess, setSaveSuccess] = useState(false);

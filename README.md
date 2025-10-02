@@ -9,6 +9,12 @@
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4.2-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 
+### ❤️ Support the Developer
+
+[![GitHub Sponsors](https://img.shields.io/badge/GitHub-Sponsors-EA4AAA?style=for-the-badge&logo=githubsponsors)](https://github.com/sponsors/nishal21)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/kingtanjiro)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/demon_king)
+
 A modern, feature-rich anime streaming web application built with React, Vite, and Tailwind CSS. Watch thousands of anime series and movies with high-quality streaming, filler episode detection, subtitle downloads, and personalized profiles.
 
 [🌟 Features](#-features) • [🚀 Quick Start](#-quick-start) • [📖 Documentation](#-documentation) • [🛠️ Tech Stack](#️-tech-stack) • [📝 License](#-license)
@@ -43,7 +49,9 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 - **Independent Feature** - Download without streaming - perfect for offline prep
 
 ### 👤 User Profiles & Authentication
-- **20 Anime Avatars** - Choose from iconic anime character-inspired profile pictures
+- **75 Anime Avatars** - Choose from iconic anime character-inspired profile pictures with character-specific traits
+- **Anime Series Filter** - Browse avatars by 23 anime series (Naruto, One Piece, Dragon Ball, etc.)
+- **Character Traits** - Each avatar has unique traits (e.g., NarutoOrangeNinjaFoxWhiskers, GokuOrangeSaiyanKamehameha)
 - **Cloud Sync** - Sync data across devices when logged in (NeonDB)
 - **Local Storage** - Works fully offline without account
 - **Favorites Management** - Save and organize your anime collection
@@ -64,16 +72,23 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 - **Daily Signup Limit** - 300 registrations/day to maintain email reliability
 
 ### 🎨 User Experience
-- **Dark Theme** - Beautiful gradient design easy on the eyes
+- **Dark Theme** - Beautiful gradient design easy on the eyes with consistent black background
 - **Responsive Design** - Works perfectly on mobile, tablet, and desktop
 - **Filler Episode Indicators** - Orange/amber color coding, badges, and info tooltips
 - **Social Media Preview** - Rich link previews with images on Discord, Twitter, Facebook, WhatsApp
-- **PWA Support** - Install as native app on any device
+- **PWA Support** - Install as native app on any device with custom install prompt
 - **Offline Capability** - Service worker caches for faster loading
 - **Prebuilt Fallback Cache** - Works even on first visit with slow/no internet
 - **Fast Performance** - Optimized with Vite and lazy loading
-- **Smooth Animations** - Polished transitions and interactions
+- **Smooth Animations** - Polished transitions with framer-motion
 - **No Intrusive Ads** - Clean, distraction-free experience
+
+### ❤️ Support Developer
+- **Multiple Donation Options** - GitHub Sponsors, Buy Me a Coffee, Ko-fi
+- **Dedicated Support Page** - Beautiful page explaining how to support at `/support`
+- **Integrated Links** - Support buttons in footer, sidebar, and PWA install prompt
+- **Non-Intrusive** - Visible but doesn't interrupt user experience
+- **Highlighted Design** - Pink/purple gradients for easy discovery
 
 ### 🔒 Privacy & Security
 - **Encrypted Passwords** - bcrypt hashing with 10 salt rounds
@@ -206,8 +221,9 @@ vercel
 | Technology | Purpose |
 |------------|---------|
 | **FontAwesome 6.6.0** | Icon library |
-| **Lucide React 0.438.0** | Additional icons |
+| **Lucide React 0.447.0** | Additional icons |
 | **Swiper 11.1.12** | Touch-enabled carousels |
+| **Framer Motion** | Smooth animations |
 
 ### Database & Authentication
 | Technology | Purpose |
@@ -237,9 +253,11 @@ vercel
 All documentation is included in this README. For specific topics:
 
 - **Email System**: See [Email Configuration](#️-configuration) section below
-- **User Profiles**: 20 anime avatars, cloud sync with NeonDB, local storage support
+- **User Profiles**: 75 anime avatars with character-specific traits, cloud sync with NeonDB, local storage support
+- **Avatar System**: Browse by 23 anime series, each character has unique trait-based seeds
 - **Registration Limits**: 300 signups/day to maintain email reliability (Gmail 500/day quota)
 - **CORS Proxy**: Required for streaming - see [Required External Services](#required-external-services)
+- **Support Developer**: Visit `/support` page or check footer/sidebar links
 - **FAQ**: Check the FAQ section on the live website
 
 ## ⚙️ Configuration
@@ -361,7 +379,9 @@ npm run lint         # Run ESLint to check code quality
 
 ### 3. Create Profile
 - Click "Sign In" → "Sign Up"
-- Choose from 20 anime avatars
+- Choose from 75 anime avatars (23 series including Naruto, One Piece, Dragon Ball)
+- Filter avatars by anime series using horizontal tabs
+- Each character has unique trait-based appearance
 - Enter email, username, password
 - Verify email (check inbox)
 - Start syncing data across devices
@@ -374,12 +394,20 @@ npm run lint         # Run ESLint to check code quality
 - Import data to restore
 
 ### 5. Account Options
-- Change username and avatar
+- Change username and avatar (browse 75 character-themed options)
 - Reset password via email
 - Delete account with options:
   - Server & Local (complete deletion)
   - Server only (keep local data)
   - Local only (keep server account)
+
+### 6. Support Developer
+- Visit `/support` page for all donation options
+- GitHub Sponsors - Support development through GitHub
+- Buy Me a Coffee - Treat the developer to a coffee
+- Ko-fi - One-time or monthly support
+- Links available in footer and sidebar menu
+- PWA install prompt also includes support links
 
 ## 🤝 Contributing
 
@@ -430,15 +458,36 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - **Netlify**: Deployment and hosting
 - All anime fans who inspired this project! 🎌
 
-## 📞 Support
+## 📞 Support & Contact
 
 - **Live Demo**: [otazumi.netlify.app](https://otazumi.netlify.app)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/otazumi/issues)
-- **Email**: support@otazumi.com
-- **Documentation**: Check `/docs` folder for detailed guides
+- **Issues**: [GitHub Issues](https://github.com/nishal21/otazumi/issues)
+- **Email**: nishalamv@gmail.com
+- **Documentation**: Check this README for detailed guides
+- **Support Developer**: Visit [/support](https://otazumi.netlify.app/support) page
+
+### ❤️ Ways to Support
+
+If you enjoy Otazumi, consider supporting the developer:
+
+- ⭐ **Star on GitHub**: [github.com/nishal21/otazumi](https://github.com/nishal21/otazumi)
+- 💖 **GitHub Sponsors**: [github.com/sponsors/nishal21](https://github.com/sponsors/nishal21)
+- ☕ **Buy Me a Coffee**: [buymeacoffee.com/kingtanjiro](https://buymeacoffee.com/kingtanjiro)
+- 🎁 **Ko-fi**: [ko-fi.com/demon_king](https://ko-fi.com/demon_king)
+- 📢 **Share with friends** and spread the word
+- 🐛 **Report bugs** to help improve the app
+- 💡 **Suggest features** for future development
 
 ## 🚀 Roadmap
 
+### ✅ Recently Added
+- [x] 75 Anime character avatars with trait-based seeds
+- [x] Avatar filter by anime series (23 series)
+- [x] Support developer page and integration
+- [x] Framer Motion animations
+- [x] Enhanced PWA install prompt with support links
+
+### 🔜 Coming Soon
 - [ ] Mobile apps (iOS/Android)
 - [ ] Discord integration
 - [ ] Watch parties (sync viewing)
@@ -454,7 +503,15 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 <div align="center">
 
-Made with ❤️ by the Nishal K 
+Made with ❤️ by Nishal K
+
+### 💖 Support This Project
+
+If you find Otazumi useful, please consider supporting:
+
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-EA4AAA?style=for-the-badge&logo=githubsponsors)](https://github.com/sponsors/nishal21)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/kingtanjiro)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/demon_king)
 
 ⭐ **Star us on GitHub** if you find this project useful! ⭐
 

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faEye, faEyeSlash, faUser, faEnvelope, faLock, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../services/authService';
 import { useAuth } from '../../context/AuthContext';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 import AvatarSelector from './AvatarSelector';
 import ForgotPassword from './ForgotPassword';
 import PrivacyNotice from './PrivacyNotice';
@@ -23,6 +24,10 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'login' }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(getRandomAvatar());
   const [isAvatarSelectorOpen, setIsAvatarSelectorOpen] = useState(false);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  
+  // Prevent body scroll when modal is open, but only if child modals are not open
+  // Child modals (ForgotPassword, AvatarSelector) handle their own scroll locking
+  useBodyScrollLock(isOpen && !isForgotPasswordOpen && !isAvatarSelectorOpen);
 
   const { login } = useAuth();
 

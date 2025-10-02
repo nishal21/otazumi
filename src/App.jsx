@@ -1,10 +1,9 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 import { HomeInfoProvider } from "./context/HomeInfoContext";
 import { AuthProvider } from "./context/AuthContext";
+import { PWAProvider } from "./context/PWAContext";
 import Home from "./pages/Home/Home";
 import AnimeInfo from "./pages/animeInfo/AnimeInfo";
 import Profile from "./pages/profile/Profile";
@@ -27,6 +26,7 @@ import ResetPassword from "./pages/resetPassword/ResetPassword";
 import VerifyEmail from "./pages/verifyEmail/VerifyEmail";
 import FAQ from "./pages/faq/FAQ";
 import SubtitleDownload from "./pages/subtitle-download/SubtitleDownload";
+import Support from "./pages/support/Support";
 
 function App() {
   const location = useLocation();
@@ -40,11 +40,12 @@ function App() {
   const isSplashScreen = location.pathname === "/";
 
   return (
-    <AuthProvider>
-      <HomeInfoProvider>
-        <div className="app-container px-4 lg:px-10" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
-          <main className="content max-w-[2048px] mx-auto w-full">
-            {!isSplashScreen && <Navbar />}
+    <PWAProvider>
+      <AuthProvider>
+        <HomeInfoProvider>
+          <div className="app-container px-4 lg:px-10" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
+            <main className="content max-w-[2048px] mx-auto w-full">
+              {!isSplashScreen && <Navbar />}
             <Routes>
             <Route path="/" element={<SplashScreen />} />
             <Route path="/home" element={<Home />} />
@@ -63,6 +64,7 @@ function App() {
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/subtitle-download" element={<SubtitleDownload />} />
+            <Route path="/support" element={<Support />} />
             {/* Render category routes */}
             {categoryRoutes.map((path) => (
               <Route
@@ -88,11 +90,10 @@ function App() {
           </Routes>
           {!isSplashScreen && <Footer />}
         </main>
-        <Analytics />
-        <SpeedInsights />
       </div>
     </HomeInfoProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </PWAProvider>
   );
 }
 

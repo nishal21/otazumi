@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faEnvelope, faArrowLeft, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../services/authService';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 const ForgotPassword = ({ isOpen, onClose, onBackToLogin }) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  
+  // Prevent body scroll when modal is open
+  useBodyScrollLock(isOpen);
 
   if (!isOpen) return null;
 

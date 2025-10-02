@@ -1,79 +1,14 @@
-import { useState, useEffect } from 'react';
 import { Download } from 'lucide-react';
+import { usePWA } from '../../context/PWAContext';
 
 const PWAInstallButton = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [isInstalled, setIsInstalled] = useState(false);
-
-  useEffect(() => {
-    console.log('PWAInstallButton: Component mounted');
-    
-    // Check if app is already installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    console.log('PWAInstallButton: Is installed?', isStandalone);
-    
-    if (isStandalone) {
-      setIsInstalled(true);
-      return;
-    }
-
-    // Listen for the beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e) => {
-      console.log('PWAInstallButton: beforeinstallprompt event received');
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
-
-    // Check if app was installed
-    const handleAppInstalled = () => {
-      setIsInstalled(true);
-      setDeferredPrompt(null);
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
-    };
-  }, []);
+  const { isInstalled, promptInstall } = usePWA();
 
   const handleInstall = async () => {
-    if (!deferredPrompt) {
-      // Fallback instructions for different browsers
-      const userAgent = navigator.userAgent.toLowerCase();
-      let message = 'To install this app:\n\n';
-      
-      if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
-        message += '1. Tap the Share button (square with arrow)\n2. Scroll down and tap "Add to Home Screen"\n3. Tap "Add" to confirm';
-      } else if (userAgent.includes('android')) {
-        message += '1. Tap the menu button (⋮)\n2. Tap "Install App" or "Add to Home Screen"\n3. Tap "Install" to confirm';
-      } else {
-        message += 'Desktop Chrome/Edge: Look for the install icon (⊕) in the address bar\n\nOr use the browser menu → "Install OTAZUMI"';
-      }
-      
-      alert(message);
-      return;
-    }
-
-    // Show the install prompt
-    deferredPrompt.prompt();
-    
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    console.log(`User ${outcome} the install prompt`);
-    
-    if (outcome === 'accepted') {
-      setIsInstalled(true);
-    }
-    
-    // Clear the deferredPrompt
-    setDeferredPrompt(null);
+    await promptInstall();
   };
 
-  console.log('PWAInstallButton: Render - isInstalled:', isInstalled, 'deferredPrompt:', !!deferredPrompt);
+  console.log('PWAInstallButton: Render - isInstalled:', isInstalled);
 
   // Don't show button if already installed
   if (isInstalled) {

@@ -10,6 +10,7 @@ import { useHomeInfo } from "@/src/context/HomeInfoContext.jsx";
 import Schedule from "@/src/components/schedule/Schedule";
 import ContinueWatching from "@/src/components/continue/ContinueWatching";
 import TabbedAnimeSection from "@/src/components/tabbed-anime/TabbedAnimeSection";
+import PWAInstallPrompt from "@/src/components/pwa-install/PWAInstallPrompt";
 
 function Home() {
   const { homeInfo, homeInfoLoading, error } = useHomeInfo();
@@ -44,6 +45,9 @@ function Home() {
   
   return (
     <>
+      {/* PWA Install Prompt - Shows once a week */}
+      <PWAInstallPrompt />
+      
       <div className="pt-16 w-full min-h-screen" style={{ backgroundColor: '#0a0a0a' }}>
         <Spotlight spotlights={homeInfo.spotlights} />
         <div className="mt-6">

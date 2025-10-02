@@ -1,18 +1,23 @@
 import logoTitle from "@/src/config/logoTitle.js";
 import website_name from "@/src/config/website.js";
 import { Link } from "react-router-dom";
+import PWAInstallButton from "@/src/components/pwa-install/PWAInstallButton";
 
 function Footer() {
   return (
     <footer className="w-full mt-16">
       {/* Logo Section */}
       <div className="max-w-[1920px] mx-auto px-4">
-        <div className="flex justify-center sm:justify-start items-center gap-6">
+        <div className="flex justify-center sm:justify-between items-center gap-6 flex-wrap">
           <img
             src="/footer.svg"
             alt={logoTitle}
             className="h-[100px] w-[200px] object-contain"
           />
+          {/* PWA Install Button */}
+          <div className="flex items-center">
+            <PWAInstallButton />
+          </div>
         </div>
       </div>
 
@@ -72,6 +77,17 @@ function Footer() {
               >
                 Contact
               </Link>
+              <Link
+                to="/support"
+                className="text-sm text-pink-400 hover:text-pink-300 transition-colors font-semibold"
+              >
+                ❤️ Support Developer
+              </Link>
+            </div>
+            
+            {/* Support Links */}
+            <div className="flex gap-4 flex-wrap justify-center sm:justify-start mt-4 pt-4 border-t border-white/5">
+              
             </div>
           </div>
 
