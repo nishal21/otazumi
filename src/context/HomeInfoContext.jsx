@@ -10,13 +10,21 @@ export const HomeInfoProvider = ({ children }) => {
     useEffect(() => {
         const fetchHomeInfo = async () => {
             try {
+                console.log('🚀 HomeInfoContext - Starting to fetch home info...');
                 const data = await getHomeInfo();
+                console.log('✅ HomeInfoContext - Data fetched successfully:', data ? 'exists' : 'null');
                 setHomeInfo(data);
             } catch (err) {
-                console.error("Error fetching home info:", err);
+                console.error("❌ HomeInfoContext - Error fetching home info:", err);
+                console.error("Error details:", {
+                    message: err.message,
+                    status: err.response?.status,
+                    statusText: err.response?.statusText
+                });
                 setError(err);
             } finally {
                 setHomeInfoLoading(false);
+                console.log('🏁 HomeInfoContext - Loading finished');
             }
         };
         fetchHomeInfo();

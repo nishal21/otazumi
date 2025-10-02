@@ -67,7 +67,7 @@ const TabbedAnimeSectionLoader = () => (
 
 function HomeLoader() {
   return (
-    <div className="pt-16 w-full bg-[#0a0a0a]">
+    <div className="pt-16 w-full min-h-screen bg-[#0a0a0a]">
       <SpotlightLoader />
       <div className="mt-6">
         <GenreLoader />

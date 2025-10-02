@@ -13,12 +13,22 @@ import TabbedAnimeSection from "@/src/components/tabbed-anime/TabbedAnimeSection
 
 function Home() {
   const { homeInfo, homeInfoLoading, error } = useHomeInfo();
+  
+  console.log('Home - Loading:', homeInfoLoading, 'Error:', error, 'Data:', homeInfo ? 'exists' : 'null');
+  
   if (homeInfoLoading) return <Loader type="home" />;
-  if (error) return <Error />;
-  if (!homeInfo) return <Error error="404" />;
+  if (error) {
+    console.error('Home - Error loading:', error);
+    return <Error />;
+  }
+  if (!homeInfo) {
+    console.warn('Home - No data available');
+    return <Error error="404" />;
+  }
+  
   return (
     <>
-      <div className="pt-16 w-full">
+      <div className="pt-16 w-full min-h-screen bg-[#0a0a0a]">
         <Spotlight spotlights={homeInfo.spotlights} />
         <div className="mt-6">
           <Genre data={homeInfo.genres} />
