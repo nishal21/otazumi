@@ -13,7 +13,7 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 
 [🌟 Features](#-features) • [🚀 Quick Start](#-quick-start) • [📖 Documentation](#-documentation) • [🛠️ Tech Stack](#️-tech-stack) • [📝 License](#-license)
 
-![Otazumi Banner](public/splash.png)
+![Otazumi Banner](public/preview.png)
 
 </div>
 
@@ -67,8 +67,10 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 - **Dark Theme** - Beautiful gradient design easy on the eyes
 - **Responsive Design** - Works perfectly on mobile, tablet, and desktop
 - **Filler Episode Indicators** - Orange/amber color coding, badges, and info tooltips
+- **Social Media Preview** - Rich link previews with images on Discord, Twitter, Facebook, WhatsApp
 - **PWA Support** - Install as native app on any device
 - **Offline Capability** - Service worker caches for faster loading
+- **Prebuilt Fallback Cache** - Works even on first visit with slow/no internet
 - **Fast Performance** - Optimized with Vite and lazy loading
 - **Smooth Animations** - Polished transitions and interactions
 - **No Intrusive Ads** - Clean, distraction-free experience

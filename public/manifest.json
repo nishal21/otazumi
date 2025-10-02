@@ -2,11 +2,11 @@
   "id": "/",
   "name": "Otazumi - Anime Streaming",
   "short_name": "Otazumi",
-  "description": "A modern anime streaming webapp with high-quality videos and user-friendly interface",
+  "description": "Watch thousands of anime series and movies for free. HD streaming, subtitle downloads, personalized profiles, and ad-free experience.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
+  "theme_color": "#0a9bdb",
   "orientation": "portrait",
   "scope": "/",
   "icons": [
@@ -25,14 +25,14 @@
   ],
   "screenshots": [
     {
-      "src": "splash.png",
+      "src": "preview.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Otazumi homepage with featured anime"
     },
     {
-      "src": "splash.png",
+      "src": "mobile.png",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow",
