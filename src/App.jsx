@@ -42,7 +42,7 @@ function App() {
   return (
     <AuthProvider>
       <HomeInfoProvider>
-        <div className="app-container px-4 lg:px-10">
+        <div className="app-container px-4 lg:px-10" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
           <main className="content max-w-[2048px] mx-auto w-full">
             {!isSplashScreen && <Navbar />}
             <Routes>

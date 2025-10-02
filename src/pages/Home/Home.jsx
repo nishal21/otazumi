@@ -16,19 +16,35 @@ function Home() {
   
   console.log('Home - Loading:', homeInfoLoading, 'Error:', error, 'Data:', homeInfo ? 'exists' : 'null');
   
-  if (homeInfoLoading) return <Loader type="home" />;
+  if (homeInfoLoading) {
+    return (
+      <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
+        <Loader type="home" />
+      </div>
+    );
+  }
+  
   if (error) {
     console.error('Home - Error loading:', error);
-    return <Error />;
+    return (
+      <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
+        <Error />
+      </div>
+    );
   }
+  
   if (!homeInfo) {
     console.warn('Home - No data available');
-    return <Error error="404" />;
+    return (
+      <div style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
+        <Error error="404" />
+      </div>
+    );
   }
   
   return (
     <>
-      <div className="pt-16 w-full min-h-screen bg-[#0a0a0a]">
+      <div className="pt-16 w-full min-h-screen" style={{ backgroundColor: '#0a0a0a' }}>
         <Spotlight spotlights={homeInfo.spotlights} />
         <div className="mt-6">
           <Genre data={homeInfo.genres} />
