@@ -151,8 +151,16 @@
 .menu-items {
   width: 100%;
   padding: 0.5rem;
+  padding-bottom: 6rem;
   flex: 1;
   overflow-y: auto;
+}
+
+/* Mobile safe area support for devices with bottom navigation */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .menu-items {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+  }
 }
 
 .menu-item {
