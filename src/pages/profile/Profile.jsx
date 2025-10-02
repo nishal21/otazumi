@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { LocalStorageService } from '../../services/localStorageService';
+import { UserDataService } from '../../services/userDataService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHeart, 
@@ -21,27 +22,52 @@ const Profile = () => {
   const [watchlist, setWatchlist] = useState([]);
   const [continueWatching, setContinueWatching] = useState([]);
 
+
   useEffect(() => {
     loadUserData();
-  }, []);
+    // eslint-disable-next-line
+  }, [isAuthenticated, user]);
 
-  const loadUserData = () => {
-    setFavorites(LocalStorageService.getFavorites());
-    setWatchlist(LocalStorageService.getWatchlist());
-    setContinueWatching(LocalStorageService.getContinueWatching());
+  const loadUserData = async () => {
+    if (isAuthenticated && user?.id) {
+      // Fetch from server for logged-in users
+      const [favoritesData, watchlistData, continueData] = await Promise.all([
+        UserDataService.getFavorites(user.id),
+        UserDataService.getWatchlist(user.id),
+        UserDataService.getContinueWatching(user.id)
+      ]);
+      setFavorites(favoritesData || []);
+      setWatchlist(watchlistData || []);
+      setContinueWatching(continueData || []);
+    } else {
+      // Fallback to localStorage for guests
+      setFavorites(LocalStorageService.getFavorites());
+      setWatchlist(LocalStorageService.getWatchlist());
+      setContinueWatching(LocalStorageService.getContinueWatching());
+    }
   };
 
-  const handleRemoveFavorite = (animeId) => {
-    LocalStorageService.removeFromFavorites(animeId);
+
+  const handleRemoveFavorite = async (animeId) => {
+    if (isAuthenticated && user?.id) {
+      await UserDataService.removeFromFavorites(user.id, animeId);
+    } else {
+      LocalStorageService.removeFromFavorites(animeId);
+    }
     loadUserData();
   };
 
-  const handleRemoveFromWatchlist = (animeId) => {
-    LocalStorageService.removeFromWatchlist(animeId);
+  const handleRemoveFromWatchlist = async (animeId) => {
+    if (isAuthenticated && user?.id) {
+      await UserDataService.removeFromWatchlist(user.id, animeId);
+    } else {
+      LocalStorageService.removeFromWatchlist(animeId);
+    }
     loadUserData();
   };
 
-  const handleRemoveFromContinue = (episodeId) => {
+  const handleRemoveFromContinue = async (episodeId) => {
+    // Only localStorage for continue watching (server sync not implemented)
     LocalStorageService.removeFromContinueWatching(episodeId);
     loadUserData();
   };
