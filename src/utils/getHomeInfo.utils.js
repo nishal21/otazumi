@@ -1,4 +1,5 @@
 import axios from "axios";
+import fallbackHomeData from "../data/fallbackHomeData";
 
 const CACHE_KEY = "homeInfoCache";
 const CACHE_DURATION = 24 * 60 * 60 * 1000;
@@ -118,12 +119,20 @@ export default async function getHomeInfo() {
   // All retries failed
   console.error('❌ All API attempts failed');
   
-  // If API fails but we have stale cache, use it
+  // Fallback priority:
+  // 1. Use stale cache if available
   if (cachedData && cachedData.data) {
     console.log('🔄 Using stale cache as fallback');
     return cachedData.data;
   }
   
-  // If no cache available, throw the error
-  throw lastError || new Error('Failed to fetch home info');
+  // 2. Use prebuilt fallback data (from your working desktop cache)
+  console.log('📦 Using prebuilt fallback data (no cache available)');
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(fallbackHomeData));
+    console.log('💾 Prebuilt data cached for next time');
+  } catch (e) {
+    console.warn('⚠️ Could not cache prebuilt data:', e);
+  }
+  return fallbackHomeData.data;
 }
