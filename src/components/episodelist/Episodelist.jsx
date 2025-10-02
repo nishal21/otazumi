@@ -4,6 +4,7 @@ import {
   faCirclePlay,
   faList,
   faCheck,
+  faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +27,10 @@ function Episodelist({
   const [episodeNum, setEpisodeNum] = useState(currentEpisode);
   const dropDownRef = useRef(null);
   const [searchedEpisode, setSearchedEpisode] = useState(null);
+  const [showFillerInfo, setShowFillerInfo] = useState(false);
+
+  // Check if there are any filler episodes
+  const hasFillerEpisodes = episodes?.some((item) => item?.filler);
 
   const scrollToActiveEpisode = () => {
     if (activeEpisodeRef.current && listContainerRef.current) {
@@ -55,12 +60,16 @@ function Episodelist({
       if (dropDownRef.current && !dropDownRef.current.contains(event.target)) {
         setShowDropDown(false);
       }
+      // Close filler info popup when clicking outside
+      if (showFillerInfo && !event.target.closest('.filler-info-container')) {
+        setShowFillerInfo(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [showFillerInfo]);
 
   function handleChange(e) {
     const value = e.target.value;
@@ -140,7 +149,39 @@ function Episodelist({
     <div className="flex flex-col w-full h-full">
       <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-2.5 bg-[#1a1a1a] border-b border-[#2a2a2a] max-[600px]:px-2">
         <div className="flex items-center gap-4 max-[600px]:gap-2">
-          <h1 className="text-[14px] font-semibold text-white max-[600px]:text-[13px]">Episodes</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-[14px] font-semibold text-white max-[600px]:text-[13px]">Episodes</h1>
+            {hasFillerEpisodes && (
+              <div className="relative filler-info-container">
+                <button
+                  onClick={() => setShowFillerInfo(!showFillerInfo)}
+                  className="text-amber-400 hover:text-amber-300 transition-colors"
+                  title="Filler episode info"
+                >
+                  <FontAwesomeIcon icon={faInfoCircle} className="text-[12px] max-[600px]:text-[11px]" />
+                </button>
+                {showFillerInfo && (
+                  <div className="absolute top-full left-0 mt-2 w-[280px] bg-[#2a2a2a] border border-amber-800/50 rounded-lg p-3 shadow-xl z-50 max-[600px]:w-[240px] max-[600px]:left-auto max-[600px]:right-0">
+                    <div className="flex items-start gap-2 mb-2">
+                      <div className="w-4 h-4 rounded bg-gradient-to-br from-amber-900/40 to-orange-900/40 border border-amber-800/50 flex-shrink-0 mt-0.5"></div>
+                      <div>
+                        <p className="text-[12px] text-amber-300 font-semibold mb-1 max-[600px]:text-[11px]">Filler Episodes</p>
+                        <p className="text-[11px] text-gray-400 leading-relaxed max-[600px]:text-[10px]">
+                          Episodes marked in <span className="text-amber-400 font-medium">orange/amber</span> are filler content not part of the original manga storyline.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowFillerInfo(false)}
+                      className="mt-2 text-[10px] text-gray-500 hover:text-gray-300 transition-colors max-[600px]:text-[9px]"
+                    >
+                      Close
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
           {totalEpisodes > 100 && (
             <div className="flex items-center">
               <div
@@ -230,16 +271,16 @@ function Episodelist({
                       className={`flex items-center justify-center rounded-lg h-[35px] text-[13px] font-medium cursor-pointer transition-all max-[600px]:h-[30px] max-[600px]:text-[12px] ${
                         item?.filler
                           ? isActive
-                            ? "bg-white text-black"
-                            : "bg-[#2a2a2a] text-gray-400"
-                          : ""
-                      } hover:bg-[#404040] 
-                          hover:text-white
-                       ${
-                         isActive
-                           ? "bg-white text-black ring-1 ring-white"
-                           : "bg-[#2a2a2a] text-gray-400"
-                       } ${isSearched ? "ring-2 ring-white" : ""}`}
+                            ? "bg-white text-black ring-1 ring-amber-500"
+                            : "bg-gradient-to-br from-amber-900/40 to-orange-900/40 text-amber-400 border border-amber-800/50"
+                          : isActive
+                          ? "bg-white text-black ring-1 ring-white"
+                          : "bg-[#2a2a2a] text-gray-400"
+                      } ${
+                        item?.filler
+                          ? "hover:bg-amber-800/60 hover:text-amber-200"
+                          : "hover:bg-[#404040] hover:text-white"
+                      } ${isSearched ? "ring-2 ring-white" : ""}`}
                       onClick={() => {
                         if (episodeNumber) {
                           onEpisodeClick(episodeNumber);
@@ -247,6 +288,7 @@ function Episodelist({
                           setSearchedEpisode(null);
                         }
                       }}
+                      title={item?.filler ? "Filler Episode" : ""}
                     >
                       <span className="transition-colors">
                         {index + selectedRange[0]}
@@ -266,11 +308,19 @@ function Episodelist({
                     key={item?.id}
                     ref={isActive ? activeEpisodeRef : null}
                     className={`w-full px-4 py-2.5 flex items-center justify-start gap-x-4 cursor-pointer transition-all max-[600px]:px-3 max-[600px]:py-2 max-[600px]:gap-x-3 ${
-                      (index + 1) % 2 && !isActive
+                      item?.filler
+                        ? isActive
+                          ? "bg-gradient-to-r from-amber-900/40 to-orange-900/40 border-l-2 border-amber-500"
+                          : "bg-gradient-to-r from-amber-900/20 to-orange-900/20 border-l-2 border-amber-800/50"
+                        : (index + 1) % 2 && !isActive
                         ? "bg-[#202020]"
+                        : isActive
+                        ? "bg-[#2a2a2a]"
                         : "bg-[#1a1a1a]"
-                    } hover:bg-[#2a2a2a] ${
-                      isActive ? "bg-[#2a2a2a]" : ""
+                    } ${
+                      item?.filler
+                        ? "hover:bg-gradient-to-r hover:from-amber-800/50 hover:to-orange-800/50"
+                        : "hover:bg-[#2a2a2a]"
                     } ${isSearched ? "ring-1 ring-white" : ""}`}
                     onClick={() => {
                       if (episodeNumber) {
@@ -280,19 +330,38 @@ function Episodelist({
                       }
                     }}
                   >
-                    <p className={`text-[14px] font-medium max-[600px]:text-[13px] ${isActive ? "text-white" : "text-gray-400"}`}>
+                    <p className={`text-[14px] font-medium max-[600px]:text-[13px] ${
+                      item?.filler
+                        ? "text-amber-400"
+                        : isActive
+                        ? "text-white"
+                        : "text-gray-400"
+                    }`}>
                       {index + 1}
                     </p>
                     <div className="w-full flex items-center justify-between gap-x-[5px]">
-                      <h1 className={`line-clamp-1 text-[14px] transition-colors max-[600px]:text-[13px] ${
-                        isActive ? "text-white font-medium" : "text-gray-400 font-normal"
-                      }`}>
-                        {language === "EN" ? item?.title : item?.japanese_title}
-                      </h1>
+                      <div className="flex items-center gap-x-2 flex-1 min-w-0">
+                        <h1 className={`line-clamp-1 text-[14px] transition-colors max-[600px]:text-[13px] ${
+                          item?.filler
+                            ? "text-amber-300 font-medium"
+                            : isActive
+                            ? "text-white font-medium"
+                            : "text-gray-400 font-normal"
+                        }`}>
+                          {language === "EN" ? item?.title : item?.japanese_title}
+                        </h1>
+                        {item?.filler && (
+                          <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-amber-900/60 text-amber-300 rounded border border-amber-700/50 whitespace-nowrap max-[600px]:text-[9px] max-[600px]:px-1">
+                            FILLER
+                          </span>
+                        )}
+                      </div>
                       {isActive && (
                         <FontAwesomeIcon
                           icon={faCirclePlay}
-                          className="w-[18px] h-[18px] text-white max-[600px]:w-[16px] max-[600px]:h-[16px]"
+                          className={`w-[18px] h-[18px] max-[600px]:w-[16px] max-[600px]:h-[16px] ${
+                            item?.filler ? "text-amber-400" : "text-white"
+                          }`}
                         />
                       )}
                     </div>

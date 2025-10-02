@@ -9,7 +9,7 @@
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4.2-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 
-A modern, feature-rich anime streaming web application built with React, Vite, and Tailwind CSS. Watch thousands of anime series and movies with high-quality streaming, subtitle downloads, and personalized profiles.
+A modern, feature-rich anime streaming web application built with React, Vite, and Tailwind CSS. Watch thousands of anime series and movies with high-quality streaming, filler episode detection, subtitle downloads, and personalized profiles.
 
 [🌟 Features](#-features) • [🚀 Quick Start](#-quick-start) • [📖 Documentation](#-documentation) • [🛠️ Tech Stack](#️-tech-stack) • [📝 License](#-license)
 
@@ -27,6 +27,7 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 - **Advanced Search** - Find anime quickly with powerful search functionality
 - **Multiple Servers** - Automatic fallback if one server fails
 - **Subtitle Support** - Multi-language subtitles with custom styling
+- **Filler Episode Detection** - Clearly marked filler episodes with orange/amber color coding
 - **Continue Watching** - Pick up right where you left off
 - **Latest Updates** - Stay current with new episodes and releases
 - **A-Z Listing** - Browse complete anime catalog alphabetically
@@ -65,6 +66,7 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 ### 🎨 User Experience
 - **Dark Theme** - Beautiful gradient design easy on the eyes
 - **Responsive Design** - Works perfectly on mobile, tablet, and desktop
+- **Filler Episode Indicators** - Orange/amber color coding, badges, and info tooltips
 - **PWA Support** - Install as native app on any device
 - **Offline Capability** - Service worker caches for faster loading
 - **Fast Performance** - Optimized with Vite and lazy loading
@@ -342,6 +344,8 @@ npm run lint         # Run ESLint to check code quality
 - Browse homepage for latest, trending, and popular anime
 - Use search bar to find specific titles
 - Click any anime to view details, episodes, and watch
+- **Identify filler episodes** by orange/amber color and "FILLER" badge
+- Click info icon (ℹ️) next to "Episodes" to learn about fillers
 - Multiple server options with automatic fallback
 - Resume watching from where you left off
 

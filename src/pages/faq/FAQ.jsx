@@ -62,6 +62,10 @@ const FAQ_DATA = {
       answer: "We offer multiple quality options including 360p, 480p, 720p (HD), and 1080p (Full HD). The available quality depends on the source and your internet connection."
     },
     {
+      question: "What are filler episodes and how can I identify them?",
+      answer: "Filler episodes are episodes not based on the original manga storyline. They're created by the anime studio to give the manga time to progress or to explore side stories. On Otazumi, filler episodes are clearly marked with an orange/amber color in the episode list. You'll see a 'FILLER' badge in list view, and the episode numbers will have an orange gradient background in grid view. Click the info icon (ℹ️) next to 'Episodes' for more details. This helps you decide whether to watch or skip them!"
+    },
+    {
       question: "Why is the video buffering or loading slowly?",
       answer: "Buffering can occur due to slow internet connection, server load, or your device performance. Try: lowering the video quality, clearing your browser cache, switching to a different server, or checking your internet speed."
     },
