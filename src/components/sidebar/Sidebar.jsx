@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
 const MENU_ITEMS = [
+  { name: "❤️ Support Developer", path: "/support", icon: faHandHoldingHeart, highlight: true },
   { name: "Home", path: "/home", icon: faHome },
   { name: "My Collection", path: "/profile", icon: faHeart },
   { name: "Download Subtitles", path: "/subtitle-download", icon: faClosedCaptioning },
@@ -21,7 +22,6 @@ const MENU_ITEMS = [
   { name: "OVAs", path: "/ova", icon: faCirclePlay },
   { name: "ONAs", path: "/ona", icon: faPlay },
   { name: "Specials", path: "/special", icon: faClock },
-  { name: "❤️ Support Developer", path: "/support", icon: faHandHoldingHeart, highlight: true },
 ];
 
 const Sidebar = ({ isOpen, onClose }) => {
