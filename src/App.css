@@ -8,12 +8,14 @@ body,
 #root {
   margin: 0;
   padding: 0;
+  background-color: #0a0a0a;
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: #0a0a0a;
 }
 .content {
   width: 100%;
