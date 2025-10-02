@@ -25,6 +25,32 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 
 ---
 
+## 🎯 Recent Updates (October 3, 2025)
+
+### 🆕 What's New
+
+**📊 Statistics Dashboard**
+- Comprehensive watch history tracking system
+- Automatic recording of every episode you watch
+- Detailed analytics with time-based filtering (All Time, Month, Week)
+- Track total hours, episodes, completion rate, and more
+- Works for all users - no login required!
+
+**🎨 UI Improvements**
+- Enhanced splash screen loading animation for better visibility
+- Bigger loader (220px → 180px → 160px responsive sizes)
+- Fixed statistics page heading overlap with navbar
+- Improved mobile experience
+
+**🔧 Technical Enhancements**
+- Watch history automatically records on video play
+- Progress updates every 30 seconds during playback
+- Episodes marked complete at 90% watch time
+- Dual storage system (localStorage + NeonDB)
+- Better error handling and data persistence
+
+---
+
 ## ✨ Features
 
 ### 🎬 Core Streaming Features
@@ -83,12 +109,34 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 - **Smooth Animations** - Polished transitions with framer-motion
 - **No Intrusive Ads** - Clean, distraction-free experience
 
+### 📊 Statistics & Tracking
+- **Watch History Tracking** - Automatically records every episode you watch
+- **Detailed Statistics Dashboard** - View comprehensive watching stats at `/statistics`
+- **Time-based Filtering** - Filter stats by All Time, This Month, or This Week
+- **Watch Time Calculation** - See total hours and episodes watched
+- **Completion Rate** - Track how many episodes you finish
+- **Unique Anime Counter** - Count distinct anime you've watched
+- **Daily Averages** - Average episodes per day statistics
+- **Most Active Day** - Find your most active watching day
+- **Recent Activity** - View last 5 episodes watched with dates
+- **Personalized Insights** - Get achievements and milestones
+- **Progress Tracking** - Records progress every 30 seconds during playback
+- **Completion Detection** - Marks episodes as completed at 90% watch time
+- **Works Without Login** - Statistics available for all users via localStorage
+
 ### ❤️ Support Developer
 - **Multiple Donation Options** - GitHub Sponsors, Buy Me a Coffee, Ko-fi
 - **Dedicated Support Page** - Beautiful page explaining how to support at `/support`
 - **Integrated Links** - Support buttons in footer, sidebar, and PWA install prompt
 - **Non-Intrusive** - Visible but doesn't interrupt user experience
 - **Highlighted Design** - Pink/purple gradients for easy discovery
+
+### 🎨 Enhanced User Interface
+- **Bigger Splash Screen** - Improved loading animation visibility on mobile devices
+- **Optimized Loader Size** - 220px character GIF and 5em text on desktop
+- **Responsive Scaling** - Adaptive sizes for tablet (180px/4em) and mobile (160px/3.5em)
+- **Fixed Navigation Overlap** - Statistics page now has proper top padding
+- **Consistent Dark Theme** - Beautiful black background throughout the app
 
 ### 🔒 Privacy & Security
 - **Encrypted Passwords** - bcrypt hashing with 10 salt rounds
@@ -377,7 +425,18 @@ npm run lint         # Run ESLint to check code quality
 - Choose language from dropdown (8 options)
 - Click "Download Selected" to get VTT files
 
-### 3. Create Profile
+### 3. View Statistics
+- Navigate to "Statistics" in sidebar menu
+- View comprehensive watch history analytics
+- Filter by All Time, This Month, or This Week
+- See total hours watched and episodes completed
+- Track unique anime watched and completion rate
+- Check daily averages and most active day
+- View recent activity with episode details
+- Get personalized insights and achievements
+- **Works without login** - uses localStorage for guest users
+
+### 4. Create Profile
 - Click "Sign In" → "Sign Up"
 - Choose from 75 anime avatars (23 series including Naruto, One Piece, Dragon Ball)
 - Filter avatars by anime series using horizontal tabs
@@ -386,7 +445,7 @@ npm run lint         # Run ESLint to check code quality
 - Verify email (check inbox)
 - Start syncing data across devices
 
-### 4. Manage Data
+### 5. Manage Data
 - Add anime to Favorites (heart icon)
 - Add to Watchlist (bookmark icon)
 - View watch history in profile
@@ -480,7 +539,14 @@ If you enjoy Otazumi, consider supporting the developer:
 
 ## 🚀 Roadmap
 
-### ✅ Recently Added
+### ✅ Recently Added (October 2025)
+- [x] **Statistics Dashboard** - Comprehensive watch history analytics
+- [x] **Auto Watch History Recording** - Tracks every episode automatically
+- [x] **Progress Tracking** - Updates every 30 seconds during playback
+- [x] **Completion Detection** - Marks episodes completed at 90% watch time
+- [x] **Enhanced Splash Screen** - Bigger loader for better mobile visibility
+- [x] **Fixed Navigation Overlap** - Statistics page heading no longer hidden
+- [x] **Works for All Users** - Statistics available without login
 - [x] 75 Anime character avatars with trait-based seeds
 - [x] Avatar filter by anime series (23 series)
 - [x] Support developer page and integration
@@ -493,7 +559,8 @@ If you enjoy Otazumi, consider supporting the developer:
 - [ ] Watch parties (sync viewing)
 - [ ] User reviews and ratings
 - [ ] Anime recommendations algorithm
-- [ ] Advanced statistics dashboard
+- [ ] Genre-based statistics breakdown
+- [ ] Export statistics as PDF
 - [ ] Multi-language UI (i18n)
 - [ ] Dark/Light theme toggle
 - [ ] Chromecast support

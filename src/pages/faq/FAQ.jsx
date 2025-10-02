@@ -82,6 +82,40 @@ const FAQ_DATA = {
       answer: "Try these steps: 1) Refresh the page, 2) Clear your browser cache, 3) Try a different server option, 4) Update your browser, 5) Disable ad blockers temporarily, 6) Try a different browser."
     }
   ],
+  'Statistics & Watch History': [
+    {
+      question: "What is the Statistics Dashboard?",
+      answer: "The Statistics Dashboard is your personal anime watching analytics hub! It automatically tracks every episode you watch and provides detailed insights including total hours watched, completion rate, unique anime count, daily averages, and more. You can access it from the sidebar menu under 'Statistics'."
+    },
+    {
+      question: "Do I need an account to use the Statistics feature?",
+      answer: "No! The Statistics Dashboard works for everyone - both logged-in users and guests. Your watch history is stored locally on your device (localStorage) for privacy, and logged-in users also get cloud sync to NeonDB for cross-device access."
+    },
+    {
+      question: "How does watch history tracking work?",
+      answer: "Your watch history is automatically recorded when you start playing an episode. The system updates your progress every 30 seconds during playback. When you finish watching (90% or more), the episode is marked as completed. All this happens seamlessly in the background!"
+    },
+    {
+      question: "What statistics can I see on the dashboard?",
+      answer: "You can view: Total hours watched, Total episodes watched, Number of unique anime, Completion rate percentage, Average episodes per day, Most active watching day, Days with activity, Recent activity (last 5 episodes), and Personalized insights with achievements based on your watching habits."
+    },
+    {
+      question: "Can I filter statistics by time period?",
+      answer: "Yes! You can filter your statistics by three time ranges: All Time (complete history), This Month (last 30 days), and This Week (last 7 days). This helps you track your recent watching patterns or see your all-time stats."
+    },
+    {
+      question: "Why isn't an episode showing in my statistics?",
+      answer: "Make sure you actually started playing the video (not just opened the page). The episode is recorded when the video player starts. If using an ad blocker or privacy extension, it might block localStorage. Try disabling it temporarily and refreshing the page."
+    },
+    {
+      question: "What does 'Completion Rate' mean?",
+      answer: "Completion Rate shows the percentage of episodes you've fully watched (90% or more) compared to episodes you started. For example, if you watched 10 episodes and completed 8 of them, your completion rate would be 80%."
+    },
+    {
+      question: "Can I export my watch history?",
+      answer: "Yes! Go to your profile settings and use the 'Export Data' feature. This downloads a JSON file containing all your watch history, favorites, and watchlist. You can also import this data later to restore your history."
+    }
+  ],
   'Features & Functionality': [
     {
       question: "How do I add anime to my watchlist?",
@@ -93,7 +127,7 @@ const FAQ_DATA = {
     },
     {
       question: "Can I sync my data across devices?",
-      answer: "Your account information (username, email, avatar), favorites and watchlist syncs automatically across devices. However watch history are stored locally on each device for privacy reasons."
+      answer: "Your account information (username, email, avatar), favorites and watchlist syncs automatically across devices. Watch history is stored locally on each device, but logged-in users also get cloud backup to NeonDB."
     },
     {
       question: "How do I request an anime that's not available?",

@@ -150,6 +150,7 @@ body::-webkit-scrollbar {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+  
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -176,6 +177,17 @@ body::-webkit-scrollbar {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+}
+
+/* Dark Theme (Default and Only Theme) */
+.dark {
+  background-color: #0a0a0a;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.dark body {
+  background-color: #0a0a0a !important;
+  color: rgba(255, 255, 255, 0.87) !important;
 }
 .dot {
   width: 4px;
@@ -318,3 +330,95 @@ body::-webkit-scrollbar {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* Language Toggle Switch - Navbar (Desktop) */
+.language-toggle-wrapper-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.language-toggle-nav {
+  --size: 50px;
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--size);
+  height: calc(var(--size) / 2);
+  background-color: #fff;
+  border: 2px solid #222;
+  border-radius: 30px 100px 100px 100px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.5s;
+}
+
+.language-toggle-nav::before {
+  content: "";
+  position: absolute;
+  width: calc(var(--size) / 2);
+  height: calc(var(--size) / 2);
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scale(0.7);
+  border: 2px solid #222;
+  border-radius: 30px 100px 100px 100px;
+  background-color: #fde881;
+  box-sizing: border-box;
+  transition: all 0.5s;
+}
+
+.language-toggle-nav:checked {
+  background-color: #fde881;
+  border-radius: 100px 100px 30px 100px;
+}
+
+.language-toggle-nav:checked::before {
+  left: 50%;
+  background-color: #fff;
+  border-radius: 100px 100px 30px 100px;
+}
+
+.language-labels-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.language-label-nav {
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.language-label-nav.active {
+  color: #fde881;
+  font-size: 0.75rem;
+  text-shadow: 0 0 10px rgba(253, 232, 129, 0.5);
+}
+
+.language-label-divider-nav {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Responsive adjustments for navbar toggle */
+@media (max-width: 1024px) {
+  .language-toggle-nav {
+    --size: 45px;
+  }
+  
+  .language-labels-nav {
+    font-size: 0.6rem;
+  }
+  
+  .language-label-nav.active {
+    font-size: 0.7rem;
+  }
+}
+
+

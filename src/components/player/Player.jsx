@@ -28,6 +28,8 @@ import website_name from "@/src/config/website";
 import getChapterStyles from "./getChapterStyle";
 import artplayerPluginHlsControl from "artplayer-plugin-hls-control";
 import artplayerPluginUploadSubtitle from "./artplayerPluginUploadSubtitle";
+import { UserDataService } from "@/src/services/userDataService";
+import { useAuth } from "@/src/context/AuthContext";
 
 Artplayer.LOG_VERSION = false;
 Artplayer.CONTEXTMENU = false;
@@ -60,8 +62,10 @@ export default function Player({
   episodeNum,
   streamInfo,
 }) {
+  const { user } = useAuth();
   const artRef = useRef(null);
-  const leftAtRef = useRef(0); 
+  const leftAtRef = useRef(0);
+  const watchRecordedRef = useRef(false);
   const proxy = import.meta.env.VITE_PROXY_URL;
   const m3u8proxy = import.meta.env.VITE_M3U8_PROXY_URL?.split(",") || [];
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(
@@ -77,6 +81,8 @@ export default function Player({
       );
       setCurrentEpisodeIndex(newIndex);
     }
+    // Reset watch recorded flag when episode changes
+    watchRecordedRef.current = false;
   }, [episodeId, episodes]);
   useEffect(() => {
     const applyChapterStyles = () => {
@@ -448,8 +454,47 @@ export default function Player({
       const currentEntry = continueWatchingList.find((item) => item.episodeId === episodeId);
       if (currentEntry?.leftAt) art.currentTime = currentEntry.leftAt;
 
+      // Record watch history when video starts playing
+      art.on("video:play", () => {
+        if (!watchRecordedRef.current && animeInfo) {
+          watchRecordedRef.current = true;
+          
+          // Record to watch history
+          UserDataService.addToWatchHistory(user?.id, {
+            animeId: animeInfo.id || animeInfo.data_id,
+            episodeId: episodeId,
+            episodeNumber: parseInt(episodeNum) || parseInt(episodeId),
+            title: animeInfo.title,
+            japanese_title: animeInfo.japanese_title,
+            poster: animeInfo.poster,
+            adultContent: animeInfo.adultContent,
+            progress: 0,
+            completed: false,
+          }).catch(err => console.error('Failed to record watch history:', err));
+        }
+      });
+
       art.on("video:timeupdate", () => {
         leftAtRef.current = Math.floor(art.currentTime);
+        
+        // Update watch progress every 30 seconds if video is playing
+        const currentProgress = Math.floor(art.currentTime);
+        if (currentProgress > 0 && currentProgress % 30 === 0 && animeInfo) {
+          const watchedPercentage = (art.currentTime / art.duration) * 100;
+          const isCompleted = watchedPercentage >= 90; // Consider completed if 90% watched
+          
+          UserDataService.addToWatchHistory(user?.id, {
+            animeId: animeInfo.id || animeInfo.data_id,
+            episodeId: episodeId,
+            episodeNumber: parseInt(episodeNum) || parseInt(episodeId),
+            title: animeInfo.title,
+            japanese_title: animeInfo.japanese_title,
+            poster: animeInfo.poster,
+            adultContent: animeInfo.adultContent,
+            progress: currentProgress,
+            completed: isCompleted,
+          }).catch(err => console.error('Failed to update watch progress:', err));
+        }
       });
 
       setTimeout(() => {
@@ -541,6 +586,8 @@ export default function Player({
         art.destroy(false);
       }
       document.removeEventListener("keydown", handleKeydown);
+      
+      // Save continue watching to localStorage
       const continueWatching = JSON.parse(localStorage.getItem("continueWatching")) || [];
       const newEntry = {
         id: animeInfo?.id,
@@ -554,15 +601,34 @@ export default function Player({
         leftAt: leftAtRef.current,
       };
 
-      if (!newEntry.data_id) return;
-
-      const existingIndex = continueWatching.findIndex((item) => item.data_id === newEntry.data_id);
-      if (existingIndex !== -1) {
-        continueWatching[existingIndex] = newEntry;
-      } else {
-        continueWatching.push(newEntry);
+      if (newEntry.data_id) {
+        const existingIndex = continueWatching.findIndex((item) => item.data_id === newEntry.data_id);
+        if (existingIndex !== -1) {
+          continueWatching[existingIndex] = newEntry;
+        } else {
+          continueWatching.push(newEntry);
+        }
+        localStorage.setItem("continueWatching", JSON.stringify(continueWatching));
+        
+        // Record final watch state to history if video was played
+        if (watchRecordedRef.current && animeInfo && art) {
+          const finalProgress = leftAtRef.current;
+          const watchedPercentage = art.duration > 0 ? (finalProgress / art.duration) * 100 : 0;
+          const isCompleted = watchedPercentage >= 90;
+          
+          UserDataService.addToWatchHistory(user?.id, {
+            animeId: animeInfo.id || animeInfo.data_id,
+            episodeId: episodeId,
+            episodeNumber: parseInt(episodeNum) || parseInt(episodeId),
+            title: animeInfo.title,
+            japanese_title: animeInfo.japanese_title,
+            poster: animeInfo.poster,
+            adultContent: animeInfo.adultContent,
+            progress: finalProgress,
+            completed: isCompleted,
+          }).catch(err => console.error('Failed to save final watch state:', err));
+        }
       }
-      localStorage.setItem("continueWatching", JSON.stringify(continueWatching));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streamUrl, subtitles, intro, outro]);

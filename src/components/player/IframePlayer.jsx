@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import BouncingLoader from "../ui/bouncingloader/Bouncingloader";
+import { UserDataService } from "@/src/services/userDataService";
+import { useAuth } from "@/src/context/AuthContext";
 
 export default function IframePlayer({
   episodeId,
@@ -12,6 +14,8 @@ export default function IframePlayer({
   playNext,
   autoNext,
 }) {
+  const { user } = useAuth();
+  const watchRecordedRef = useRef(false);
   const baseURL =
     serverName.toLowerCase() === "hd-1" || serverName.toLowerCase() === "hd-3"
       ? import.meta.env.VITE_BASE_IFRAME_URL
@@ -48,6 +52,8 @@ export default function IframePlayer({
       );
       setCurrentEpisodeIndex(newIndex);
     }
+    // Reset watch recorded flag when episode changes
+    watchRecordedRef.current = false;
   }, [episodeId, episodes]);
 
   useEffect(() => {
@@ -72,7 +78,26 @@ export default function IframePlayer({
   useEffect(() => {
     setLoading(true);
     setIframeLoaded(false);
+    
+    // Record watch history when iframe loads
+    if (!watchRecordedRef.current && animeInfo && episodeId) {
+      watchRecordedRef.current = true;
+      
+      UserDataService.addToWatchHistory(user?.id, {
+        animeId: animeInfo.id || animeInfo.data_id,
+        episodeId: episodeId,
+        episodeNumber: parseInt(episodeNum) || parseInt(episodeId),
+        title: animeInfo.title,
+        japanese_title: animeInfo.japanese_title,
+        poster: animeInfo.poster,
+        adultContent: animeInfo.adultContent,
+        progress: 0,
+        completed: false,
+      }).catch(err => console.error('Failed to record watch history:', err));
+    }
+    
     return () => {
+      // Save continue watching to localStorage
       const continueWatching = JSON.parse(localStorage.getItem("continueWatching")) || [];
       const newEntry = {
         id: animeInfo?.id,
@@ -84,16 +109,18 @@ export default function IframePlayer({
         title: animeInfo?.title,
         japanese_title: animeInfo?.japanese_title,
       };
-      if (!newEntry.data_id) return;
-      const existingIndex = continueWatching.findIndex(
-        (item) => item.data_id === newEntry.data_id
-      );
-      if (existingIndex !== -1) {
-        continueWatching[existingIndex] = newEntry;
-      } else {
-        continueWatching.push(newEntry);
+      
+      if (newEntry.data_id) {
+        const existingIndex = continueWatching.findIndex(
+          (item) => item.data_id === newEntry.data_id
+        );
+        if (existingIndex !== -1) {
+          continueWatching[existingIndex] = newEntry;
+        } else {
+          continueWatching.push(newEntry);
+        }
+        localStorage.setItem("continueWatching", JSON.stringify(continueWatching));
       }
-      localStorage.setItem("continueWatching", JSON.stringify(continueWatching));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episodeId, servertype]);

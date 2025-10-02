@@ -101,21 +101,20 @@ function Navbar() {
 
           {/* Right Section - Desktop */}
           <div className="hidden md:flex items-center gap-4">
-            {/* Language Toggle */}
-            <div className="flex items-center gap-2 bg-[#27272A] rounded-md p-1">
-              {["EN", "JP"].map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => toggleLanguage(lang)}
-                  className={`px-3 py-1 text-sm font-medium rounded ${
-                    language === lang
-                      ? "bg-[#3F3F46] text-white"
-                      : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  {lang}
-                </button>
-              ))}
+            {/* Language Toggle - Desktop */}
+            <div className="language-toggle-wrapper-nav">
+              <input 
+                type="checkbox" 
+                id="language-toggle-nav"
+                className="language-toggle-nav"
+                checked={language === 'JP'}
+                onChange={(e) => toggleLanguage(e.target.checked ? 'JP' : 'EN')}
+              />
+              <div className="language-labels-nav">
+                <span className={`language-label-nav ${language === 'EN' ? 'active' : ''}`}>EN</span>
+                <span className="language-label-divider-nav">to</span>
+                <span className={`language-label-nav ${language === 'JP' ? 'active' : ''}`}>JP</span>
+              </div>
             </div>
 
             {/* User Authentication */}
@@ -208,3 +207,4 @@ function Navbar() {
 }
 
 export default Navbar;
+

@@ -27,6 +27,7 @@ import VerifyEmail from "./pages/verifyEmail/VerifyEmail";
 import FAQ from "./pages/faq/FAQ";
 import SubtitleDownload from "./pages/subtitle-download/SubtitleDownload";
 import Support from "./pages/support/Support";
+import StatsDashboard from "./pages/statistics/StatsDashboard";
 
 function App() {
   const location = useLocation();
@@ -65,6 +66,7 @@ function App() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/subtitle-download" element={<SubtitleDownload />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/statistics" element={<StatsDashboard />} />
             {/* Render category routes */}
             {categoryRoutes.map((path) => (
               <Route
@@ -98,3 +100,4 @@ function App() {
 }
 
 export default App;
+

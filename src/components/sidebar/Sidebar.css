@@ -151,8 +151,16 @@
 .menu-items {
   width: 100%;
   padding: 0.5rem;
+  padding-bottom: 6rem;
   flex: 1;
   overflow-y: auto;
+}
+
+/* Mobile safe area support for devices with bottom navigation */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .menu-items {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+  }
 }
 
 .menu-item {
@@ -168,4 +176,88 @@
 .menu-item:hover {
   color: white;
   background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Language Toggle Switch - Sidebar (Mobile) */
+.language-toggle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.language-toggle-wrapper-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.language-toggle-sidebar {
+  --size: 32px;
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--size);
+  height: calc(var(--size) / 2);
+  background-color: #fff;
+  border: 1.5px solid #222;
+  border-radius: 20px 60px 60px 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.5s;
+}
+
+.language-toggle-sidebar::before {
+  content: "";
+  position: absolute;
+  width: calc(var(--size) / 2);
+  height: calc(var(--size) / 2);
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scale(0.65);
+  border: 1.5px solid #222;
+  border-radius: 20px 60px 60px 20px;
+  background-color: #fde881;
+  box-sizing: border-box;
+  transition: all 0.5s;
+}
+
+.language-toggle-sidebar:checked {
+  background-color: #fde881;
+  border-radius: 60px 60px 20px 60px;
+}
+
+.language-toggle-sidebar:checked::before {
+  left: 50%;
+  background-color: #fff;
+  border-radius: 60px 60px 20px 60px;
+}
+
+.language-labels-sidebar {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.language-label-sidebar {
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.language-label-sidebar.active {
+  color: #fde881;
+  font-size: 0.6rem;
+  text-shadow: 0 0 8px rgba(253, 232, 129, 0.5);
+}
+
+.language-label-divider-sidebar {
+  font-size: 0.5rem;
+  color: rgba(255, 255, 255, 0.4);
 } 

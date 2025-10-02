@@ -1,6 +1,6 @@
 import { FaChevronLeft } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart } from "@fortawesome/free-solid-svg-icons";
+import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart, faChartBar } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "@/src/context/LanguageContext";
 import { useAuth } from "@/src/context/AuthContext";
 import { useEffect, useRef } from "react";
@@ -8,8 +8,10 @@ import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
 const MENU_ITEMS = [
+  { name: "❤️ Support Developer", path: "/support", icon: faHandHoldingHeart, highlight: true },
   { name: "Home", path: "/home", icon: faHome },
   { name: "My Collection", path: "/profile", icon: faHeart },
+  { name: "Statistics", path: "/statistics", icon: faChartBar },
   { name: "Download Subtitles", path: "/subtitle-download", icon: faClosedCaptioning },
   { name: "Recently Added", path: "/recently-added", icon: faCirclePlay },
   { name: "Top Upcoming", path: "/top-upcoming", icon: faFilePen },
@@ -21,7 +23,6 @@ const MENU_ITEMS = [
   { name: "OVAs", path: "/ova", icon: faCirclePlay },
   { name: "ONAs", path: "/ona", icon: faPlay },
   { name: "Specials", path: "/special", icon: faClock },
-  { name: "❤️ Support Developer", path: "/support", icon: faHandHoldingHeart, highlight: true },
 ];
 
 const Sidebar = ({ isOpen, onClose }) => {
@@ -66,11 +67,12 @@ const Sidebar = ({ isOpen, onClose }) => {
   }, [location]);
 
   return (
-    <div className="sidebar-container" aria-hidden={!isOpen}>
+    <div className="sidebar-container">
       {isOpen && (
         <div
           className="sidebar-overlay"
           onClick={onClose}
+          aria-hidden="true"
         />
       )}
 
@@ -78,6 +80,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         className={`sidebar-main ${isOpen ? 'sidebar-open' : ''}`}
         role="dialog"
         aria-modal="true"
+        aria-hidden={!isOpen}
       >
         <div className="sidebar-content">
           {/* Header */}
@@ -108,19 +111,21 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <FontAwesomeIcon icon={faFilm} className="text-lg" />
                 <span className="text-xs font-medium">Movie</span>
               </Link>
-              <div className="quick-action-item">
-                <div className="language-switcher">
-                  {["EN", "JP"].map((lang) => (
-                    <button
-                      key={lang}
-                      onClick={() => toggleLanguage(lang)}
-                      className={`lang-button ${language === lang ? 'active' : ''}`}
-                    >
-                      {lang}
-                    </button>
-                  ))}
+              <div className="quick-action-item language-toggle-container">
+                <div className="language-toggle-wrapper-sidebar">
+                  <input 
+                    type="checkbox" 
+                    id="language-toggle-sidebar"
+                    className="language-toggle-sidebar"
+                    checked={language === 'JP'}
+                    onChange={(e) => toggleLanguage(e.target.checked ? 'JP' : 'EN')}
+                  />
+                  <div className="language-labels-sidebar">
+                    <span className={`language-label-sidebar ${language === 'EN' ? 'active' : ''}`}>EN</span>
+                    <span className="language-label-divider-sidebar">to</span>
+                    <span className={`language-label-sidebar ${language === 'JP' ? 'active' : ''}`}>JP</span>
+                  </div>
                 </div>
-                <span className="text-xs font-medium text-white/60">Language</span>
               </div>
             </div>
           </div>
@@ -145,3 +150,4 @@ const Sidebar = ({ isOpen, onClose }) => {
 };
 
 export default Sidebar;
+

@@ -49,13 +49,17 @@ function SplashScreen() {
               className="running-character"
             />
           </div>
-          <div className="loading-text">
-            <h2>Welcome to Otazumi</h2>
-            <div className="loading-dots">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
+          <div className="loader">
+            <div className="text"><span>Loading</span></div>
+            <div className="text"><span>Loading</span></div>
+            <div className="text"><span>Loading</span></div>
+            <div className="text"><span>Loading</span></div>
+            <div className="text"><span>Loading</span></div>
+            <div className="text"><span>Loading</span></div>
+            <div className="text"><span>Loading</span></div>
+            <div className="text"><span>Loading</span></div>
+            <div className="text"><span>Loading</span></div>
+            <div className="line"></div>
           </div>
         </div>
       </div>
@@ -75,7 +79,7 @@ function SplashScreen() {
           <h1 className="hero-title">Your Ultimate Anime Streaming Destination</h1>
           <p className="hero-description">
             Watch thousands of anime series and movies for free. High-quality streaming, 
-            subtitle downloads in 8 languages, personalized profiles with 20 anime avatars, 
+            subtitle downloads in 8 languages, personalized profiles with 75 anime avatars, 
             and a seamless ad-free experience across all your devices.
           </p>
           
@@ -154,3 +158,5 @@ function SplashScreen() {
 }
 
 export default SplashScreen;
+
+
