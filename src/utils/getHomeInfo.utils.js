@@ -2,37 +2,62 @@ import axios from "axios";
 
 const CACHE_KEY = "homeInfoCache";
 const CACHE_DURATION = 24 * 60 * 60 * 1000;
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 2000; // 2 seconds
+
+// Helper function to wait
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export default async function getHomeInfo() {
   const api_url = import.meta.env.VITE_API_URL;
 
-  console.log('🔍 getHomeInfo - API URL:', api_url);
 
   const currentTime = Date.now();
-  const cachedData = JSON.parse(localStorage.getItem(CACHE_KEY));
+  let cachedData = null;
+  
+  // Try to get cached data
+  try {
+    const cacheStr = localStorage.getItem(CACHE_KEY);
+    if (cacheStr) {
+      cachedData = JSON.parse(cacheStr);
+      console.log('📦 Found cached data, age:', Math.round((currentTime - cachedData.timestamp) / 1000 / 60), 'minutes');
+    }
+  } catch (e) {
+    console.warn('⚠️ Error reading cache:', e);
+  }
 
+  // Return fresh cache if available
   if (cachedData && currentTime - cachedData.timestamp < CACHE_DURATION) {
-    console.log('✅ Using cached data');
+    console.log('✅ Using fresh cached data');
     return cachedData.data;
   }
   
-  console.log('📡 Fetching fresh data from API...');
-  const response = await axios.get(`${api_url}`, {
-    timeout: 15000, // 15 second timeout
-    headers: {
-      'Cache-Control': 'no-cache',
+  // Try to fetch from API with retries
+  let lastError = null;
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      console.log(`📡 Fetching fresh data from API... (Attempt ${attempt}/${MAX_RETRIES})`);
+      const response = await axios.get(`${api_url}`, {
+        timeout: 30000, // 30 second timeout for mobile networks
+        headers: {
+          'Cache-Control': 'no-cache',
+        }
+      });
+      
+      console.log('📦 API Response:', response.status, response.data ? 'Data received' : 'No data');
+    
+    if (
+      !response.data.results ||
+      Object.keys(response.data.results).length === 0
+    ) {
+      console.error('❌ No results in API response');
+      // If we have stale cache, use it as fallback
+      if (cachedData && cachedData.data) {
+        console.log('🔄 Using stale cache as fallback');
+        return cachedData.data;
+      }
+      return null;
     }
-  });
-  
-  console.log('📦 API Response:', response.status, response.data ? 'Data received' : 'No data');
-  
-  if (
-    !response.data.results ||
-    Object.keys(response.data.results).length === 0
-  ) {
-    console.error('❌ No results in API response');
-    return null;
-  }
   const {
     spotlights,
     trending,
@@ -48,25 +73,57 @@ export default async function getHomeInfo() {
     genres,
   } = response.data.results;
 
-  const dataToCache = {
-    data: {
-      spotlights,
-      trending,
-      topten,
-      todaySchedule,
-      top_airing,
-      most_popular,
-      most_favorite,
-      latest_completed,
-      latest_episode,
-      top_upcoming,
-      recently_added,
-      genres,
-    },
-    timestamp: currentTime,
-  };
+    const dataToCache = {
+      data: {
+        spotlights,
+        trending,
+        topten,
+        todaySchedule,
+        top_airing,
+        most_popular,
+        most_favorite,
+        latest_completed,
+        latest_episode,
+        top_upcoming,
+        recently_added,
+        genres,
+      },
+      timestamp: currentTime,
+    };
 
-  localStorage.setItem(CACHE_KEY, JSON.stringify(dataToCache));
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify(dataToCache));
+      console.log('💾 Data cached successfully');
+    } catch (e) {
+      console.error('⚠️ Error saving to cache:', e);
+    }
 
-  return dataToCache.data;
+      return dataToCache.data;
+      
+    } catch (error) {
+      lastError = error;
+      console.error(`❌ API Error (Attempt ${attempt}/${MAX_RETRIES}):`, error.message);
+      
+      // If this was the last attempt, fall through to error handling
+      if (attempt === MAX_RETRIES) {
+        break;
+      }
+      
+      // Wait before retrying
+      console.log(`⏳ Waiting ${RETRY_DELAY}ms before retry...`);
+      await wait(RETRY_DELAY);
+    }
+  }
+  
+  // All retries failed
+  console.error('❌ All API attempts failed');
+  
+  // If API fails but we have stale cache, use it
+  if (cachedData && cachedData.data) {
+    console.log('🔄 Using stale cache as fallback');
+    return cachedData.data;
+  }
+  
+  // If no cache available, throw the error
+  throw lastError || new Error('Failed to fetch home info');
 }
