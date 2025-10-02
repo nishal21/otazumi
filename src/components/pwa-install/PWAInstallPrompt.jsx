@@ -7,9 +7,15 @@ const PWAInstallPrompt = () => {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
+    console.log('PWAInstallPrompt: Component mounted');
+    
     // Check if app is already installed (PWA mode or standalone)
-    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    console.log('PWAInstallPrompt: Is installed?', isStandalone);
+    
+    if (isStandalone) {
       setIsInstalled(true);
+      console.log('PWAInstallPrompt: App already installed, hiding prompt');
       return;
     }
 
@@ -20,9 +26,11 @@ const PWAInstallPrompt = () => {
 
     // Check if user already dismissed recently
     const shouldShow = !lastPromptTime || (now - parseInt(lastPromptTime)) > oneWeek;
+    console.log('PWAInstallPrompt: Should show prompt?', shouldShow, 'Last shown:', lastPromptTime);
 
     // Listen for the beforeinstallprompt event
     const handleBeforeInstallPrompt = (e) => {
+      console.log('PWAInstallPrompt: beforeinstallprompt event fired!');
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Stash the event so it can be triggered later
@@ -30,9 +38,26 @@ const PWAInstallPrompt = () => {
       
       // Show our custom prompt if it's time
       if (shouldShow && !isInstalled) {
-        setTimeout(() => setShowPrompt(true), 3000); // Show after 3 seconds on homepage
+        console.log('PWAInstallPrompt: Will show prompt in 3 seconds...');
+        setTimeout(() => {
+          console.log('PWAInstallPrompt: Showing prompt now!');
+          setShowPrompt(true);
+        }, 3000); // Show after 3 seconds on homepage
       }
     };
+    
+    // For testing: Show prompt after 3 seconds even if beforeinstallprompt doesn't fire
+    // This helps on iOS and other browsers that don't support the API
+    if (shouldShow && !isInstalled) {
+      console.log('PWAInstallPrompt: Setting fallback timer (will show in 5 seconds)');
+      const fallbackTimer = setTimeout(() => {
+        console.log('PWAInstallPrompt: Fallback - showing prompt now');
+        setShowPrompt(true);
+      }, 5000);
+      
+      // Clear fallback if beforeinstallprompt fires
+      return () => clearTimeout(fallbackTimer);
+    }
 
     // Listen for app installation
     const handleAppInstalled = () => {

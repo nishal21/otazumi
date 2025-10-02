@@ -6,14 +6,20 @@ const PWAInstallButton = () => {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
+    console.log('PWAInstallButton: Component mounted');
+    
     // Check if app is already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    console.log('PWAInstallButton: Is installed?', isStandalone);
+    
+    if (isStandalone) {
       setIsInstalled(true);
       return;
     }
 
     // Listen for the beforeinstallprompt event
     const handleBeforeInstallPrompt = (e) => {
+      console.log('PWAInstallButton: beforeinstallprompt event received');
       e.preventDefault();
       setDeferredPrompt(e);
     };
@@ -67,6 +73,8 @@ const PWAInstallButton = () => {
     setDeferredPrompt(null);
   };
 
+  console.log('PWAInstallButton: Render - isInstalled:', isInstalled, 'deferredPrompt:', !!deferredPrompt);
+
   // Don't show button if already installed
   if (isInstalled) {
     return (
@@ -77,6 +85,7 @@ const PWAInstallButton = () => {
     );
   }
 
+  // Always show button (with fallback for browsers that don't support PWA)
   return (
     <button
       onClick={handleInstall}
