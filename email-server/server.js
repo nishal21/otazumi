@@ -14,13 +14,61 @@ const PORT = process.env.PORT || 3001;
 app.use(helmet());
 
 // CORS configuration - Update with your frontend domain
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  'https://otazumi.netlify.app',
+  'https://otazumi.page',
+  'https://www.otazumi.page'
+];
+
 const corsOptions = {
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:5173', 'http://localhost:4173'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   methods: ['GET', 'POST', 'OPTIONS'],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
+
 app.use(cors(corsOptions));
+
+// Add explicit CORS headers for Vercel (must be before routes)
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  
+  // Always set CORS headers - allow the requesting origin if it's in our list
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  } else if (!origin) {
+    // For requests without origin (like curl), allow all
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  } else {
+    // For unknown origins, allow the main domain
+    res.setHeader('Access-Control-Allow-Origin', 'https://otazumi.netlify.app');
+  }
+  
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization, Accept, Origin');
+  res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
+  
+  // Handle preflight OPTIONS request immediately
+  if (req.method === 'OPTIONS') {
+    console.log('✅ Handling OPTIONS preflight for:', req.url, 'from origin:', origin);
+    return res.status(204).end();
+  }
+  
+  next();
+});
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
@@ -199,7 +247,7 @@ app.listen(PORT, () => {
   console.log('🚀 Otazumi Email Server running on port', PORT);
   console.log('📧 Provider:', process.env.EMAIL_PROVIDER || 'gmail');
   console.log('📬 From:', process.env.SMTP_USER);
-  console.log('🌐 Allowed origins:', corsOptions.origin);
+  console.log('🌐 Allowed origins:', allowedOrigins.join(', '));
 });
 
 // Graceful shutdown
