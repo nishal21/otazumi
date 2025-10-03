@@ -1,9 +1,21 @@
+import { useEffect } from "react";
 import logoTitle from "@/src/config/logoTitle.js";
 import website_name from "@/src/config/website.js";
 import { Link } from "react-router-dom";
 import PWAInstallButton from "@/src/components/pwa-install/PWAInstallButton";
 
 function Footer() {
+  // Load DMCA badge script after component mounts
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://images.dmca.com/Badges/DMCABadgeHelper.min.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <footer className="w-full mt-16">
       {/* Logo Section */}
@@ -87,7 +99,20 @@ function Footer() {
             
             {/* Support Links */}
             <div className="flex gap-4 flex-wrap justify-center sm:justify-start mt-4 pt-4 border-t border-white/5">
-              
+              {/* DMCA Badge */}
+              <a
+                href="//www.dmca.com/Protection/Status.aspx?ID=f45f82d3-f541-4754-a9a8-a4983ee5e643"
+                title="DMCA.com Protection Status"
+                className="dmca-badge"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="https://images.dmca.com/Badges/DMCA_logo-grn-btn150w.png?ID=f45f82d3-f541-4754-a9a8-a4983ee5e643"
+                  alt="DMCA.com Protection Status"
+                  style={{ width: "120px", height: "auto", maxWidth: "100%" }}
+                />
+              </a>
             </div>
           </div>
 
