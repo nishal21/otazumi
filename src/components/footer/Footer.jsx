@@ -101,7 +101,7 @@ function Footer() {
             <div className="flex gap-4 flex-wrap justify-center sm:justify-start mt-4 pt-4 border-t border-white/5">
               {/* DMCA Badge */}
               <a
-                href="//www.dmca.com/Protection/Status.aspx?ID=f45f82d3-f541-4754-a9a8-a4983ee5e643"
+                href="//https://www.dmca.com/Protection/Status.aspx?ID=f45f82d3-f541-4754-a9a8-a4983ee5e643&refurl=https://otazumi.page/"
                 title="DMCA.com Protection Status"
                 className="dmca-badge"
                 target="_blank"
