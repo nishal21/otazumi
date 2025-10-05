@@ -5,6 +5,8 @@
 - [Account & Profile](#account--profile)
 - [Streaming & Video Quality](#streaming--video-quality)
 - [Subtitle Downloads](#subtitle-downloads)
+- [Anime Quotes](#anime-quotes)
+- [Anime News](#anime-news)
 - [Features & Functionality](#features--functionality)
 - [Technical & Troubleshooting](#technical--troubleshooting)
 - [Legal & Copyright](#legal--copyright)
@@ -32,7 +34,7 @@ Use the search bar at the top of any page. You can search by anime title, genre,
 ### How do I create an account?
 1. Click the "Sign In" button in the navigation bar
 2. Select "Sign Up"
-3. Choose from 20 anime avatars
+3. Choose from 75 anime avatars from 23 different anime series (Naruto, One Piece, Dragon Ball, etc.)
 4. Enter your email, username, and password
 5. Verify your email (check inbox)
 6. Start syncing data across devices
@@ -57,7 +59,7 @@ You'll see a friendly message letting you know the daily signup limit has been r
 5. Enter your new password
 
 ### Can I change my username or avatar?
-Yes! Go to your profile settings by clicking your avatar in the navigation bar. You can change your username and select a different avatar from 20 anime-themed options anytime.
+Yes! Go to your profile settings by clicking your avatar in the navigation bar. You can change your username and select a different avatar from 75 anime-themed options from 23 different anime series anytime. Each avatar has unique character-specific traits and themes.
 
 ### How do I delete my account?
 1. Go to your profile settings
@@ -183,6 +185,59 @@ Yes! The subtitle download feature is completely independent from streaming. You
 
 ---
 
+## Anime Quotes
+
+### How do I access anime quotes?
+Navigate to "Anime Quotes" in the sidebar menu. You can browse thousands of quotes from popular anime series, search by anime or character, generate beautiful quote images, and share them on social media platforms.
+
+### How do I generate and share quote images?
+1. Go to "Anime Quotes" in the sidebar
+2. Browse or search for quotes
+3. Click on any quote to generate an image
+4. Use the share buttons to post on Discord, Twitter, Reddit, Facebook, Pinterest, Instagram, Snapchat, or WhatsApp
+5. Or download the image to your device
+
+### What anime series have quotes available?
+We have quotes from thousands of popular anime series including Naruto, One Piece, Dragon Ball, Attack on Titan, My Hero Academia, Demon Slayer, Death Note, and many more. The collection grows as we integrate with multiple anime databases.
+
+### How does the quote image generation work?
+Our system uses HTML5 Canvas to create beautiful quote images that include:
+- The quote text with custom typography
+- Character images from the anime
+- Anime title and character name
+- Custom styling and backgrounds
+- High-quality output suitable for sharing
+
+### Can I download quote images?
+Yes! Each generated quote image can be downloaded to your device in high quality. Simply click the download button after generating the quote image.
+
+### Are quote images optimized for social media?
+Yes, all generated quote images are optimized for social media sharing with appropriate dimensions and quality for platforms like Instagram, Twitter, Facebook, and more.
+
+---
+
+## Anime News
+
+### How do I stay updated with anime news?
+Visit "Anime News" in the sidebar menu. You'll find the latest news about anime and manga from various sources, with options to filter by category (All News, Anime, or Manga).
+
+### Can I filter anime news by type?
+Yes! On the Anime News page, you can use the filter buttons to view:
+- **All News**: Everything including industry updates
+- **Anime**: News specifically about anime series and movies
+- **Manga**: News about manga, manhwa, and manhua
+
+### How often is the news updated?
+News is fetched in real-time from RSS feeds of major anime news sources. The page shows the most recent articles with publication dates, so you'll always see the latest updates when you refresh the page.
+
+### Where does the news come from?
+We aggregate news from reputable anime news sources including Anime-Planet and other major anime news websites through RSS feeds. Each article links back to the original source for the full story.
+
+### Can I read full news articles?
+Yes! Each news item includes a "Read more →" link that takes you directly to the full article on the original news source website.
+
+---
+
 ## Features & Functionality
 
 ### How do I add anime to my watchlist?
@@ -193,8 +248,77 @@ Yes! The subtitle download feature is completely independent from streaming. You
 
 **Note**: You need to be logged in to use this feature.
 
+### How do I share anime with others?
+Click the share button (📤 icon) on any anime page. The button will show "Copied!" in green text for 2 seconds to confirm that the anime link has been copied to your clipboard. You can then paste the link anywhere to share the anime with friends on social media, messaging apps, or chat.
+
 ### How does 'Continue Watching' work?
 We automatically save your progress when you watch an episode. Your "Continue Watching" list shows all anime where you haven't finished watching, allowing you to pick up right where you left off.
+
+### How do I sync my data across devices?
+Yes! Your account information syncs automatically across devices:
+- **Synced**: Username, email, avatar, favorites, watchlist
+- **Local only**: Watch history (stored on each device for privacy)
+
+### How do I export my data?
+1. Go to your profile settings
+2. Scroll to "Data Management" section
+3. Click "Download My Data"
+4. A JSON file will be downloaded containing all your data
+
+### How do I import my data?
+1. Go to your profile settings
+2. Click "Upload Data"
+3. Select your previously downloaded JSON file
+4. Your data will be restored
+
+### How do I request an anime that's not available?
+Go to our Contact page and submit an anime request. Include:
+- Anime title
+- Year
+- Any other relevant information
+
+We review all requests and add popular titles when possible.
+
+### Do you have a mobile app?
+Currently, we don't have a dedicated mobile app, but our website is fully responsive and works great on mobile browsers. You can **install Otazumi as a PWA** (Progressive Web App) for an app-like experience:
+
+**On Mobile:**
+1. Open Otazumi in your browser
+2. Look for "Add to Home Screen" in browser menu
+3. Follow the prompts
+
+**On Desktop:**
+1. Open Otazumi in Chrome/Edge
+2. Click the install icon in the address bar
+3. The app will install as a native application
+
+### How does 'Continue Watching' work?
+We automatically save your progress when you watch an episode. Your "Continue Watching" list shows all anime where you haven't finished watching, allowing you to pick up right where you left off.
+
+### How do I access anime quotes?
+Navigate to "Anime Quotes" in the sidebar menu. You can browse thousands of quotes from popular anime series, search by anime or character, generate beautiful quote images, and share them on social media platforms.
+
+### How do I generate and share quote images?
+1. Go to "Anime Quotes" in the sidebar
+2. Browse or search for quotes
+3. Click on any quote to generate an image
+4. Use the share buttons to post on Discord, Twitter, Reddit, Facebook, Pinterest, Instagram, Snapchat, or WhatsApp
+5. Or download the image to your device
+
+### What anime series have quotes available?
+We have quotes from thousands of popular anime series including Naruto, One Piece, Dragon Ball, Attack on Titan, My Hero Academia, Demon Slayer, Death Note, and many more. The collection grows as we integrate with multiple anime databases.
+
+### How do I stay updated with anime news?
+Visit "Anime News" in the sidebar menu. You'll find the latest news about anime and manga from various sources, with options to filter by category (All News, Anime, or Manga).
+
+### Can I filter anime news by type?
+Yes! On the Anime News page, you can use the filter buttons to view:
+- **All News**: Everything including industry updates
+- **Anime**: News specifically about anime series and movies
+- **Manga**: News about manga, manhwa, and manhua
+
+### How often is the news updated?
+News is fetched in real-time from RSS feeds of major anime news sources. The page shows the most recent articles with publication dates, so you'll always see the latest updates when you refresh the page.
 
 ### Can I sync my data across devices?
 Yes! Your account information syncs automatically across devices:

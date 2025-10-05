@@ -1,6 +1,6 @@
 import { FaChevronLeft } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart, faChartBar } from "@fortawesome/free-solid-svg-icons";
+import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart, faChartBar, faNewspaper, faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "@/src/context/LanguageContext";
 import { useAuth } from "@/src/context/AuthContext";
 import { useEffect, useRef } from "react";
@@ -10,6 +10,8 @@ import "./Sidebar.css";
 const MENU_ITEMS = [
   { name: "❤️ Support Developer", path: "/support", icon: faHandHoldingHeart, highlight: true },
   { name: "Home", path: "/home", icon: faHome },
+  { name: "News", path: "/news", icon: faNewspaper },
+  { name: "Quotes", path: "/quotes", icon: faQuoteLeft },
   { name: "My Collection", path: "/profile", icon: faHeart },
   { name: "Statistics", path: "/statistics", icon: faChartBar },
   { name: "Download Subtitles", path: "/subtitle-download", icon: faClosedCaptioning },

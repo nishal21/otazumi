@@ -28,6 +28,8 @@ import FAQ from "./pages/faq/FAQ";
 import SubtitleDownload from "./pages/subtitle-download/SubtitleDownload";
 import Support from "./pages/support/Support";
 import StatsDashboard from "./pages/statistics/StatsDashboard";
+import AnimeNews from "./pages/anime-news/AnimeNews";
+import AnimeQuotes from "./pages/anime-quotes/AnimeQuotes";
 
 function App() {
   const location = useLocation();
@@ -67,6 +69,8 @@ function App() {
             <Route path="/subtitle-download" element={<SubtitleDownload />} />
             <Route path="/support" element={<Support />} />
             <Route path="/statistics" element={<StatsDashboard />} />
+            <Route path="/news" element={<AnimeNews />} />
+            <Route path="/quotes" element={<AnimeQuotes />} />
             {/* Render category routes */}
             {categoryRoutes.map((path) => (
               <Route

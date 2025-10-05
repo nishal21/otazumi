@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faBookmark, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { faHeart as faHeartOutline, faBookmark as faBookmarkOutline } from '@fortawesome/free-regular-svg-icons';
+import { faBookmark, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as faBookmarkOutline } from '@fortawesome/free-regular-svg-icons';
 import { LocalStorageService } from '../../services/localStorageService';
 import { useAuth } from '../../context/AuthContext';
+import AnimatedHeart from '../ui/AnimatedHeart/AnimatedHeart';
 
 const AnimeActions = ({ animeData }) => {
   const { isAuthenticated } = useAuth();
@@ -61,18 +62,15 @@ const AnimeActions = ({ animeData }) => {
   return (
     <div className="flex items-center gap-3">
       {/* Favorite Button */}
-      <button
-        onClick={handleToggleFavorite}
-        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-          isFavorite
-            ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
-            : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white'
-        }`}
-        title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-      >
-        <FontAwesomeIcon icon={isFavorite ? faHeart : faHeartOutline} className="text-lg" />
-        <span className="hidden sm:inline">{isFavorite ? 'Favorited' : 'Favorite'}</span>
-      </button>
+      <div className="flex items-center gap-2">
+        <AnimatedHeart
+          isFavorite={isFavorite}
+          onToggle={handleToggleFavorite}
+        />
+        <span className="hidden sm:inline text-gray-300 font-medium">
+          {isFavorite ? 'Favorited' : 'Favorite'}
+        </span>
+      </div>
 
       {/* Watchlist Button */}
       <div className="relative">

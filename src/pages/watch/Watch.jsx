@@ -21,6 +21,7 @@ import useWatchControl from "@/src/hooks/useWatchControl";
 import Player from "@/src/components/player/Player";
 import IframePlayer from "@/src/components/player/IframePlayer";
 import AnimeActions from "@/src/components/anime-actions/AnimeActions";
+import ShareButton from "@/src/components/ShareButton/ShareButton";
 
 export default function Watch() {
   const location = useLocation();
@@ -495,6 +496,19 @@ export default function Watch() {
                   {animeInfo && (
                     <div className="mt-4 max-[600px]:mt-2">
                       <AnimeActions anime={animeInfo} variant="compact" />
+                    </div>
+                  )}
+
+                  {/* Episode Share Button */}
+                  {animeInfo && episodeId && (
+                    <div className="mt-2 max-[600px]:mt-1">
+                      <ShareButton
+                        onShare={() => console.log(`Episode ${episodeId} shared!`)}
+                        className="flex-shrink-0"
+                        text="Share Episode"
+                        episodeId={episodeId}
+                        animeTitle={animeInfo?.title || animeInfo?.japanese_title}
+                      />
                     </div>
                   )}
                 </div>

@@ -25,7 +25,7 @@ const FAQ_DATA = {
   'Account & Profile': [
     {
       question: "How do I create an account?",
-      answer: "Click the 'Sign In' button in the navigation bar, then select 'Sign Up'. Enter your email, choose a username, select an avatar, and create a password. You'll receive a verification email to activate your account."
+      answer: "Click the 'Sign In' button in the navigation bar, then select 'Sign Up'. Choose from 75 anime avatars from 23 different anime series (Naruto, One Piece, Dragon Ball, etc.), enter your email, choose a username, and create a password. You'll receive a verification email to activate your account."
     },
     {
       question: "I didn't receive my verification email. What should I do?",
@@ -37,7 +37,7 @@ const FAQ_DATA = {
     },
     {
       question: "Can I change my username or avatar?",
-      answer: "Yes! Go to your profile settings by clicking your avatar in the navigation bar. You can change your username, avatar, and other preferences anytime."
+      answer: "Yes! Go to your profile settings by clicking your avatar in the navigation bar. You can change your username and select a different avatar from 75 anime-themed options from 23 different anime series anytime. Each avatar has unique character-specific traits and themes."
     },
     {
       question: "How do I delete my account?",
@@ -122,6 +122,10 @@ const FAQ_DATA = {
       answer: "Click the '+ Watchlist' button on any anime page. You can view your full watchlist from your profile menu. Note: You need to be logged in to use this feature."
     },
     {
+      question: "How do I share anime with others?",
+      answer: "Click the share button (📤 icon) on any anime page. The button will show 'Copied!' in green text for 2 seconds to confirm that the anime link has been copied to your clipboard. You can then paste the link anywhere to share the anime with friends on social media, messaging apps, or chat."
+    },
+    {
       question: "How does 'Continue Watching' work?",
       answer: "We automatically save your progress when you watch an episode. Your 'Continue Watching' list shows all anime where you haven't finished watching, allowing you to pick up right where you left off."
     },
@@ -170,6 +174,54 @@ const FAQ_DATA = {
     {
       question: "Can I download subtitles without watching the anime?",
       answer: "Yes! The subtitle download feature is completely independent from watching. You can download subtitles anytime without streaming the video, making it perfect for offline preparation or archiving."
+    }
+  ],
+  'Anime Quotes': [
+    {
+      question: "How do I access anime quotes?",
+      answer: "Navigate to 'Anime Quotes' in the sidebar menu. You can browse thousands of quotes from popular anime series, search by anime or character, generate beautiful quote images, and share them on social media platforms."
+    },
+    {
+      question: "How do I generate and share quote images?",
+      answer: "Go to 'Anime Quotes' in the sidebar, browse or search for quotes, click on any quote to generate an image, then use the share buttons to post on Discord, Twitter, Reddit, Facebook, Pinterest, Instagram, Snapchat, or WhatsApp. You can also download the image to your device."
+    },
+    {
+      question: "What anime series have quotes available?",
+      answer: "We have quotes from thousands of popular anime series including Naruto, One Piece, Dragon Ball, Attack on Titan, My Hero Academia, Demon Slayer, Death Note, and many more. The collection grows as we integrate with multiple anime databases."
+    },
+    {
+      question: "How does the quote image generation work?",
+      answer: "Our system uses HTML5 Canvas to create beautiful quote images that include the quote text with custom typography, character images from the anime, anime title and character name, custom styling and backgrounds, and high-quality output suitable for sharing."
+    },
+    {
+      question: "Can I download quote images?",
+      answer: "Yes! Each generated quote image can be downloaded to your device in high quality. Simply click the download button after generating the quote image."
+    },
+    {
+      question: "Are quote images optimized for social media?",
+      answer: "Yes, all generated quote images are optimized for social media sharing with appropriate dimensions and quality for platforms like Instagram, Twitter, Facebook, and more."
+    }
+  ],
+  'Anime News': [
+    {
+      question: "How do I stay updated with anime news?",
+      answer: "Visit 'Anime News' in the sidebar menu. You'll find the latest news about anime and manga from various sources, with options to filter by category (All News, Anime, or Manga)."
+    },
+    {
+      question: "Can I filter anime news by type?",
+      answer: "Yes! On the Anime News page, you can use the filter buttons to view: All News (everything including industry updates), Anime (news specifically about anime series and movies), or Manga (news about manga, manhwa, and manhua)."
+    },
+    {
+      question: "How often is the news updated?",
+      answer: "News is fetched in real-time from RSS feeds of major anime news sources. The page shows the most recent articles with publication dates, so you'll always see the latest updates when you refresh the page."
+    },
+    {
+      question: "Where does the news come from?",
+      answer: "We aggregate news from reputable anime news sources including Anime-Planet and other major anime news websites through RSS feeds. Each article links back to the original source for the full story."
+    },
+    {
+      question: "Can I read full news articles?",
+      answer: "Yes! Each news item includes a 'Read more →' link that takes you directly to the full article on the original news source website."
     }
   ],
   'Technical & Troubleshooting': [

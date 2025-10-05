@@ -7,6 +7,8 @@ import {
   faXmark,
   faUser,
   faSignInAlt,
+  faNewspaper,
+  faQuoteLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "@/src/context/LanguageContext";
 import { useAuth } from "@/src/context/AuthContext";
@@ -99,9 +101,8 @@ function Navbar() {
             </div>
           </div>
 
-          {/* Right Section - Desktop */}
-          <div className="hidden md:flex items-center gap-4">
-            {/* Language Toggle - Desktop */}
+          {/* Language Toggle - Desktop */}
+          <div className="hidden md:flex items-center mr-4">
             <div className="language-toggle-wrapper-nav">
               <input 
                 type="checkbox" 
@@ -116,6 +117,29 @@ function Navbar() {
                 <span className={`language-label-nav ${language === 'JP' ? 'active' : ''}`}>JP</span>
               </div>
             </div>
+          </div>
+
+          {/* Right Section - Desktop */}
+          <div className="hidden md:flex items-center gap-4">
+            {/* News Link */}
+            <Link
+              to="/news"
+              className="flex items-center gap-2 px-3 py-2 bg-[#2a2a2a]/75 hover:bg-[#3F3F46] text-white/70 hover:text-white rounded-lg transition-colors"
+              title="Anime News"
+            >
+              <FontAwesomeIcon icon={faNewspaper} className="text-lg" />
+              <span className="font-medium">News</span>
+            </Link>
+
+            {/* Quotes Link */}
+            <Link
+              to="/quotes"
+              className="flex items-center gap-2 px-3 py-2 bg-[#2a2a2a]/75 hover:bg-[#3F3F46] text-white/70 hover:text-white rounded-lg transition-colors"
+              title="Anime Quotes"
+            >
+              <FontAwesomeIcon icon={faQuoteLeft} className="text-lg" />
+              <span className="font-medium">Quotes</span>
+            </Link>
 
             {/* User Authentication */}
             {isAuthenticated ? (
