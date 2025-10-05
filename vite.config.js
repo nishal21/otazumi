@@ -12,6 +12,7 @@ export default defineConfig({
       strategies: 'generateSW',
       manifest: false,
       workbox: {
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MB
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [
           /^\/_/, // Exclude internal routes
