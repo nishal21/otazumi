@@ -13,7 +13,6 @@ import {
 import { LocalStorageService } from '@/src/services/localStorageService';
 import { UserDataService } from '@/src/services/userDataService';
 import { useAuth } from '@/src/context/AuthContext';
-import AnimatedHeart from '@/src/components/ui/AnimatedHeart/AnimatedHeart';
 import ShareButton from '@/src/components/ShareButton/ShareButton';
 
 const AnimeActions = ({ anime, variant = 'default', className = '' }) => {
@@ -121,14 +120,18 @@ const AnimeActions = ({ anime, variant = 'default', className = '' }) => {
   if (variant === 'compact') {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        {/* Favorite Button */}
-        <AnimatedHeart
-          isFavorite={isFavorite}
-          onToggle={toggleFavorite}
-          className="flex-shrink-0"
-          size="small"
-          variant="compact"
-        />
+        {/* Favorite Button - Simple heart without animation */}
+        <button
+          onClick={toggleFavorite}
+          className={`flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200 ${
+            isFavorite
+              ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
+              : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-red-400'
+          }`}
+          title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+        >
+          <FontAwesomeIcon icon={faHeart} className="text-sm" />
+        </button>
 
         {/* Watchlist Button with Status */}
         <div className="relative">
@@ -178,7 +181,7 @@ const AnimeActions = ({ anime, variant = 'default', className = '' }) => {
         </div>
 
         {/* Share Button */}
-        <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-200">
+        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-200">
           <ShareButton
             onShare={() => console.log('Anime shared!')}
             className="flex-shrink-0"
@@ -193,14 +196,18 @@ const AnimeActions = ({ anime, variant = 'default', className = '' }) => {
   // Default variant with full buttons
   return (
     <div className={`flex flex-wrap items-center gap-3 ${className}`}>
-      {/* Favorite Button */}
-      <AnimatedHeart
-        isFavorite={isFavorite}
-        onToggle={toggleFavorite}
-        className="flex-shrink-0"
-        size="default"
-        variant="default"
-      />
+      {/* Favorite Button - Simple heart without animation */}
+      <button
+        onClick={toggleFavorite}
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+          isFavorite
+            ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30'
+            : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-red-400'
+        }`}
+      >
+        <FontAwesomeIcon icon={faHeart} className="text-sm" />
+        <span className="text-sm">{isFavorite ? 'Favorited' : 'Favorite'}</span>
+      </button>
 
       {/* Watchlist Button with Status */}
       <div className="relative">

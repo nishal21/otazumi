@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShare, faDownload, faCopy, faHeart, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import { faTwitter, faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import quotesData from '../../../quotes-dataset.json';
-import AnimatedHeart from '../../components/AnimatedHeart';
 
 const AnimeQuotes = () => {
   const [quotes, setQuotes] = useState([]);
@@ -14,19 +13,155 @@ const AnimeQuotes = () => {
   const [favorites, setFavorites] = useState(new Set());
   const [animeData, setAnimeData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [characterImageCache, setCharacterImageCache] = useState({}); // Cache for character images
+  const [animeImageCache, setAnimeImageCache] = useState(() => {
+    // Load from localStorage on initialization
+    try {
+      const saved = localStorage.getItem('animeImageCache');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+  const [characterImageCache, setCharacterImageCache] = useState(() => {
+    // Load from localStorage on initialization
+    try {
+      const saved = localStorage.getItem('characterImageCache');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
   const [shareButtonsExpanded, setShareButtonsExpanded] = useState({});
   const quotesPerPage = 12;
 
+  // Save anime image cache to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('animeImageCache', JSON.stringify(animeImageCache));
+    } catch (error) {
+      console.warn('Failed to save anime image cache to localStorage:', error);
+    }
+  }, [animeImageCache]);
+
+  // Save character image cache to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('characterImageCache', JSON.stringify(characterImageCache));
+    } catch (error) {
+      console.warn('Failed to save character image cache to localStorage:', error);
+    }
+  }, [characterImageCache]);
+
+  // Utility: sleep and fetch with exponential backoff to reduce 429s
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  // Simple per-host concurrency limiter + backoff + cors-proxy fallback
+  const perHostActive = {};
+  const GLOBAL_MAX_PER_HOST = 2; // default concurrent per host
+
+  // Proxy base can be configured via Vite env: VITE_PROXY_URL (preferred) or VITE_CORS_PROXY
+  const PROXY_BASE = (typeof import.meta !== 'undefined' && import.meta.env)
+    ? (import.meta.env.VITE_PROXY_URL || import.meta.env.VITE_CORS_PROXY || '/cors-proxy?url=')
+    : '/cors-proxy?url=';
+
+  // Host-specific tuning: lower concurrency or higher backoff for aggressive APIs
+  const hostConfigs = {
+    'api.jikan.moe': { maxPerHost: 1, backoffMultiplier: 2.0 },
+    'graphql.anilist.co': { maxPerHost: 1, backoffMultiplier: 2.0 },
+    'anime.fandom.com': { maxPerHost: 1, backoffMultiplier: 1.8 },
+  };
+
+  const getHostFromInput = (input) => {
+    try {
+      const url = typeof input === 'string' ? input : input.url;
+      return new URL(url).host;
+    } catch (e) {
+      return 'unknown';
+    }
+  };
+
+  const enqueueForHost = async (host) => {
+    const cfg = hostConfigs[host] || {};
+    const max = cfg.maxPerHost || GLOBAL_MAX_PER_HOST;
+    perHostActive[host] = perHostActive[host] || 0;
+    while (perHostActive[host] >= max) {
+      // wait with small jitter
+      await sleep(180 + Math.floor(Math.random() * 220));
+    }
+    perHostActive[host] += 1;
+  };
+
+  const dequeueForHost = (host) => {
+    perHostActive[host] = Math.max(0, (perHostActive[host] || 1) - 1);
+  };
+
+  const fetchWithBackoff = async (input, init = {}, maxAttempts = 7, baseDelay = 350) => {
+    const host = getHostFromInput(input);
+    const cfg = hostConfigs[host] || {};
+    const hostMultiplier = cfg.backoffMultiplier || 1.0;
+
+    let attempt = 0;
+    let lastErr = null;
+    let usedProxy = false;
+
+    while (attempt < maxAttempts) {
+      await enqueueForHost(host);
+      try {
+        const res = await fetch(input, init);
+        dequeueForHost(host);
+
+        if (res.ok) return res;
+
+        // Retry on 429 or 5xx
+        if (res.status === 429 || (res.status >= 500 && res.status < 600)) {
+          lastErr = new Error(`HTTP ${res.status}`);
+        } else {
+          // Non-retriable status (404 etc.) - return and let caller handle
+          return res;
+        }
+      } catch (err) {
+        dequeueForHost(host);
+        lastErr = err;
+
+        // If this looks like a CORS/network error, try proxy once
+        const isTypeError = err instanceof TypeError || /NetworkError|Failed to fetch/i.test(String(err));
+        if (isTypeError && !usedProxy) {
+          usedProxy = true;
+          try {
+            const origUrl = typeof input === 'string' ? input : input.url;
+            const proxyUrl = `${PROXY_BASE}${encodeURIComponent(origUrl)}`;
+            const proxyInit = { ...init, method: init.method || 'GET' };
+            // small delay before proxy retry
+            await sleep(400 + Math.floor(Math.random() * 400));
+            await enqueueForHost('local-proxy');
+            const proxyRes = await fetch(proxyUrl, proxyInit);
+            dequeueForHost('local-proxy');
+            if (proxyRes.ok) return proxyRes;
+            lastErr = new Error(`Proxy HTTP ${proxyRes.status}`);
+          } catch (proxyErr) {
+            lastErr = proxyErr;
+          }
+        }
+      }
+
+      attempt += 1;
+      // Larger backoff for 429 specifically and multiply by host multiplier
+      const jitter = Math.floor(Math.random() * 1000);
+      const delay = Math.floor((baseDelay * Math.pow(2, attempt - 1) * hostMultiplier) + jitter + (attempt * 150));
+      await sleep(delay);
+    }
+    throw lastErr || new Error('fetchWithBackoff: failed');
+  };
+
   // Fetch and cache anime cover image
   const fetchAnimeImage = async (animeName) => {
+    // Check cache first
     if (animeImageCache[animeName]) {
       return animeImageCache[animeName];
     }
 
     try {
       // Try Jikan API first
-      const jikanResponse = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(animeName)}&limit=1`);
+  const jikanResponse = await fetchWithBackoff(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(animeName)}&limit=1`);
       const jikanData = await jikanResponse.json();
 
       if (jikanData.data && jikanData.data[0] && jikanData.data[0].images && jikanData.data[0].images.jpg && jikanData.data[0].images.jpg.large_image_url) {
@@ -36,7 +171,7 @@ const AnimeQuotes = () => {
       }
 
       // Try Kitsu API
-      const kitsuResponse = await fetch(`https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(animeName)}&page[limit]=1`);
+  const kitsuResponse = await fetchWithBackoff(`https://kitsu.io/api/edge/anime?filter[text]=${encodeURIComponent(animeName)}&page[limit]=1`);
       const kitsuData = await kitsuResponse.json();
 
       if (kitsuData.data && kitsuData.data[0] && kitsuData.data[0].attributes && kitsuData.data[0].attributes.posterImage && kitsuData.data[0].attributes.posterImage.large) {
@@ -56,7 +191,7 @@ const AnimeQuotes = () => {
         }
       `;
 
-      const anilistResponse = await fetch('https://graphql.anilist.co', {
+  const anilistResponse = await fetchWithBackoff('https://graphql.anilist.co', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +212,7 @@ const AnimeQuotes = () => {
       }
 
       // Try Fandom API
-      const fandomResponse = await fetch(`https://anime.fandom.com/api/v1/Search/List?query=${encodeURIComponent(animeName)}&limit=1`);
+  const fandomResponse = await fetchWithBackoff(`https://anime.fandom.com/api/v1/Search/List?query=${encodeURIComponent(animeName)}&limit=1`);
       const fandomData = await fandomResponse.json();
 
       if (fandomData.items && fandomData.items[0] && fandomData.items[0].thumbnail) {
@@ -96,13 +231,14 @@ const AnimeQuotes = () => {
   // Fetch and cache character image
   const fetchCharacterImage = async (characterName, animeName) => {
     const cacheKey = `${characterName}_${animeName}`;
+    // Check cache first
     if (characterImageCache[cacheKey]) {
       return characterImageCache[cacheKey];
     }
 
     try {
       // Try Jikan API first
-      const jikanResponse = await fetch(`https://api.jikan.moe/v4/characters?q=${encodeURIComponent(characterName)}&limit=1`);
+  const jikanResponse = await fetchWithBackoff(`https://api.jikan.moe/v4/characters?q=${encodeURIComponent(characterName)}&limit=1`);
       const jikanData = await jikanResponse.json();
 
       if (jikanData.data && jikanData.data[0] && jikanData.data[0].images && jikanData.data[0].images.jpg && jikanData.data[0].images.jpg.image_url) {
@@ -112,7 +248,7 @@ const AnimeQuotes = () => {
       }
 
       // Try Kitsu API
-      const kitsuResponse = await fetch(`https://kitsu.io/api/edge/characters?filter[name]=${encodeURIComponent(characterName)}&page[limit]=1`);
+  const kitsuResponse = await fetchWithBackoff(`https://kitsu.io/api/edge/characters?filter[name]=${encodeURIComponent(characterName)}&page[limit]=1`);
       const kitsuData = await kitsuResponse.json();
 
       if (kitsuData.data && kitsuData.data[0] && kitsuData.data[0].attributes && kitsuData.data[0].attributes.image && kitsuData.data[0].attributes.image.original) {
@@ -132,7 +268,7 @@ const AnimeQuotes = () => {
         }
       `;
 
-      const anilistResponse = await fetch('https://graphql.anilist.co', {
+  const anilistResponse = await fetchWithBackoff('https://graphql.anilist.co', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +289,7 @@ const AnimeQuotes = () => {
       }
 
       // Try Fandom API
-      const fandomResponse = await fetch(`https://anime.fandom.com/api/v1/Search/List?query=${encodeURIComponent(characterName + ' ' + animeName)}&limit=1`);
+  const fandomResponse = await fetchWithBackoff(`https://anime.fandom.com/api/v1/Search/List?query=${encodeURIComponent(characterName + ' ' + animeName)}&limit=1`);
       const fandomData = await fandomResponse.json();
 
       if (fandomData.items && fandomData.items[0] && fandomData.items[0].thumbnail) {
@@ -174,7 +310,7 @@ const AnimeQuotes = () => {
     try {
       // Clean anime name for API search
       const cleanName = animeName.replace(/[^a-zA-Z0-9\s]/g, '').trim();
-      const response = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(cleanName)}&limit=1`);
+  const response = await fetchWithBackoff(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(cleanName)}&limit=1`);
       const data = await response.json();
 
       if (data.data && data.data.length > 0) {
@@ -202,12 +338,24 @@ const AnimeQuotes = () => {
       const uniqueAnimes = [...new Set(quotesData.map(quote => quote.anime))];
       const animeDataMap = {};
 
-      // Fetch data for unique anime titles with rate limiting
-      for (let i = 0; i < Math.min(uniqueAnimes.length, 20); i++) { // Limit to 50 to avoid rate limits
+      // First, collect all unique anime-character combinations that need caching
+      const allImageRequests = [];
+      const uniqueAnimeCharacterPairs = new Set();
+
+      quotesData.forEach(quote => {
+        uniqueAnimeCharacterPairs.add(`${quote.anime}|${quote.character}`);
+      });
+
+      // Pre-populate caches for the first 20 anime titles to avoid rate limits
+      for (let i = 0; i < Math.min(uniqueAnimes.length, 20); i++) {
         const animeName = uniqueAnimes[i];
         const data = await fetchAnimeData(animeName);
         if (data) {
           animeDataMap[animeName] = data;
+          // Save successfully fetched images to cache
+          if (data.coverImage && !animeImageCache[animeName]) {
+            setAnimeImageCache(prev => ({ ...prev, [animeName]: data.coverImage }));
+          }
         }
         // Add delay between requests to avoid rate limiting
         if (i < uniqueAnimes.length - 1) {
@@ -215,11 +363,41 @@ const AnimeQuotes = () => {
         }
       }
 
+      // Now pre-fetch and cache remaining anime images that weren't loaded initially
+      const remainingAnimes = uniqueAnimes.slice(20); // Skip the first 20 already processed
+      if (remainingAnimes.length > 0) {
+        const ANIME_CHUNK = 4;
+        for (let i = 0; i < remainingAnimes.length; i += ANIME_CHUNK) {
+          const chunk = remainingAnimes.slice(i, i + ANIME_CHUNK);
+          await Promise.all(chunk.map(async (animeName) => {
+            if (!animeImageCache[animeName]) {
+              try {
+                const imageUrl = await fetchAnimeImage(animeName);
+                if (imageUrl) {
+                  setAnimeImageCache(prev => ({ ...prev, [animeName]: imageUrl }));
+                }
+              } catch (err) {
+                console.warn(`Prefetch anime failed for ${animeName}:`, err);
+              }
+            }
+          }));
+          // Pause between chunks with jitter
+          await delay(500 + Math.floor(Math.random() * 600));
+        }
+      }
+
       setAnimeData(animeDataMap);
 
-      // Enhance quotes with anime data
+      // Enhance quotes with anime data and pre-populate character image caches
       const enhancedQuotes = quotesData.map((quote, index) => {
         const animeInfo = animeDataMap[quote.anime];
+        const cacheKey = `${quote.character}_${quote.anime}`;
+
+        // Pre-populate character image cache if we have anime data
+        if (animeInfo?.characterImage && !characterImageCache[cacheKey]) {
+          setCharacterImageCache(prev => ({ ...prev, [cacheKey]: animeInfo.characterImage }));
+        }
+
         return {
           ...quote,
           id: index,
@@ -237,6 +415,64 @@ const AnimeQuotes = () => {
 
     loadQuotes();
   }, []);
+
+  // Second useEffect to fetch remaining character images after quotes are loaded
+  useEffect(() => {
+    if (quotes.length > 0 && !loading) {
+      const fetchRemainingImages = async () => {
+        const uniquePairs = [];
+
+        // Collect all unique anime-character pairs
+        quotes.forEach(quote => {
+          uniquePairs.push({ anime: quote.anime, character: quote.character });
+        });
+
+        // De-duplicate pairs
+        const seen = new Set();
+        const pairsToFetch = [];
+        for (const p of uniquePairs) {
+          const key = `${p.anime}|${p.character}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            const cacheKey = `${p.character}_${p.anime}`;
+            if (!characterImageCache[cacheKey]) {
+              pairsToFetch.push(p);
+            }
+          }
+        }
+
+        if (pairsToFetch.length === 0) return;
+
+        console.log(`Will fetch ${pairsToFetch.length} character images in small batches...`);
+
+        // Process in small concurrent batches to avoid bursts (chunk size configurable)
+        const CHUNK_SIZE = 3;
+        for (let i = 0; i < pairsToFetch.length; i += CHUNK_SIZE) {
+          const chunk = pairsToFetch.slice(i, i + CHUNK_SIZE);
+          await Promise.all(chunk.map(async (p) => {
+            try {
+              const imageUrl = await fetchCharacterImage(p.character, p.anime);
+              if (imageUrl) {
+                const cacheKey = `${p.character}_${p.anime}`;
+                setCharacterImageCache(prev => ({ ...prev, [cacheKey]: imageUrl }));
+              }
+            } catch (err) {
+              // swallow per-item errors and continue; backoff inside fetchCharacterImage will handle retries
+              console.warn(`Character fetch failed for ${p.character} from ${p.anime}:`, err);
+            }
+          }));
+
+          // Wait between batches with jitter to reduce rate-limit chances
+          await delay(600 + Math.floor(Math.random() * 600));
+        }
+
+        console.log('Character image caching complete');
+      };
+
+      // Small delay to ensure component is fully mounted
+      setTimeout(fetchRemainingImages, 1200);
+    }
+  }, [quotes, loading]);
 
   useEffect(() => {
     let filtered = quotes;
@@ -293,112 +529,40 @@ const AnimeQuotes = () => {
     }
   };
 
-  const downloadQuote = (quote) => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = 800;
-    canvas.height = 600;
+  const downloadQuote = async (quote) => {
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 800;
+      canvas.height = 600;
 
-    // Create gradient background
-    const gradient = ctx.createLinearGradient(0, 0, 800, 600);
-    gradient.addColorStop(0, '#0a0a0a');
-    gradient.addColorStop(1, '#1a1a1a');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 800, 600);
+      // Create gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 800, 600);
+      gradient.addColorStop(0, '#0a0a0a');
+      gradient.addColorStop(1, '#1a1a1a');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 800, 600);
 
-    // Helper function to draw rounded rectangle (fallback for older browsers)
-    const roundRect = (x, y, width, height, radius) => {
-      if (ctx.roundRect) {
-        ctx.roundRect(x, y, width, height, radius);
-      } else {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        ctx.lineTo(x + radius, y + height);
-        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
-      }
-    };
-
-    let coverLoaded = false;
-    let charLoaded = false;
-    let coverImageAvailable = false;
-
-    const tryDraw = () => {
-      if (coverLoaded && charLoaded) {
-        drawTextAndDownload();
-      }
-    };
-
-    // Load and draw cover image - use cached image if available, otherwise try to fetch
-    const loadCoverImage = async () => {
-      let coverImageUrl = animeImageCache[quote.anime];
-
-      // If not cached, try to fetch it
-      if (!coverImageUrl) {
-        try {
-          coverImageUrl = await fetchAnimeImage(quote.anime);
-          if (coverImageUrl) {
-            // Cache it for future use
-            setAnimeImageCache(prev => ({ ...prev, [quote.anime]: coverImageUrl }));
-          }
-        } catch (error) {
-          console.warn('Failed to fetch cover image:', error);
+      // Helper function to draw rounded rectangle
+      const roundRect = (x, y, width, height, radius) => {
+        if (ctx.roundRect) {
+          ctx.roundRect(x, y, width, height, radius);
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(x + radius, y);
+          ctx.lineTo(x + width - radius, y);
+          ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+          ctx.lineTo(x + width, y + height - radius);
+          ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+          ctx.lineTo(x + radius, y + height);
+          ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+          ctx.lineTo(x, y + radius);
+          ctx.quadraticCurveTo(x, y, x + radius, y);
+          ctx.closePath();
         }
-      }
+      };
 
-      if (coverImageUrl) {
-        coverImageAvailable = true;
-        // Use the image
-        try {
-          const response = await fetch(coverImageUrl);
-          const blob = await response.blob();
-          const objectUrl = URL.createObjectURL(blob);
-          const coverImg = new Image();
-          coverImg.onload = () => {
-            // Draw card background with shadow
-            ctx.save();
-            ctx.shadowColor = 'rgba(0,0,0,0.4)';
-            ctx.shadowBlur = 24;
-            roundRect(30, 30, 740, 540, 32);
-            ctx.fillStyle = 'rgba(30,30,30,0.92)';
-            ctx.fill();
-            ctx.restore();
-
-            // Draw cover image with rounded corners
-            ctx.save();
-            roundRect(60, 80, 180, 260, 18);
-            ctx.clip();
-            ctx.drawImage(coverImg, 60, 80, 180, 260);
-            ctx.restore();
-
-            URL.revokeObjectURL(objectUrl);
-            coverLoaded = true;
-            tryDraw();
-          };
-          coverImg.onerror = () => {
-            URL.revokeObjectURL(objectUrl);
-            // Fallback: draw a placeholder rectangle for cover
-            drawCoverPlaceholder();
-          };
-          coverImg.src = objectUrl;
-        } catch (error) {
-          console.warn('Failed to load cover image:', error);
-          drawCoverPlaceholder();
-        }
-      } else {
-        // No image available, use placeholder
-        drawCoverPlaceholder();
-      }
-    };
-
-    const drawCoverPlaceholder = () => {
-      // Always draw card background for card style
+      // Draw card background
       ctx.save();
       ctx.shadowColor = 'rgba(0,0,0,0.4)';
       ctx.shadowBlur = 24;
@@ -407,100 +571,115 @@ const AnimeQuotes = () => {
       ctx.fill();
       ctx.restore();
 
-      coverLoaded = true;
-      tryDraw();
-    };
+      let coverImageAvailable = false;
 
-    // Load and draw character image - use cached image if available, otherwise try to fetch
-    const loadCharImage = async () => {
-      // Only load character image if cover image is available
-      if (!coverImageAvailable) {
-        charLoaded = true;
-        tryDraw();
-        return;
+      // Function to convert image URL to base64 (handles CORS)
+      const imageToBase64 = async (url) => {
+        try {
+          const response = await fetchWithBackoff(url, {}, 4, 200);
+          // If fetchWithBackoff returned a Response-like object but with non-ok, attempt to continue
+          if (!response || !response.ok) {
+            return null;
+          }
+          const blob = await response.blob();
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+          });
+        } catch (error) {
+          console.warn('Failed to convert image to base64:', error);
+          return null;
+        }
+      };
+
+      // Try to load and draw cover image
+      try {
+        let coverImageUrl = animeImageCache[quote.anime];
+
+        // If not cached, try to fetch it
+        if (!coverImageUrl) {
+          coverImageUrl = await fetchAnimeImage(quote.anime);
+        }
+
+        if (coverImageUrl) {
+          const base64Data = await imageToBase64(coverImageUrl);
+          if (base64Data) {
+            const img = new Image();
+            await new Promise((resolve, reject) => {
+              img.onload = () => {
+                // Draw cover image with rounded corners
+                ctx.save();
+                roundRect(60, 80, 180, 260, 18);
+                ctx.clip();
+                ctx.drawImage(img, 60, 80, 180, 260);
+                ctx.restore();
+                coverImageAvailable = true;
+                resolve();
+              };
+              img.onerror = () => resolve(); // Continue without image
+              img.src = base64Data;
+            });
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load cover image:', error);
       }
 
-      const cacheKey = `${quote.character}_${quote.anime}`;
-      let charImageUrl = characterImageCache[cacheKey];
-
-      // If not cached, try to fetch it
-      if (!charImageUrl) {
+      // Try to load and draw character image (only if cover image is available)
+      if (coverImageAvailable) {
         try {
-          charImageUrl = await fetchCharacterImage(quote.character, quote.anime);
+          const cacheKey = `${quote.character}_${quote.anime}`;
+          let charImageUrl = characterImageCache[cacheKey];
+
+          // If not cached, try to fetch it
+          if (!charImageUrl) {
+            charImageUrl = await fetchCharacterImage(quote.character, quote.anime);
+          }
+
           if (charImageUrl) {
-            // Cache it for future use
-            setCharacterImageCache(prev => ({ ...prev, [cacheKey]: charImageUrl }));
+            const base64Data = await imageToBase64(charImageUrl);
+            if (base64Data) {
+              const charImg = new Image();
+              await new Promise((resolve, reject) => {
+                charImg.onload = () => {
+                  // Draw character image as circle, overlapping cover
+                  ctx.save();
+                  ctx.beginPath();
+                  ctx.arc(180, 320, 54, 0, Math.PI * 2);
+                  ctx.closePath();
+                  ctx.shadowColor = 'rgba(0,0,0,0.25)';
+                  ctx.shadowBlur = 12;
+                  ctx.clip();
+                  ctx.drawImage(charImg, 126, 266, 108, 108);
+                  ctx.restore();
+                  resolve();
+                };
+                charImg.onerror = () => resolve(); // Continue without character image
+                charImg.src = base64Data;
+              });
+            }
           }
         } catch (error) {
-          console.warn('Failed to fetch character image:', error);
+          console.warn('Failed to load character image:', error);
         }
       }
 
-      if (charImageUrl) {
-        // Use the image
-        try {
-          const response = await fetch(charImageUrl);
-          const blob = await response.blob();
-          const objectUrl = URL.createObjectURL(blob);
-          const charImg = new Image();
-          charImg.onload = () => {
-            // Draw character image as circle, overlapping cover
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(180, 320, 54, 0, Math.PI * 2);
-            ctx.closePath();
-            ctx.shadowColor = 'rgba(0,0,0,0.25)';
-            ctx.shadowBlur = 12;
-            ctx.clip();
-            ctx.drawImage(charImg, 126, 266, 108, 108);
-            ctx.restore();
-
-            URL.revokeObjectURL(objectUrl);
-            charLoaded = true;
-            tryDraw();
-          };
-          charImg.onerror = () => {
-            URL.revokeObjectURL(objectUrl);
-            // When character image fails to load, don't draw any circle - just skip to text
-            charLoaded = true;
-            tryDraw();
-          };
-          charImg.src = objectUrl;
-        } catch (error) {
-          console.warn('Failed to load cached character image:', error);
-          // When character image fails to load, don't draw any circle - just skip to text
-          charLoaded = true;
-          tryDraw();
-        }
-      } else {
-        // No character image available, skip drawing any circle
-        charLoaded = true;
-        tryDraw();
-      }
-    };
-
-    loadCoverImage();
-    loadCharImage();
-
-    // Helper function to draw text and download
-    const drawTextAndDownload = () => {
-      // Draw quote text - centered when no cover image, otherwise positioned right of images
+      // Draw quote text
       ctx.save();
       ctx.font = 'bold 26px Arial';
       ctx.fillStyle = '#fff';
       ctx.textBaseline = 'top';
 
       let quoteX, quoteWidth;
-      if (!coverImageAvailable) {
-        // Center the text when no cover image
-        quoteX = canvas.width / 2;
-        quoteWidth = 600;
-        ctx.textAlign = 'center';
-      } else {
-        // Position to the right of images when cover is available
+      if (coverImageAvailable) {
         quoteX = 270;
         quoteWidth = 470;
         ctx.textAlign = 'left';
+      } else {
+        quoteX = canvas.width / 2;
+        quoteWidth = 600;
+        ctx.textAlign = 'center';
       }
 
       const quoteY = 100;
@@ -522,7 +701,7 @@ const AnimeQuotes = () => {
       ctx.fillText(line, quoteX, y);
       ctx.restore();
 
-      // Draw character name and anime title at the bottom - centered when no cover image
+      // Draw character name and anime title
       ctx.save();
       ctx.font = 'bold 22px Arial';
       ctx.fillStyle = '#fff';
@@ -542,103 +721,102 @@ const AnimeQuotes = () => {
       ctx.fillText('Otazumi Anime Quotes', 760, 550);
       ctx.restore();
 
-      // Download
-      const link = document.createElement('a');
-      link.download = `quote-${quote.id}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-    };
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        if (!blob) {
+          alert('Failed to generate image. Please try again.');
+          return;
+        }
+
+        try {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `quote-${quote.id}.png`;
+
+          // For mobile devices, try different approaches
+          if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            // Mobile: try to open in new tab first, then download
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+
+            // Try programmatic click
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Also try to trigger download after a short delay
+            setTimeout(() => {
+              try {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = url;
+                downloadLink.download = `quote-${quote.id}.png`;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+              } catch (e) {
+                console.warn('Mobile download fallback failed:', e);
+              }
+            }, 100);
+          } else {
+            // Desktop: standard download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }
+
+          // Clean up the blob URL
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+          // Show success message
+          alert('Quote image downloaded successfully!');
+
+        } catch (error) {
+          console.error('Download failed:', error);
+          alert('Download failed. Please try again or use a different browser.');
+        }
+      }, 'image/png', 1.0);
+
+    } catch (error) {
+      console.error('Error generating quote image:', error);
+      alert('Failed to generate quote image. Please try again.');
+    }
   };
 
   const shareQuoteAsImage = async (quote) => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = 800;
-    canvas.height = 600;
+    try {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 800;
+      canvas.height = 600;
 
-    // Create gradient background
-    const gradient = ctx.createLinearGradient(0, 0, 800, 600);
-    gradient.addColorStop(0, '#0a0a0a');
-    gradient.addColorStop(1, '#1a1a1a');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 800, 600);
+      // Create gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 800, 600);
+      gradient.addColorStop(0, '#0a0a0a');
+      gradient.addColorStop(1, '#1a1a1a');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 800, 600);
 
-    // Helper function to draw rounded rectangle (fallback for older browsers)
-    const roundRect = (x, y, width, height, radius) => {
-      if (ctx.roundRect) {
-        ctx.roundRect(x, y, width, height, radius);
-      } else {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        ctx.lineTo(x + radius, y + height);
-        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
-      }
-    };
-
-    let coverLoaded = false;
-    let charLoaded = false;
-
-    const tryDraw = () => {
-      if (coverLoaded && charLoaded) {
-        drawTextAndShare();
-      }
-    };
-
-    // Load and draw cover image - use cached image if available
-    const loadCoverImage = async () => {
-      const cachedCoverImage = animeImageCache[quote.anime];
-      if (cachedCoverImage) {
-        // Use cached image
-        try {
-          const response = await fetch(cachedCoverImage);
-          const blob = await response.blob();
-          const objectUrl = URL.createObjectURL(blob);
-          const coverImg = new Image();
-          coverImg.onload = () => {
-            // Draw card background with shadow
-            ctx.save();
-            ctx.shadowColor = 'rgba(0,0,0,0.4)';
-            ctx.shadowBlur = 24;
-            roundRect(30, 30, 740, 540, 32);
-            ctx.fillStyle = 'rgba(30,30,30,0.92)';
-            ctx.fill();
-            ctx.restore();
-
-            // Draw cover image with rounded corners
-            ctx.save();
-            roundRect(60, 80, 180, 260, 18);
-            ctx.clip();
-            ctx.drawImage(coverImg, 60, 80, 180, 260);
-            ctx.restore();
-
-            URL.revokeObjectURL(objectUrl);
-            coverLoaded = true;
-            tryDraw();
-          };
-          coverImg.onerror = () => {
-            URL.revokeObjectURL(objectUrl);
-            // Fallback: draw a placeholder rectangle for cover
-            drawCoverPlaceholder();
-          };
-          coverImg.src = objectUrl;
-        } catch (error) {
-          console.warn('Failed to load cached cover image:', error);
-          drawCoverPlaceholder();
+      // Helper function to draw rounded rectangle
+      const roundRect = (x, y, width, height, radius) => {
+        if (ctx.roundRect) {
+          ctx.roundRect(x, y, width, height, radius);
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(x + radius, y);
+          ctx.lineTo(x + width - radius, y);
+          ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+          ctx.lineTo(x + width, y + height - radius);
+          ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+          ctx.lineTo(x + radius, y + height);
+          ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+          ctx.lineTo(x, y + radius);
+          ctx.quadraticCurveTo(x, y, x + radius, y);
+          ctx.closePath();
         }
-      } else {
-        // No cached image, use placeholder
-        drawCoverPlaceholder();
-      }
-    };
+      };
 
-    const drawCoverPlaceholder = () => {
+      // Draw card background
       ctx.save();
       ctx.shadowColor = 'rgba(0,0,0,0.4)';
       ctx.shadowBlur = 24;
@@ -647,96 +825,111 @@ const AnimeQuotes = () => {
       ctx.fill();
       ctx.restore();
 
-      ctx.save();
-      roundRect(60, 80, 180, 260, 18);
-      ctx.fillStyle = '#666';
-      ctx.fill();
-      ctx.strokeStyle = '#999';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 16px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('Anime Cover', 150, 210);
-      ctx.restore();
-
-      coverLoaded = true;
-      tryDraw();
-    };
-
-    // Load and draw character image - use cached image if available
-    const loadCharImage = async () => {
-      const cacheKey = `${quote.character}_${quote.anime}`;
-      const cachedCharImage = characterImageCache[cacheKey];
-      if (cachedCharImage) {
-        // Use cached image
+      // Function to convert image URL to base64 (handles CORS)
+      const imageToBase64 = async (url) => {
         try {
-          const response = await fetch(cachedCharImage);
+          const response = await fetchWithBackoff(url, {}, 4, 200);
+          if (!response || !response.ok) return null;
           const blob = await response.blob();
-          const objectUrl = URL.createObjectURL(blob);
-          const charImg = new Image();
-          charImg.onload = () => {
-            // Draw character image as circle, overlapping cover
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(180, 320, 54, 0, Math.PI * 2);
-            ctx.closePath();
-            ctx.shadowColor = 'rgba(0,0,0,0.25)';
-            ctx.shadowBlur = 12;
-            ctx.clip();
-            ctx.drawImage(charImg, 126, 266, 108, 108);
-            ctx.restore();
-
-            URL.revokeObjectURL(objectUrl);
-            charLoaded = true;
-            tryDraw();
-          };
-          charImg.onerror = () => {
-            URL.revokeObjectURL(objectUrl);
-            // When character image fails to load, don't draw any circle - just skip to text
-            charLoaded = true;
-            tryDraw();
-          };
-          charImg.src = objectUrl;
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+          });
         } catch (error) {
-          console.warn('Failed to load cached character image:', error);
-          // When character image fails to load, don't draw any circle - just skip to text
-          charLoaded = true;
-          tryDraw();
+          console.warn('Failed to convert image to base64:', error);
+          return null;
         }
-      } else {
-        // No cached image, skip drawing any circle
-        charLoaded = true;
-        tryDraw();
+      };
+
+      // Try to load and draw cover image
+      let coverImageAvailable = false;
+      try {
+        let coverImageUrl = animeImageCache[quote.anime];
+
+        // If not cached, try to fetch it
+        if (!coverImageUrl) {
+          coverImageUrl = await fetchAnimeImage(quote.anime);
+        }
+
+        if (coverImageUrl) {
+          const base64Data = await imageToBase64(coverImageUrl);
+          if (base64Data) {
+            const img = new Image();
+            await new Promise((resolve, reject) => {
+              img.onload = () => {
+                // Draw cover image with rounded corners
+                ctx.save();
+                roundRect(60, 80, 180, 260, 18);
+                ctx.clip();
+                ctx.drawImage(img, 60, 80, 180, 260);
+                ctx.restore();
+                coverImageAvailable = true;
+                resolve();
+              };
+              img.onerror = () => resolve(); // Continue without image
+              img.src = base64Data;
+            });
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to load cover image for sharing:', error);
       }
-    };
 
-    loadCoverImage();
-    loadCharImage();
+      // Try to load and draw character image
+      if (coverImageAvailable) {
+        try {
+          const cacheKey = `${quote.character}_${quote.anime}`;
+          let charImageUrl = characterImageCache[cacheKey];
 
-    // Helper function to draw text and share
-    const drawTextAndShare = () => {
-      // Draw quote text - centered when no cover image, otherwise positioned right of images
+          // If not cached, try to fetch it
+          if (!charImageUrl) {
+            charImageUrl = await fetchCharacterImage(quote.character, quote.anime);
+          }
+
+          if (charImageUrl) {
+            const base64Data = await imageToBase64(charImageUrl);
+            if (base64Data) {
+              const charImg = new Image();
+              await new Promise((resolve, reject) => {
+                charImg.onload = () => {
+                  // Draw character image as circle, overlapping cover
+                  ctx.save();
+                  ctx.beginPath();
+                  ctx.arc(180, 320, 54, 0, Math.PI * 2);
+                  ctx.closePath();
+                  ctx.shadowColor = 'rgba(0,0,0,0.25)';
+                  ctx.shadowBlur = 12;
+                  ctx.clip();
+                  ctx.drawImage(charImg, 126, 266, 108, 108);
+                  ctx.restore();
+                  resolve();
+                };
+                charImg.onerror = () => resolve(); // Continue without character image
+                charImg.src = base64Data;
+              });
+            }
+          }
+        } catch (error) {
+          console.warn('Failed to load character image for sharing:', error);
+        }
+      }
+
+      // Draw quote text
       ctx.save();
       ctx.font = 'bold 26px Arial';
       ctx.fillStyle = '#fff';
       ctx.textBaseline = 'top';
 
       let quoteX, quoteWidth;
-      const cachedCoverImage = animeImageCache[quote.anime];
-      const hasCoverImage = !!cachedCoverImage;
-
-      if (!hasCoverImage) {
-        // Center the text when no cover image
-        quoteX = canvas.width / 2;
-        quoteWidth = 600;
-        ctx.textAlign = 'center';
-      } else {
-        // Position to the right of images when cover is available
+      if (coverImageAvailable) {
         quoteX = 270;
         quoteWidth = 470;
         ctx.textAlign = 'left';
+      } else {
+        quoteX = canvas.width / 2;
+        quoteWidth = 600;
+        ctx.textAlign = 'center';
       }
 
       const quoteY = 100;
@@ -758,12 +951,12 @@ const AnimeQuotes = () => {
       ctx.fillText(line, quoteX, y);
       ctx.restore();
 
-      // Draw character name and anime title at the bottom - centered when no cover image
+      // Draw character name and anime title
       ctx.save();
       ctx.font = 'bold 22px Arial';
       ctx.fillStyle = '#fff';
-      ctx.textAlign = hasCoverImage ? 'left' : 'center';
-      const bottomX = hasCoverImage ? 270 : canvas.width / 2;
+      ctx.textAlign = coverImageAvailable ? 'left' : 'center';
+      const bottomX = coverImageAvailable ? 270 : canvas.width / 2;
       ctx.fillText(quote.character, bottomX, 500);
       ctx.font = '18px Arial';
       ctx.fillStyle = '#00d4ff';
@@ -780,7 +973,10 @@ const AnimeQuotes = () => {
 
       // Convert to blob and share
       canvas.toBlob(async (blob) => {
-        if (!blob) return;
+        if (!blob) {
+          alert('Failed to generate image for sharing. Please try again.');
+          return;
+        }
 
         const file = new File([blob], `quote-${quote.id}.png`, { type: 'image/png' });
 
@@ -796,10 +992,14 @@ const AnimeQuotes = () => {
             if (error.name !== 'AbortError') {
               console.warn('Share failed:', error);
               // Fallback to download
+              const url = URL.createObjectURL(blob);
               const link = document.createElement('a');
+              link.href = url;
               link.download = `quote-${quote.id}.png`;
-              link.href = canvas.toDataURL();
+              document.body.appendChild(link);
               link.click();
+              document.body.removeChild(link);
+              setTimeout(() => URL.revokeObjectURL(url), 1000);
             }
           }
         } else {
@@ -811,14 +1011,23 @@ const AnimeQuotes = () => {
           } catch (clipboardError) {
             console.warn('Clipboard API failed:', clipboardError);
             // Final fallback: download
+            const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
+            link.href = url;
             link.download = `quote-${quote.id}.png`;
-            link.href = canvas.toDataURL();
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            alert('Quote image downloaded! (Sharing not supported in this browser)');
           }
         }
-      });
-    };
+      }, 'image/png', 1.0);
+
+    } catch (error) {
+      console.error('Error generating quote image for sharing:', error);
+      alert('Failed to generate quote image for sharing. Please try again.');
+    }
   };
 
   const toggleShareButtons = (quoteId) => {
@@ -1231,11 +1440,6 @@ const AnimeQuotes = () => {
                     </div>
                   )}
                 </div>
-                <AnimatedHeart
-                  isFavorite={favorites.has(quote.id)}
-                  onToggle={() => toggleFavorite(quote.id)}
-                  className="absolute top-4 right-4"
-                />
               </div>
 
               {/* Character Image and Content */}
@@ -1283,12 +1487,7 @@ const AnimeQuotes = () => {
                 )}
 
                 {/* Actions */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm text-gray-400">
-                    <FontAwesomeIcon icon={faHeart} />
-                    <span>{quote.likes}</span>
-                  </div>
-
+                <div className="flex items-center justify-end">
                   <div className="flex gap-2">
                     <div className={`buttons ${shareButtonsExpanded[quote.id] ? 'expanded' : ''}`}>
                       <button 
@@ -1296,9 +1495,7 @@ const AnimeQuotes = () => {
                         title="Share"
                         onClick={() => toggleShareButtons(quote.id)}
                       >
-                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M15.75 5.125a3.125 3.125 0 1 1 .754 2.035l-8.397 3.9a3.124 3.124 0 0 1 0 1.88l8.397 3.9a3.125 3.125 0 1 1-.61 1.095l-8.397-3.9a3.125 3.125 0 1 1 0-4.07l8.397-3.9a3.125 3.125 0 0 1-.144-.94Z"></path>
-                        </svg>
+                        <FontAwesomeIcon icon={faShare} className="w-5 h-5" />
                       </button>
                       <button
                         className="discord-button button"

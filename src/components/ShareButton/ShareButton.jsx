@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShare } from '@fortawesome/free-solid-svg-icons';
 
 const ShareButton = ({ onShare, className = "", text = "Share", episodeId = null, animeTitle = "" }) => {
-  const [showCopiedText, setShowCopiedText] = useState(false);
+  const [showCopiedPopup, setShowCopiedPopup] = useState(false);
 
   const handleShare = async () => {
     const currentUrl = window.location.href;
@@ -19,20 +21,20 @@ const ShareButton = ({ onShare, className = "", text = "Share", episodeId = null
           text: shareText,
           url: currentUrl,
         });
-        setShowCopiedText(true);
-        setTimeout(() => setShowCopiedText(false), 2000);
+        setShowCopiedPopup(true);
+        setTimeout(() => setShowCopiedPopup(false), 2000);
       } catch (err) {
         console.log('Error sharing:', err);
         // Fallback to clipboard
         copyToClipboard(currentUrl);
-        setShowCopiedText(true);
-        setTimeout(() => setShowCopiedText(false), 2000);
+        setShowCopiedPopup(true);
+        setTimeout(() => setShowCopiedPopup(false), 2000);
       }
     } else {
       // Fallback for browsers without Web Share API
       copyToClipboard(currentUrl);
-      setShowCopiedText(true);
-      setTimeout(() => setShowCopiedText(false), 2000);
+      setShowCopiedPopup(true);
+      setTimeout(() => setShowCopiedPopup(false), 2000);
     }
 
     if (onShare) onShare();
@@ -48,32 +50,35 @@ const ShareButton = ({ onShare, className = "", text = "Share", episodeId = null
   };
 
   return (
-    <div className={className}>
-      <div
+    <div className={`relative ${className}`}>
+      <button
         className="flex items-center justify-center text-center bg-[linear-gradient(90deg,#212121_calc(22px-1px),transparent_1%)_center/22px_22px,linear-gradient(#212121_calc(22px-1px),transparent_1%)_center/22px_22px,#313131] border border-[#313131] px-2 py-1 rounded-[0.35em] shadow-[0_0_0.5em_0.25em_rgba(0,0,0,0.1)] cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-[0_0_0.5em_0.3em_rgba(0,0,0,0.1)]"
         onClick={handleShare}
+        title={text}
       >
-        <label
-          className="flex items-center cursor-pointer"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {showCopiedText ? (
-            <span className="text-green-400 font-bold text-sm animate-pulse">
-              Copied!
-            </span>
-          ) : (
-            <svg
-              className="w-4 h-4 fill-white transition-opacity duration-300"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M18 16.08C17.24 16.08 16.56 16.38 16.05 16.87L8.91 12.7C8.96 12.47 9 12.24 9 12C9 11.76 8.96 11.53 8.91 11.3L15.95 7.13C16.46 7.62 17.24 7.92 18 7.92C19.66 7.92 21 6.58 21 4.92C21 3.26 19.66 1.92 18 1.92C16.34 1.92 15 3.26 15 4.92C15 5.16 15.04 5.39 15.09 5.62L8.05 9.79C7.54 9.3 6.76 9 6 9C4.34 9 3 10.34 3 12C3 13.66 4.34 15 6 15C6.76 15 7.54 14.7 8.05 14.21L15.18 18.38C15.13 18.61 15.09 18.84 15.09 19.08C15.09 20.74 16.43 22.08 18.09 22.08C19.75 22.08 21.09 20.74 21.09 19.08C21.09 17.42 19.75 16.08 18 16.08Z"
-              ></path>
-            </svg>
-          )}
-        </label>
-      </div>
+        <FontAwesomeIcon
+          icon={faShare}
+          className="w-4 h-4 fill-white transition-opacity duration-300"
+        />
+      </button>
+
+      {/* Copied Popup Card */}
+      {showCopiedPopup && (
+        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 z-50 animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="bg-green-500 text-white px-3 py-2 rounded-lg shadow-lg border border-green-400">
+            <div className="flex items-center gap-2">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm font-medium">Copied!</span>
+            </div>
+            {/* Arrow pointing down */}
+            <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
+              <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-green-500"></div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
