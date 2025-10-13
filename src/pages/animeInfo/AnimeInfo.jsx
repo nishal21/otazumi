@@ -16,6 +16,7 @@ import { useLanguage } from "@/src/context/LanguageContext";
 import { useHomeInfo } from "@/src/context/HomeInfoContext";
 import Voiceactor from "@/src/components/voiceactor/Voiceactor";
 import AnimeActions from "@/src/components/anime-actions/AnimeActions";
+import CommentSection from "@/src/components/CommentSection/CommentSection";
 
 function InfoItem({ label, value, isProducer = true }) {
   return (
@@ -517,6 +518,17 @@ function AnimeInfo({ random = false }) {
         </div>
       )}
 
+      {/* Comments Section */}
+      {animeInfo.malId && (
+        <div className="container mx-auto py-12">
+          <CommentSection
+            malId={animeInfo.malId}
+            episodeNumber={1}
+            mediaType="anime"
+          />
+        </div>
+      )}
+
       {/* Recommendations Section */}
       {animeInfo.recommended_data.length > 0 && (
         <div className="container mx-auto py-12">
@@ -528,6 +540,8 @@ function AnimeInfo({ random = false }) {
           />
         </div>
       )}
+
+      
     </div>
   );
 }
