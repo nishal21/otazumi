@@ -140,6 +140,30 @@ const FAQ_DATA = {
     {
       question: "Do you have a mobile app?",
       answer: "Currently, we don't have a dedicated mobile app, but our website is fully responsive and works great on mobile browsers. You can add Otazumi to your home screen for an app-like experience."
+    },
+    {
+      question: "What is the comment section?",
+      answer: "We have integrated a comment section powered by The Anime Community, a third-party service. This allows users to discuss anime episodes and series. Comments are available on both anime info pages and individual episode watch pages."
+    },
+    {
+      question: "Are the comments moderated?",
+      answer: "The comment section is provided by a third-party service (The Anime Community) and operates as a global chat system. While they have community guidelines, moderation is handled by the service provider, not by Otazumi directly."
+    },
+    {
+      question: "Why do I see comments about other websites in the comment section?",
+      answer: "The comment section is a global chat system used by multiple anime streaming sites worldwide. Since it's shared across different platforms, you may see discussions or complaints about other websites that also use this comment service. This is normal for a global community chat system."
+    },
+    {
+      question: "Who provides the comment service?",
+      answer: "The comment section is powered by The Anime Community, an independent third-party service. They provide comment functionality for anime websites globally. Otazumi integrates with their service to enable community discussions."
+    },
+    {
+      question: "Are comments visible globally across all sites?",
+      answer: "Yes, the comment section is a global chat system. Comments posted here are visible to users across all anime streaming websites that use The Anime Community service. This creates a worldwide anime community discussion platform."
+    },
+    {
+      question: "Can I report inappropriate comments?",
+      answer: "For comment moderation and reporting, please use the built-in reporting features within the comment section interface provided by The Anime Community. They handle community moderation and content policies for their global chat system."
     }
   ],
   'Subtitle Downloads': [
