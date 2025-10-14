@@ -45,6 +45,30 @@ const CommentSection = ({ malId, aniListId, episodeNumber, mediaType = 'anime' }
       commentDiv.appendChild(script);
     }
 
+    // Add CSS to make embedded content responsive
+    const style = document.createElement('style');
+    style.textContent = `
+      #anime-community-comment-section iframe,
+      #anime-community-comment-section embed,
+      #anime-community-comment-section object {
+        max-width: 100% !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow-x: auto !important;
+      }
+      #anime-community-comment-section * {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      #anime-community-comment-section {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+    `;
+    if (commentDiv) {
+      commentDiv.appendChild(style);
+    }
+
     // Cleanup function - don't remove script on unmount
   }, [malId, aniListId, episodeNumber, mediaType]);
 
@@ -62,10 +86,13 @@ const CommentSection = ({ malId, aniListId, episodeNumber, mediaType = 'anime' }
         </p>
       </div>
       
-      <div
-        id="anime-community-comment-section"
-        className="bg-[#141414] rounded-lg p-4 min-h-[400px]"
-      ></div>
+      {/* Scrollable wrapper for embedded content */}
+      <div className="w-full overflow-x-auto -webkit-overflow-scrolling-touch">
+        <div
+          id="anime-community-comment-section"
+          className="bg-[#141414] rounded-lg p-2 sm:p-4 min-h-[400px] w-full max-w-full"
+        ></div>
+      </div>
     </div>
   );
 };
