@@ -82,13 +82,17 @@ define(['./workbox-fc76d6c3'], (function (workbox) { 'use strict';
     "revision": "3ca0b8505b4bec776b69afdba2768812"
   }, {
     "url": "/index.html",
-    "revision": "0.7f7jjfp9prg"
+    "revision": "0.qdlko1g66r4"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/index.html"), {
     allowlist: [/^\/$/],
     denylist: [/^\/_/, /^\/@/, /\/[^/?]+\.[^/]+$/]
   }));
+  workbox.registerRoute(/^https:\/\/otazumi-cors-proxy-nishal\.nishalamv\.workers\.dev\/.*$/, new workbox.NetworkOnly({
+    "cacheName": "api-cache",
+    plugins: []
+  }), 'GET');
   workbox.registerRoute(/^https:\/\/.*\.(m3u8|ts)$/, new workbox.NetworkOnly({
     "cacheName": "video-cache",
     plugins: []

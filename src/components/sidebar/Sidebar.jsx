@@ -1,6 +1,6 @@
 import { FaChevronLeft } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart, faChartBar, faNewspaper, faQuoteLeft } from "@fortawesome/free-solid-svg-icons";
+import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart, faChartBar, faNewspaper, faQuoteLeft, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "@/src/context/LanguageContext";
 import { useAuth } from "@/src/context/AuthContext";
 import { useEffect, useRef } from "react";
@@ -15,6 +15,7 @@ const MENU_ITEMS = [
   { name: "My Collection", path: "/profile", icon: faHeart },
   { name: "Statistics", path: "/statistics", icon: faChartBar },
   { name: "Download Subtitles", path: "/subtitle-download", icon: faClosedCaptioning },
+  { name: "Download Anime Videos", path: "/anime-video-download", icon: faDownload },
   { name: "Recently Added", path: "/recently-added", icon: faCirclePlay },
   { name: "Top Upcoming", path: "/top-upcoming", icon: faFilePen },
   { name: "Subbed Anime", path: "/subbed-anime", icon: faFilePen },

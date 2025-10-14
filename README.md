@@ -29,18 +29,17 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 
 ### 🆕 What's New
 
-**🎨 Enhanced Share Button**
-- Redesigned share button with icon-only display
-- Shows "Copied!" confirmation text when clicked
-- Green animated text with pulse effect for 2 seconds
-- Improved visual feedback for link sharing
-- Cleaner, more modern appearance
-
 **🔧 Technical Improvements**
 - Converted AnimatedHeart component from styled-jsx to Tailwind CSS
 - Removed styled-jsx dependency for better consistency
 - Fixed React warnings about non-boolean jsx attributes
 - Improved component performance and maintainability
+
+**🆕 New Pages & Features**
+- Added **Anime Video Downloader** page — search series, browse episodes, and open download links via a modal popup (modal appears below the navbar).
+- Added **MAL / AniList view** button on anime pages — quick link to view the title on MyAnimeList and AniList for additional info and tracking.
+- Launched **News** page — aggregated anime/manga news with categories and thumbnails.
+- Improved **Quotes** page — expanded quote database, better generation UI, and easier sharing/download of quote images.
 
 ---
 
@@ -152,7 +151,14 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 - **Fixed Navigation Overlap** - Statistics page now has proper top padding
 - **Consistent Dark Theme** - Beautiful black background throughout the app
 
-### 🔒 Privacy & Security
+### 🎥 Anime Video Downloader
+
+- **Search & Download** - Search for anime series and open available download links for individual episodes.
+- **Download Modal** - Links open via a modal popup that appears below the fixed navbar to avoid overlapping the header.
+- **Third-party Links** - Download sources are provided by external services. Availability and safety depend on those providers; use caution when downloading.
+- **Episode Search & Pagination** - Quickly find episodes using the episode search box and navigate large series with pagination.
+
+### ��� Privacy & Security
 - **Encrypted Passwords** - bcrypt hashing with 10 salt rounds
 - **JWT Authentication** - Secure token-based auth
 - **Secure Database** - NeonDB with SSL/TLS encryption
@@ -541,6 +547,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - **Anime API**: [itzzzme/anime-api](https://github.com/itzzzme/anime-api)
 - **M3U8 Proxy**: [itzzzme/m3u8proxy](https://github.com/itzzzme/m3u8proxy)
 - **Artplayer**: Amazing video player library
+- **AnimePaheDownloader**: Reference implementation used while building the Anime Video Downloader - [IamHomen/AnimePaheDownloader](https://github.com/IamHomen/AnimePaheDownloader) (thank you!)
 - **NeonDB**: Serverless Postgres hosting
 - **Netlify**: Deployment and hosting
 - All anime fans who inspired this project! 🎌
@@ -585,15 +592,11 @@ If you enjoy Otazumi, consider supporting the developer:
 - [ ] Mobile apps (iOS/Android)
 - [ ] Discord integration
 - [ ] Watch parties (sync viewing)
-- [ ] User reviews and ratings
+- [x] User reviews and ratings
 - [ ] Anime recommendations algorithm
 - [ ] Genre-based statistics breakdown
-- [ ] Export statistics as PDF
-- [ ] Multi-language UI (i18n)
-- [ ] Dark/Light theme toggle
 - [ ] Chromecast support
-- [ ] Download episodes (premium)
-
+- [x] Download episodes
 ---
 
 <div align="center">

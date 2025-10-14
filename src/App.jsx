@@ -30,6 +30,8 @@ import Support from "./pages/support/Support";
 import StatsDashboard from "./pages/statistics/StatsDashboard";
 import AnimeNews from "./pages/anime-news/AnimeNews";
 import AnimeQuotes from "./pages/anime-quotes/AnimeQuotes";
+import AnimeVideoDownload from "./pages/anime-video-download/AnimeVideoDownload";
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const location = useLocation();
@@ -67,6 +69,7 @@ function App() {
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/subtitle-download" element={<SubtitleDownload />} />
+            <Route path="/anime-video-download" element={<AnimeVideoDownload />} />
             <Route path="/support" element={<Support />} />
             <Route path="/statistics" element={<StatsDashboard />} />
             <Route path="/news" element={<AnimeNews />} />
@@ -96,6 +99,7 @@ function App() {
           </Routes>
           {!isSplashScreen && <Footer />}
         </main>
+        <Toaster />
       </div>
     </HomeInfoProvider>
       </AuthProvider>

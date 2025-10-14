@@ -331,6 +331,132 @@ body::-webkit-scrollbar {
   }
 }
 
+/* Episode Search Bar Styles - From Uiverse.io by krlozCJ */
+.episode-search-container {
+  position: relative;
+  --size-button: 40px;
+  color: white;
+}
+
+.episode-search-input {
+  padding-left: var(--size-button);
+  height: var(--size-button);
+  font-size: 15px;
+  border: none;
+  color: #fff;
+  outline: none;
+  width: var(--size-button);
+  transition: all ease 0.3s;
+  background-color: #191A1E;
+  box-shadow: 1.5px 1.5px 3px #0e0e0e, -1.5px -1.5px 3px rgb(95 94 94 / 25%), inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #5f5e5e;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.episode-search-input:focus,
+.episode-search-input:not(:invalid) {
+  width: 200px;
+  cursor: text;
+  box-shadow: 0px 0px 0px #0e0e0e, 0px 0px 0px rgb(95 94 94 / 25%), inset 1.5px 1.5px 3px #0e0e0e, inset -1.5px -1.5px 3px #5f5e5e;
+}
+
+.episode-search-input:focus + .episode-search-icon,
+.episode-search-input:not(:invalid) + .episode-search-icon {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.episode-search-container .episode-search-icon {
+  position: absolute;
+  width: var(--size-button);
+  height: var(--size-button);
+  top: 0;
+  left: 0;
+  padding: 8px;
+  pointer-events: none;
+}
+
+.episode-search-container .episode-search-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Search Result Card Styles - From Uiverse.io by Tiagoadag */
+.card {
+  width: 190px;
+  height: 254px;
+  background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+  border-radius: 20px;
+  transition: all .3s;
+}
+
+.card2 {
+  width: 190px;
+  height: 254px;
+  background-color: #1a1a1a;
+  border-radius: 20px;
+  transition: all .2s;
+}
+
+.card2:hover {
+  transform: scale(0.98);
+  border-radius: 20px;
+}
+
+.card:hover {
+  box-shadow: 0px 0px 20px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive card styles for smaller devices */
+@media (max-width: 640px) {
+  .card {
+    width: 280px;
+    height: 374px;
+  }
+  
+  .card2 {
+    width: 280px;
+    height: 374px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .card {
+    width: 220px;
+    height: 294px;
+  }
+  
+  .card2 {
+    width: 220px;
+    height: 294px;
+  }
+}
+
+/* Larger cards for big screens */
+@media (min-width: 1025px) and (max-width: 1536px) {
+  .card {
+    width: 240px;
+    height: 320px;
+  }
+  
+  .card2 {
+    width: 240px;
+    height: 320px;
+  }
+}
+
+@media (min-width: 1537px) {
+  .card {
+    width: 280px;
+    height: 374px;
+  }
+  
+  .card2 {
+    width: 280px;
+    height: 374px;
+  }
+}
+
 /* Language Toggle Switch - Navbar (Desktop) */
 .language-toggle-wrapper-nav {
   display: flex;

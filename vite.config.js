@@ -21,6 +21,13 @@ export default defineConfig({
         ],
         runtimeCaching: [
           {
+            urlPattern: /^https:\/\/otazumi-cors-proxy-nishal\.nishalamv\.workers\.dev\/.*$/,
+            handler: 'NetworkOnly',
+            options: {
+              cacheName: 'api-cache',
+            },
+          },
+          {
             urlPattern: /^https:\/\/.*\.(m3u8|ts)$/,
             handler: 'NetworkOnly',
             options: {

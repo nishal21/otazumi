@@ -80,7 +80,11 @@ const FAQ_DATA = {
     {
       question: "The video player isn't working. What should I do?",
       answer: "Try these steps: 1) Refresh the page, 2) Clear your browser cache, 3) Try a different server option, 4) Update your browser, 5) Disable ad blockers temporarily, 6) Try a different browser."
-    }
+    },
+    {
+      question: "What is the Anime Video Downloader and is it safe?",
+      answer: "The Anime Video Downloader page lets you search for anime series and open available download links for specific episodes. Download links are provided by third-party services and will open in a new tab or external provider. We do our best to list reliable sources, but the availability and safety of download links depend on those external providers."
+    },
   ],
   'Statistics & Watch History': [
     {
