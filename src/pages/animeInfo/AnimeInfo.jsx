@@ -89,6 +89,40 @@ function AnimeInfo({ random = false }) {
   const { homeInfo } = useHomeInfo();
   const { id: currentId } = useParams();
   const navigate = useNavigate();
+
+  // Fetch AniList score
+  const fetchAniListScore = async (anilistId) => {
+    if (!anilistId) return;
+    
+    try {
+      const query = `
+        query ($id: Int) {
+          Media(id: $id, type: ANIME) {
+            averageScore
+          }
+        }
+      `;
+      
+      const response = await fetch('https://graphql.anilist.co', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          variables: { id: parseInt(anilistId) }
+        })
+      });
+      
+      const data = await response.json();
+      if (data.data?.Media?.averageScore) {
+        setAniListScore(data.data.Media.averageScore);
+      }
+    } catch (error) {
+      console.error('Error fetching AniList score:', error);
+    }
+  };
   useEffect(() => {
     if (id === "404-not-found-page") {
       console.log("404 got!");
@@ -174,6 +208,40 @@ function AnimeInfo({ random = false }) {
                     <div className="absolute top-2 left-2 px-2 py-0.5 bg-red-500/90 backdrop-blur-sm rounded-md text-[10px] font-medium">
                       18+
                     </div>
+                  )}
+                </div>
+
+                {/* External Links Section */}
+                <div className="mt-3 flex gap-2">
+                  {animeInfo?.malId && (
+                    <a
+                      href={`https://myanimelist.net/anime/${animeInfo.malId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 px-3 py-2 bg-[#2e51a2] hover:bg-[#2e51a2]/80 text-white text-center rounded-md transition-colors flex items-center justify-center"
+                      title="View on MyAnimeList"
+                    >
+                      <img 
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/MyAnimeList_favicon.svg/256px-MyAnimeList_favicon.svg.png?20240412044336" 
+                        alt="MAL" 
+                        className="w-5 h-5 object-contain"
+                      />
+                    </a>
+                  )}
+                  {animeInfo?.anilistId && (
+                    <a
+                      href={`https://anilist.co/anime/${animeInfo.anilistId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 px-3 py-2 bg-gray-900 hover:bg-black text-white text-center rounded-md transition-colors flex items-center justify-center"
+                      title="View on AniList"
+                    >
+                      <img 
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/AniList_logo.svg/512px-AniList_logo.svg.png?20220330011134" 
+                        alt="AniList" 
+                        className="w-5 h-5 object-contain"
+                      />
+                    </a>
                   )}
                 </div>
               </div>
@@ -323,6 +391,40 @@ function AnimeInfo({ random = false }) {
                     <div className="absolute top-3 left-3 px-2.5 py-0.5 bg-red-500/90 backdrop-blur-sm rounded-lg text-xs font-medium">
                       18+
                     </div>
+                  )}
+                </div>
+
+                {/* External Links Section */}
+                <div className="mt-4 flex gap-3">
+                  {animeInfo?.malId && (
+                    <a
+                      href={`https://myanimelist.net/anime/${animeInfo.malId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 px-4 py-2.5 bg-[#2e51a2] hover:bg-[#2e51a2]/80 text-white text-center rounded-lg transition-colors flex items-center justify-center"
+                      title="View on MyAnimeList"
+                    >
+                      <img 
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/MyAnimeList_favicon.svg/256px-MyAnimeList_favicon.svg.png?20240412044336" 
+                        alt="MAL" 
+                        className="w-6 h-6 object-contain"
+                      />
+                    </a>
+                  )}
+                  {animeInfo?.anilistId && (
+                    <a
+                      href={`https://anilist.co/anime/${animeInfo.anilistId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 px-4 py-2.5 bg-gray-900 hover:bg-black text-white text-center rounded-lg transition-colors flex items-center justify-center"
+                      title="View on AniList"
+                    >
+                      <img 
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/AniList_logo.svg/512px-AniList_logo.svg.png?20220330011134" 
+                        alt="AniList" 
+                        className="w-6 h-6 object-contain"
+                      />
+                    </a>
                   )}
                 </div>
               </div>
