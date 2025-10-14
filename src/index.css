@@ -1,0 +1,550 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #0a0a0a;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  background-color: #0a0a0a;
+  min-height: 100vh;
+}
+
+body::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+/* Hide default scrollbar completely */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #201f31;  /* Match the page background color */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #201f31;  /* Match the page background color */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #404040;
+  border-radius: 20px;
+  border: 2px solid #201f31;  /* Match the page background color */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4d4d4d;
+}
+
+/* Hide scrollbar buttons */
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #201f31;  /* Match the page background color */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #404040 #201f31;  /* Match the page background color */
+}
+
+/* Hide default scrollbar for .scrollbar-visible class */
+.scrollbar-visible {
+  scrollbar-width: thin;
+  scrollbar-color: #404040 #201f31;  /* Match the page background color */
+}
+
+.scrollbar-visible::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #201f31;  /* Match the page background color */
+}
+
+.scrollbar-visible::-webkit-scrollbar-track {
+  background-color: #201f31;  /* Match the page background color */
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background-color: #404040;
+  border-radius: 20px;
+  border: 2px solid #201f31;  /* Match the page background color */
+}
+
+/* Hide scrollbar buttons for .scrollbar-visible */
+.scrollbar-visible::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.scrollbar-visible::-webkit-scrollbar-corner {
+  background-color: #201f31;  /* Match the page background color */
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+::-webkit-scrollbar {
+  width: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: #23222c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #65646a;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.is-visible {
+  opacity: 1;
+}
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+/* Dark Theme (Default and Only Theme) */
+.dark {
+  background-color: #0a0a0a;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.dark body {
+  background-color: #0a0a0a !important;
+  color: rgba(255, 255, 255, 0.87) !important;
+}
+.dot {
+  width: 4px;
+  height: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  display: inline-block;
+}
+
+/* Modern Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Hide scrollbar buttons */
+::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0.02);
+}
+
+/* Scrollbar visible class with modern styling */
+.scrollbar-visible {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0.02);
+}
+
+.scrollbar-visible::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+}
+
+.scrollbar-visible::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.scrollbar-visible::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.scrollbar-visible::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+
+/* PWA Install Prompt Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Desktop animation - slide from center */
+@media (min-width: 640px) {
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Prevent body scroll when modal is open */
+.modal-open {
+  overflow: hidden;
+}
+
+/* Safe area padding for devices with notches */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Episode Search Bar Styles - From Uiverse.io by krlozCJ */
+.episode-search-container {
+  position: relative;
+  --size-button: 40px;
+  color: white;
+}
+
+.episode-search-input {
+  padding-left: var(--size-button);
+  height: var(--size-button);
+  font-size: 15px;
+  border: none;
+  color: #fff;
+  outline: none;
+  width: var(--size-button);
+  transition: all ease 0.3s;
+  background-color: #191A1E;
+  box-shadow: 1.5px 1.5px 3px #0e0e0e, -1.5px -1.5px 3px rgb(95 94 94 / 25%), inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #5f5e5e;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.episode-search-input:focus,
+.episode-search-input:not(:invalid) {
+  width: 200px;
+  cursor: text;
+  box-shadow: 0px 0px 0px #0e0e0e, 0px 0px 0px rgb(95 94 94 / 25%), inset 1.5px 1.5px 3px #0e0e0e, inset -1.5px -1.5px 3px #5f5e5e;
+}
+
+.episode-search-input:focus + .episode-search-icon,
+.episode-search-input:not(:invalid) + .episode-search-icon {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.episode-search-container .episode-search-icon {
+  position: absolute;
+  width: var(--size-button);
+  height: var(--size-button);
+  top: 0;
+  left: 0;
+  padding: 8px;
+  pointer-events: none;
+}
+
+.episode-search-container .episode-search-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Search Result Card Styles - From Uiverse.io by Tiagoadag */
+.card {
+  width: 190px;
+  height: 254px;
+  background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+  border-radius: 20px;
+  transition: all .3s;
+}
+
+.card2 {
+  width: 190px;
+  height: 254px;
+  background-color: #1a1a1a;
+  border-radius: 20px;
+  transition: all .2s;
+}
+
+.card2:hover {
+  transform: scale(0.98);
+  border-radius: 20px;
+}
+
+.card:hover {
+  box-shadow: 0px 0px 20px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive card styles for smaller devices */
+@media (max-width: 640px) {
+  .card {
+    width: 280px;
+    height: 374px;
+  }
+  
+  .card2 {
+    width: 280px;
+    height: 374px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .card {
+    width: 220px;
+    height: 294px;
+  }
+  
+  .card2 {
+    width: 220px;
+    height: 294px;
+  }
+}
+
+/* Larger cards for big screens */
+@media (min-width: 1025px) and (max-width: 1536px) {
+  .card {
+    width: 240px;
+    height: 320px;
+  }
+  
+  .card2 {
+    width: 240px;
+    height: 320px;
+  }
+}
+
+@media (min-width: 1537px) {
+  .card {
+    width: 280px;
+    height: 374px;
+  }
+  
+  .card2 {
+    width: 280px;
+    height: 374px;
+  }
+}
+
+/* Language Toggle Switch - Navbar (Desktop) */
+.language-toggle-wrapper-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.language-toggle-nav {
+  --size: 50px;
+  -webkit-appearance: none;
+  appearance: none;
+  width: var(--size);
+  height: calc(var(--size) / 2);
+  background-color: #fff;
+  border: 2px solid #222;
+  border-radius: 30px 100px 100px 100px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.5s;
+}
+
+.language-toggle-nav::before {
+  content: "";
+  position: absolute;
+  width: calc(var(--size) / 2);
+  height: calc(var(--size) / 2);
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scale(0.7);
+  border: 2px solid #222;
+  border-radius: 30px 100px 100px 100px;
+  background-color: #fde881;
+  box-sizing: border-box;
+  transition: all 0.5s;
+}
+
+.language-toggle-nav:checked {
+  background-color: #fde881;
+  border-radius: 100px 100px 30px 100px;
+}
+
+.language-toggle-nav:checked::before {
+  left: 50%;
+  background-color: #fff;
+  border-radius: 100px 100px 30px 100px;
+}
+
+.language-labels-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.language-label-nav {
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.language-label-nav.active {
+  color: #fde881;
+  font-size: 0.75rem;
+  text-shadow: 0 0 10px rgba(253, 232, 129, 0.5);
+}
+
+.language-label-divider-nav {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Responsive adjustments for navbar toggle */
+@media (max-width: 1024px) {
+  .language-toggle-nav {
+    --size: 45px;
+  }
+  
+  .language-labels-nav {
+    font-size: 0.6rem;
+  }
+  
+  .language-label-nav.active {
+    font-size: 0.7rem;
+  }
+}
+
+

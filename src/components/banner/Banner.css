@@ -1,0 +1,73 @@
+.spotlight {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.spotlight-overlay {
+  background: linear-gradient(
+    90deg,
+    #0a0a0a 0%,
+    rgba(10, 10, 10, 0.7) 35%,
+    rgba(10, 10, 10, 0) 65%
+  ),
+  linear-gradient(
+    to top,
+    #0a0a0a 0%,
+    rgba(10, 10, 10, 0.7) 20%,
+    rgba(10, 10, 10, 0) 50%
+  );
+  pointer-events: none;
+}
+
+@media only screen and (max-width: 1300px) {
+  .spotlight-overlay {
+    background: linear-gradient(
+      90deg,
+      #0a0a0a 0%,
+      rgba(10, 10, 10, 0.7) 35%,
+      rgba(10, 10, 10, 0) 65%
+    ),
+    linear-gradient(
+      to top,
+      #0a0a0a 0%,
+      rgba(10, 10, 10, 0.7) 20%,
+      rgba(10, 10, 10, 0) 50%
+    );
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .spotlight-overlay {
+    background: linear-gradient(
+      90deg,
+      #0a0a0a 0%,
+      rgba(10, 10, 10, 0.7) 35%,
+      rgba(10, 10, 10, 0) 65%
+    ),
+    linear-gradient(
+      to top,
+      #0a0a0a 0%,
+      rgba(10, 10, 10, 0.7) 20%,
+      rgba(10, 10, 10, 0) 50%
+    );
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .spotlight-overlay {
+    background: linear-gradient(
+      90deg,
+      #0a0a0a 0%,
+      rgba(10, 10, 10, 0.7) 35%,
+      rgba(10, 10, 10, 0) 65%
+    ),
+    linear-gradient(
+      to top,
+      #0a0a0a 0%,
+      rgba(10, 10, 10, 0.7) 20%,
+      rgba(10, 10, 10, 0) 50%
+    );
+  }
+}
