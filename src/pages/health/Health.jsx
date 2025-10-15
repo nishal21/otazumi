@@ -25,23 +25,26 @@ const Health = () => {
       // Try multiple sources for real-time viewer data
 
       // Option 1: Custom backend API (recommended)
-      const response = await fetch('/api/viewers')
-      if (response.ok) {
-        const data = await response.json()
-        setHealthStatus(prev => ({
-          ...prev,
-          viewers: {
-            count: data.count || 0,
-            status: 'healthy',
-            lastUpdated: new Date().toISOString(),
-            source: 'Backend API'
-          }
-        }))
-        return
+      try {
+        const response = await fetch('/api/viewers')
+        if (response.ok) {
+          const data = await response.json()
+          setHealthStatus(prev => ({
+            ...prev,
+            viewers: {
+              count: data.count || 0,
+              status: 'healthy',
+              lastUpdated: new Date().toISOString(),
+              source: 'Backend API'
+            }
+          }))
+          return
+        }
+      } catch (apiError) {
+        console.log('Backend API not available:', apiError)
       }
 
       // Option 2: Google Analytics Real Time API (if configured)
-      // You'll need to set up Google Analytics and get an API key
       const GA_PROPERTY_ID = process.env.REACT_APP_GA_PROPERTY_ID
       const GA_API_KEY = process.env.REACT_APP_GA_API_KEY
 
@@ -83,38 +86,18 @@ const Health = () => {
         }
       }
 
-      // Option 3: Third-party analytics service (example: GoSquared)
-      // Uncomment and configure if you have a GoSquared account
-      /*
-      try {
-        const gsResponse = await fetch(`https://api.gosquared.com/v1/concurrents?api_key=YOUR_API_KEY&site_token=YOUR_SITE_TOKEN`)
-        if (gsResponse.ok) {
-          const gsData = await gsResponse.json()
-          setHealthStatus(prev => ({
-            ...prev,
-            viewers: {
-              count: gsData.visitors || 0,
-              status: 'healthy',
-              lastUpdated: new Date().toISOString(),
-              source: 'GoSquared'
-            }
-          }))
-          return
-        }
-      } catch (gsError) {
-        console.log('GoSquared not available:', gsError)
-      }
-      */
+      // Option 3: Simple Analytics (if available)
+      // Simple Analytics doesn't have a public API, so we'll use a fallback
+      console.log('Using Simple Analytics - no real-time API available')
 
-      // Fallback: simulate real-time data if no external services are available
-      console.log('No external viewer tracking service available, using fallback data')
+      // Fallback: simulate real-time data or show static message
       setHealthStatus(prev => ({
         ...prev,
         viewers: {
-          count: Math.floor(Math.random() * 50) + 10,
+          count: 0, // Simple Analytics doesn't provide real-time counts
           status: 'healthy',
           lastUpdated: new Date().toISOString(),
-          source: 'Fallback (Demo)'
+          source: 'Simple Analytics (No Real-time API)'
         }
       }))
 
@@ -124,10 +107,10 @@ const Health = () => {
       setHealthStatus(prev => ({
         ...prev,
         viewers: {
-          count: Math.floor(Math.random() * 50) + 10,
+          count: 0,
           status: 'unhealthy',
           lastUpdated: new Date().toISOString(),
-          source: 'Error - Fallback'
+          source: 'Error - Using Fallback'
         }
       }))
     }
@@ -281,7 +264,9 @@ const Health = () => {
           </div>
           <div>
             <span className="text-gray-400">Active Viewers:</span>
-            <span className="text-white ml-2">{healthStatus.viewers.count}</span>
+            <span className="text-white ml-2">
+              {healthStatus.viewers.source?.includes('Simple Analytics') ? 'N/A' : healthStatus.viewers.count}
+            </span>
             {healthStatus.viewers.lastUpdated && (
               <span className="text-gray-500 text-xs ml-2">
                 (Updated: {new Date(healthStatus.viewers.lastUpdated).toLocaleTimeString()})
@@ -377,10 +362,13 @@ const Health = () => {
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold text-blue-400 mb-2">
-              {healthStatus.viewers.count}
+              {healthStatus.viewers.source?.includes('Simple Analytics') ? 'N/A' : healthStatus.viewers.count}
             </div>
             <div className="text-gray-400 text-sm">
-              Real-time active viewers
+              {healthStatus.viewers.source?.includes('Simple Analytics')
+                ? 'Real-time count not available with Simple Analytics'
+                : 'Real-time active viewers'
+              }
             </div>
             {healthStatus.viewers.source && (
               <div className="text-gray-500 text-xs mt-1">
