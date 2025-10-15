@@ -81,7 +81,7 @@ function Navbar() {
                 onClick={handleHamburgerClick}
               />
               <Link to="/home" className="flex items-center">
-                <img src="/logo.svg" alt="Otazumi Logo" className="h-10 w-auto" />
+                <img src="https://i.ibb.co/G4Hyb3Q0/logo.png" alt="Otazumi Logo" className="h-10 w-auto" />
               </Link>
             </div>
           </div>
