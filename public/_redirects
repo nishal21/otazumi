@@ -1,1 +1,5 @@
+# Netlify redirects for SPA routing
 /*    /index.html   200
+
+# Health page redirect (explicit)
+/health  /index.html  200
