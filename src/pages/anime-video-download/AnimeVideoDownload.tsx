@@ -109,6 +109,9 @@ const AnimeVideoDownload = () => {
           <p className="text-gray-300 text-lg max-[478px]:text-base max-[300px]:text-sm">
             Search and download anime episodes with high quality
           </p>
+          <p className="bg-yellow-900/20 border border-yellow-600/30 text-yellow-200 text-sm max-[478px]:text-xs max-[300px]:text-xs mt-2 px-3 py-2 rounded-lg">
+            Please note that loading anime episodes may take some time depending on the server response.
+          </p>
         </div>
 
         {/* Search Bar */}
