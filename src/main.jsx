@@ -16,9 +16,9 @@ const updateSW = registerSW({
 });
 
 createRoot(document.getElementById('root')).render(
-  <LanguageProvider>
-    <BrowserRouter>
+  <BrowserRouter>
+    <LanguageProvider>
       <App />
-    </BrowserRouter>
-  </LanguageProvider>
+    </LanguageProvider>
+  </BrowserRouter>
 );

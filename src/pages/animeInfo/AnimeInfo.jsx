@@ -4,6 +4,9 @@ import {
   faPlay,
   faClosedCaptioning,
   faMicrophone,
+  faVideo,
+  faEye,
+  faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -89,6 +92,9 @@ function AnimeInfo({ random = false }) {
   const { homeInfo } = useHomeInfo();
   const { id: currentId } = useParams();
   const navigate = useNavigate();
+  const [trailerData, setTrailerData] = useState(null);
+  const [showTrailer, setShowTrailer] = useState(false);
+  const [aniListScore, setAniListScore] = useState(null);
 
   // Fetch AniList score
   const fetchAniListScore = async (anilistId) => {
@@ -123,6 +129,108 @@ function AnimeInfo({ random = false }) {
       console.error('Error fetching AniList score:', error);
     }
   };
+
+  // Fetch AniList trailer
+  const fetchAniListTrailer = async (anilistId) => {
+    if (!anilistId) return;
+    
+    try {
+      const query = `
+        query ($id: Int) {
+          Media(id: $id, type: ANIME) {
+            trailer {
+              id
+              site
+              thumbnail
+            }
+          }
+        }
+      `;
+      
+      const response = await fetch('https://graphql.anilist.co', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          variables: { id: parseInt(anilistId) }
+        })
+      });
+      
+      const data = await response.json();
+      if (data.data?.Media?.trailer) {
+        setTrailerData(data.data.Media.trailer);
+        return true; // Found trailer
+      }
+      return false; // No trailer from AniList
+    } catch (error) {
+      console.error('Error fetching AniList trailer:', error);
+      return false; // Error, will try MAL
+    }
+  };
+
+  // Fetch MAL trailer as fallback
+  const fetchMALTrailer = async (malId) => {
+    if (!malId) return;
+    
+    try {
+      // Use Jikan API to get anime details which may include trailer
+      const response = await fetch(`https://api.jikan.moe/v4/anime/${malId}`);
+      const data = await response.json();
+      
+      // Check for trailer in different possible structures
+      let trailerUrl = null;
+      if (data.data?.trailer?.url) {
+        trailerUrl = data.data.trailer.url;
+      } else if (data.data?.trailer?.embed_url) {
+        trailerUrl = data.data.trailer.embed_url;
+      } else if (data.data?.trailer?.youtube_id) {
+        trailerUrl = `https://www.youtube.com/watch?v=${data.data.trailer.youtube_id}`;
+      }
+      
+      if (trailerUrl) {
+        
+        // Convert MAL trailer URL to embeddable format
+        let embedData = null;
+        
+        if (trailerUrl.includes('youtube.com') || trailerUrl.includes('youtu.be') || trailerUrl.includes('youtube-nocookie.com')) {
+          // Extract YouTube video ID
+          const youtubeMatch = trailerUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube-nocookie\.com\/embed\/)([^"&?\/\s]{11})/);
+          if (youtubeMatch) {
+            embedData = {
+              id: youtubeMatch[1],
+              site: 'youtube',
+              thumbnail: data.data?.trailer?.images?.maximum_image_url || 
+                        data.data?.trailer?.images?.large_image_url ||
+                        `https://img.youtube.com/vi/${youtubeMatch[1]}/maxresdefault.jpg`
+            };
+          }
+        } else if (trailerUrl.includes('dailymotion.com')) {
+          // Extract Dailymotion video ID
+          const dmMatch = trailerUrl.match(/dailymotion\.com\/video\/([a-zA-Z0-9]+)/);
+          if (dmMatch) {
+            embedData = {
+              id: dmMatch[1],
+              site: 'dailymotion',
+              thumbnail: data.data?.trailer?.images?.maximum_image_url || null
+            };
+          }
+        }
+        
+        if (embedData) {
+          setTrailerData(embedData);
+          return true; // Found trailer
+        }
+      }
+      
+      return false; // No trailer from MAL
+    } catch (error) {
+      console.error('Error fetching MAL trailer:', error);
+      return false;
+    }
+  };
   useEffect(() => {
     if (id === "404-not-found-page") {
       console.log("404 got!");
@@ -134,6 +242,17 @@ function AnimeInfo({ random = false }) {
           const data = await getAnimeInfo(id, random);
           setSeasons(data?.seasons);
           setAnimeInfo(data.data);
+          
+          // Fetch additional data from AniList and MAL
+          if (data.data?.anilistId || data.data?.malId) {
+            fetchAniListScore(data.data.anilistId);
+            
+            // Try AniList first, then MAL as fallback
+            const aniListSuccess = data.data?.anilistId ? await fetchAniListTrailer(data.data.anilistId) : false;
+            if (!aniListSuccess && data.data?.malId) {
+              await fetchMALTrailer(data.data.malId);
+            }
+          }
         } catch (err) {
           console.error("Error fetching anime info:", err);
           setError(err);
@@ -291,6 +410,61 @@ function AnimeInfo({ random = false }) {
                       </>
                     ) : (
                       info.Overview
+                    )}
+                  </div>
+                )}
+
+                {/* Trailer Preview - Mobile */}
+                {trailerData && (
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-sm font-semibold text-white flex items-center gap-1.5">
+                        <FontAwesomeIcon icon={faVideo} className="text-blue-400 text-xs" />
+                        Trailer
+                      </h3>
+                      <button
+                        onClick={() => setShowTrailer(!showTrailer)}
+                        className="flex items-center gap-1.5 px-2 py-1 bg-white/10 hover:bg-white/20 rounded-md transition-colors text-xs"
+                      >
+                        <FontAwesomeIcon 
+                          icon={showTrailer ? faEyeSlash : faEye} 
+                          className="text-[10px]" 
+                        />
+                        {showTrailer ? 'Hide' : 'Show'}
+                      </button>
+                    </div>
+                    
+                    {showTrailer && (
+                      <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black/50 backdrop-blur-sm">
+                        {trailerData.site === 'youtube' && (
+                          <iframe
+                            src={`https://www.youtube.com/embed/${trailerData.id}`}
+                            title={`${title} Trailer`}
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        )}
+                        {trailerData.site === 'dailymotion' && (
+                          <iframe
+                            src={`https://www.dailymotion.com/embed/video/${trailerData.id}`}
+                            title={`${title} Trailer`}
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="autoplay; fullscreen"
+                            allowFullScreen
+                          />
+                        )}
+                        {!['youtube', 'dailymotion'].includes(trailerData.site) && (
+                          <div className="w-full h-full flex items-center justify-center text-white/70">
+                            <div className="text-center">
+                              <FontAwesomeIcon icon={faVideo} className="text-2xl mb-1" />
+                              <p className="text-xs">Trailer not available</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
                 )}
@@ -476,6 +650,61 @@ function AnimeInfo({ random = false }) {
                   </div>
                 )}
 
+                {/* Trailer Preview */}
+                {trailerData && (
+                  <div className="mt-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                        <FontAwesomeIcon icon={faVideo} className="text-blue-400" />
+                        Trailer
+                      </h3>
+                      <button
+                        onClick={() => setShowTrailer(!showTrailer)}
+                        className="flex items-center gap-2 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-sm"
+                      >
+                        <FontAwesomeIcon 
+                          icon={showTrailer ? faEyeSlash : faEye} 
+                          className="text-xs" 
+                        />
+                        {showTrailer ? 'Hide' : 'Show'} Trailer
+                      </button>
+                    </div>
+                    
+                    {showTrailer && (
+                      <div className="relative w-full max-w-2xl aspect-video rounded-xl overflow-hidden bg-black/50 backdrop-blur-sm">
+                        {trailerData.site === 'youtube' && (
+                          <iframe
+                            src={`https://www.youtube.com/embed/${trailerData.id}`}
+                            title={`${title} Trailer`}
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        )}
+                        {trailerData.site === 'dailymotion' && (
+                          <iframe
+                            src={`https://www.dailymotion.com/embed/video/${trailerData.id}`}
+                            title={`${title} Trailer`}
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="autoplay; fullscreen"
+                            allowFullScreen
+                          />
+                        )}
+                        {!['youtube', 'dailymotion'].includes(trailerData.site) && (
+                          <div className="w-full h-full flex items-center justify-center text-white/70">
+                            <div className="text-center">
+                              <FontAwesomeIcon icon={faVideo} className="text-3xl mb-2" />
+                              <p>Trailer not available</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="flex flex-wrap items-center gap-3">
                   {/* Watch Button */}
@@ -495,6 +724,8 @@ function AnimeInfo({ random = false }) {
                       <span className="font-medium">Not released</span>
                     </div>
                   )}
+
+                  
 
                   {/* Like and Watchlist Actions */}
                   <AnimeActions anime={animeInfo} variant="default" />

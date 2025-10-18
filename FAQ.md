@@ -7,6 +7,7 @@
 - [Subtitle Downloads](#subtitle-downloads)
 - [Anime Quotes](#anime-quotes)
 - [Anime News](#anime-news)
+- [Anime Games](#anime-games)
 - [Features & Functionality](#features--functionality)
 - [Technical & Troubleshooting](#technical--troubleshooting)
 - [Legal & Copyright](#legal--copyright)
@@ -233,8 +234,100 @@ News is fetched in real-time from RSS feeds of major anime news sources. The pag
 ### Where does the news come from?
 We aggregate news from reputable anime news sources including Anime-Planet and other major anime news websites through RSS feeds. Each article links back to the original source for the full story.
 
+### How often is the news updated?
+News is fetched in real-time from RSS feeds of major anime news sources. The page shows the most recent articles with publication dates, so you'll always see the latest updates when you refresh the page.
+
+### Where does the news come from?
+We aggregate news from reputable anime news sources including Anime-Planet and other major anime news websites through RSS feeds. Each article links back to the original source for the full story.
+
 ### Can I read full news articles?
 Yes! Each news item includes a "Read more →" link that takes you directly to the full article on the original news source website.
+
+---
+
+## Anime Games
+
+### What games are available on Otazumi?
+We offer **5 exciting anime-themed games**:
+- **Anime Quiz Challenge** - Character and scene recognition quizzes
+- **Character Memory Game** - Match anime character cards
+- **Anime Trivia Master** - Questions about anime history and characters
+- **Speed Quiz Challenge** - Fast-paced timed questions
+- **Anime Gallery Quiz** - Identify anime from screenshots
+
+### How do I access the games?
+Navigate to "Games" in the sidebar menu or visit `/games`. You'll see all available games with descriptions, difficulty levels, and play buttons.
+
+### Do I need an account to play games?
+No! All games work without an account. Your scores and progress are saved locally in your browser using localStorage.
+
+### How do the report downloads work?
+All games feature **report download** functionality:
+1. Complete a game to see your results
+2. Click the "Download Report" button
+3. A beautiful result image with watermark will be generated
+4. The image includes your score, stats, and game details
+5. Save the image to share on social media
+
+### Can I share my game results?
+Yes! Each game has a **Share Result** button that uses your device's native sharing capabilities. You can share results on:
+- Social media platforms
+- Messaging apps
+- Email
+- Any app that supports image sharing
+
+### What does "shuffled questions" mean?
+All games feature **randomized content** for fair gameplay:
+- Questions appear in random order each time you play
+- Multiple choice options are shuffled
+- Gallery images are randomized
+- Memory cards are arranged randomly
+
+This ensures no two playthroughs are exactly the same and prevents memorization of answer positions.
+
+### How do game statistics work?
+Your game performance is automatically tracked:
+- **Games Played** - Total number of games completed
+- **Total Score** - Combined score across all games
+- **Individual Game Stats** - Best scores, average scores, completion times
+- **Local Storage** - Stats saved in your browser, works offline
+
+### Are the games mobile-friendly?
+Yes! All games are fully responsive and optimized for mobile devices:
+- Touch-friendly controls
+- Responsive layouts that work on all screen sizes
+- Optimized for both portrait and landscape orientations
+- Works great on phones, tablets, and desktops
+
+### How does the Character Memory Game work?
+1. Cards are laid out face-down in a grid
+2. Click cards to flip them and reveal character images
+3. Find matching pairs by remembering card positions
+4. Timer tracks how quickly you complete the game
+5. Lower moves and faster times give higher scores
+
+### What's the difference between the quiz games?
+- **Anime Quiz Challenge**: Focuses on character recognition and scene identification
+- **Anime Trivia Master**: Questions about anime history, plot details, and character backgrounds
+- **Speed Quiz Challenge**: Fast-paced with countdown timers and speed bonuses
+- **Anime Gallery Quiz**: Visual quiz using anime screenshots and scene recognition
+
+### Can I play games offline?
+Yes! Once the games page loads, you can play offline. Game stats are saved locally and will sync when you're back online.
+
+### How do I reset my game statistics?
+Game statistics are stored in your browser's localStorage. To reset:
+1. Open browser developer tools (F12)
+2. Go to Application/Storage > Local Storage
+3. Find and delete entries starting with "animeGamesStats"
+4. Refresh the page
+
+### Are there plans for more games?
+Yes! We're constantly working on new anime games including:
+- Multiplayer challenges
+- Seasonal themed games
+- Special event games
+- New game modes and difficulty levels
 
 ---
 

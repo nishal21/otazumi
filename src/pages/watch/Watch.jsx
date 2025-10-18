@@ -495,7 +495,7 @@ export default function Watch() {
                   {/* Anime Actions - Like, Watchlist, etc. */}
                   {animeInfo && (
                     <div className="mt-4 max-[600px]:mt-2">
-                      <AnimeActions anime={animeInfo} variant="compact" />
+                      <AnimeActions anime={animeInfo} variant="compact" episodeId={episodeId} />
                     </div>
                   )}
                 </div>

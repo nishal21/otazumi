@@ -22,7 +22,7 @@ function Footer() {
       <div className="max-w-[1920px] mx-auto px-4">
         <div className="flex justify-center sm:justify-between items-center gap-6 flex-wrap">
           <img
-            src="./footer.svg"
+            src="/footer.svg"
             alt={logoTitle}
             className="h-[100px] w-[200px] object-contain"
           />
@@ -88,6 +88,12 @@ function Footer() {
                 className="text-sm text-white/60 hover:text-white transition-colors"
               >
                 Contact
+              </Link>
+              <Link
+                to="/games"
+                className="text-sm text-purple-400 hover:text-purple-300 transition-colors font-semibold"
+              >
+                🎮 Games
               </Link>
               <Link
                 to="/support"

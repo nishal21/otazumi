@@ -15,7 +15,7 @@ import { UserDataService } from '@/src/services/userDataService';
 import { useAuth } from '@/src/context/AuthContext';
 import ShareButton from '@/src/components/ShareButton/ShareButton';
 
-const AnimeActions = ({ anime, variant = 'default', className = '' }) => {
+const AnimeActions = ({ anime, variant = 'default', className = '', episodeId = '1' }) => {
   const { user } = useAuth();
   const [isFavorite, setIsFavorite] = useState(false);
   const [isInWatchlist, setIsInWatchlist] = useState(false);
@@ -268,6 +268,8 @@ const AnimeActions = ({ anime, variant = 'default', className = '' }) => {
           animeTitle={anime.title}
         />
       </div>
+
+    
     </div>
   );
 };

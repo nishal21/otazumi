@@ -252,6 +252,60 @@ const FAQ_DATA = {
       answer: "Yes! Each news item includes a 'Read more →' link that takes you directly to the full article on the original news source website."
     }
   ],
+  'Anime Games': [
+    {
+      question: "What games are available on Otazumi?",
+      answer: "We offer 5 exciting anime-themed games: Anime Quiz Challenge (character and scene recognition), Character Memory Game (match anime character cards), Anime Trivia Master (questions about anime history and characters), Speed Quiz Challenge (fast-paced timed questions), and Anime Gallery Quiz (identify anime from screenshots)."
+    },
+    {
+      question: "How do I access the games?",
+      answer: "Navigate to 'Games' in the sidebar menu or visit /games. You'll see all available games with descriptions, difficulty levels, and play buttons."
+    },
+    {
+      question: "Do I need an account to play games?",
+      answer: "No! All games work without an account. Your scores and progress are saved locally in your browser using localStorage."
+    },
+    {
+      question: "How do the report downloads work?",
+      answer: "All games feature report download functionality. Complete a game to see your results, click the 'Download Report' button, and a beautiful result image with watermark will be generated including your score, stats, and game details for sharing."
+    },
+    {
+      question: "Can I share my game results?",
+      answer: "Yes! Each game has a 'Share Result' button that uses your device's native sharing capabilities. You can share results on social media platforms, messaging apps, email, or any app that supports image sharing."
+    },
+    {
+      question: "What does 'shuffled questions' mean?",
+      answer: "All games feature randomized content for fair gameplay: questions appear in random order, multiple choice options are shuffled, gallery images are randomized, and memory cards are arranged randomly. This ensures no two playthroughs are exactly the same."
+    },
+    {
+      question: "How do game statistics work?",
+      answer: "Your game performance is automatically tracked including games played, total score, individual game stats (best scores, average scores, completion times), and saved locally in your browser for offline access."
+    },
+    {
+      question: "Are the games mobile-friendly?",
+      answer: "Yes! All games are fully responsive and optimized for mobile devices with touch-friendly controls, responsive layouts that work on all screen sizes, and support for both portrait and landscape orientations."
+    },
+    {
+      question: "How does the Character Memory Game work?",
+      answer: "Cards are laid out face-down in a grid. Click cards to flip them and reveal character images, find matching pairs by remembering positions, with a timer tracking completion speed and move counter for scoring."
+    },
+    {
+      question: "What's the difference between the quiz games?",
+      answer: "Anime Quiz Challenge focuses on character recognition and scene identification, Anime Trivia Master covers anime history and plot details, Speed Quiz Challenge is fast-paced with countdown timers, and Anime Gallery Quiz uses visual scene recognition."
+    },
+    {
+      question: "Can I play games offline?",
+      answer: "Yes! Once the games page loads, you can play offline. Game stats are saved locally and will sync when you're back online."
+    },
+    {
+      question: "How do I reset my game statistics?",
+      answer: "Game statistics are stored in browser localStorage. To reset: open developer tools (F12), go to Application/Storage > Local Storage, find and delete entries starting with 'animeGamesStats', then refresh the page."
+    },
+    {
+      question: "Are there plans for more games?",
+      answer: "Yes! We're working on new anime games including multiplayer challenges, seasonal themed games, special event games, and new game modes with different difficulty levels."
+    }
+  ],
   'Technical & Troubleshooting': [
     {
       question: "Which browsers are supported?",

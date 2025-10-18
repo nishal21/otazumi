@@ -32,6 +32,14 @@ import AnimeNews from "./pages/anime-news/AnimeNews";
 import AnimeQuotes from "./pages/anime-quotes/AnimeQuotes";
 import AnimeVideoDownload from "./pages/anime-video-download/AnimeVideoDownload";
 import { Toaster } from 'react-hot-toast';
+import Health from "./pages/health/Health";
+import Games from "./pages/games/Games";
+import AnimeQuiz from "./pages/games/anime-quiz/AnimeQuiz";
+import CharacterMemory from "./pages/games/character-memory/CharacterMemory";
+import AnimeTrivia from "./pages/games/anime-trivia/AnimeTrivia";
+import SpeedQuiz from "./pages/games/speed-quiz/SpeedQuiz";
+import AnimeGallery from "./pages/games/anime-gallery/AnimeGallery";
+import UpdateHistoryPopup from "./components/UpdateHistoryPopup";
 
 function App() {
   const location = useLocation();
@@ -41,8 +49,10 @@ function App() {
     window.scrollTo(0, 0);
   }, [location]);
 
-  // Check if the current route is for the splash screen
+  // Check if the current route is for the splash screen or health page
   const isSplashScreen = location.pathname === "/";
+  const isHealthPage = location.pathname === "/health";
+  const showNavigation = !isSplashScreen && !isHealthPage;
 
   return (
     <PWAProvider>
@@ -50,7 +60,7 @@ function App() {
         <HomeInfoProvider>
           <div className="app-container px-4 lg:px-10" style={{ backgroundColor: '#0a0a0a', minHeight: '100vh' }}>
             <main className="content max-w-[2048px] mx-auto w-full">
-              {!isSplashScreen && <Navbar />}
+              {showNavigation && <Navbar />}
             <Routes>
             <Route path="/" element={<SplashScreen />} />
             <Route path="/home" element={<Home />} />
@@ -74,6 +84,13 @@ function App() {
             <Route path="/statistics" element={<StatsDashboard />} />
             <Route path="/news" element={<AnimeNews />} />
             <Route path="/quotes" element={<AnimeQuotes />} />
+            <Route path="/health" element={<Health />} />
+            <Route path="/games" element={<Games />} />
+            <Route path="/games/anime-quiz" element={<AnimeQuiz />} />
+            <Route path="/games/character-memory" element={<CharacterMemory />} />
+            <Route path="/games/anime-trivia" element={<AnimeTrivia />} />
+            <Route path="/games/speed-quiz" element={<SpeedQuiz />} />
+            <Route path="/games/anime-gallery" element={<AnimeGallery />} />
             {/* Render category routes */}
             {categoryRoutes.map((path) => (
               <Route
@@ -97,11 +114,12 @@ function App() {
             {/* Catch-all route for 404 */}
             <Route path="*" element={<Error error="404" />} />
           </Routes>
-          {!isSplashScreen && <Footer />}
+          {showNavigation && <Footer />}
         </main>
+        <UpdateHistoryPopup />
         <Toaster />
       </div>
-    </HomeInfoProvider>
+        </HomeInfoProvider>
       </AuthProvider>
     </PWAProvider>
   );

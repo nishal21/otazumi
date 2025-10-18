@@ -9,6 +9,7 @@ import {
   faSignInAlt,
   faNewspaper,
   faQuoteLeft,
+  faGamepad,
 } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "@/src/context/LanguageContext";
 import { useAuth } from "@/src/context/AuthContext";
@@ -81,7 +82,7 @@ function Navbar() {
                 onClick={handleHamburgerClick}
               />
               <Link to="/home" className="flex items-center">
-                <img src="./logo.svg" alt="Otazumi Logo" className="h-10 w-auto" />
+                <img src="/logo.svg" alt="Otazumi Logo" className="h-10 w-auto" />
               </Link>
             </div>
           </div>
@@ -119,6 +120,15 @@ function Navbar() {
             </div>
           </div>
 
+          {/* Games Link */}
+          <Link
+            to="/games"
+            className="hidden md:flex items-center gap-2 px-3 py-2 bg-[#2a2a2a]/75 hover:bg-[#3F3F46] text-white/70 hover:text-white rounded-lg transition-colors mr-4"
+            title="Anime Games"
+          >
+            <FontAwesomeIcon icon={faGamepad} className="text-lg" />
+          </Link>
+
           {/* Right Section - Desktop */}
           <div className="hidden md:flex items-center gap-4">
             {/* News Link */}
@@ -129,16 +139,6 @@ function Navbar() {
             >
               <FontAwesomeIcon icon={faNewspaper} className="text-lg" />
               <span className="font-medium">News</span>
-            </Link>
-
-            {/* Quotes Link */}
-            <Link
-              to="/quotes"
-              className="flex items-center gap-2 px-3 py-2 bg-[#2a2a2a]/75 hover:bg-[#3F3F46] text-white/70 hover:text-white rounded-lg transition-colors"
-              title="Anime Quotes"
-            >
-              <FontAwesomeIcon icon={faQuoteLeft} className="text-lg" />
-              <span className="font-medium">Quotes</span>
             </Link>
 
             {/* User Authentication */}

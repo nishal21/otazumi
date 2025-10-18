@@ -4906,6 +4906,7 @@ const fallbackHomeData = {
       "historical",
       "horror",
       "isekai",
+      "investigation",
       "josei",
       "kids",
       "magic",

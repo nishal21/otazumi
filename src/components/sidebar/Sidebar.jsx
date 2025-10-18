@@ -1,15 +1,16 @@
-import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronLeft, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart, faChartBar, faNewspaper, faQuoteLeft, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart, faChartBar, faNewspaper, faQuoteLeft, faGamepad, faDownload, faTags } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "@/src/context/LanguageContext";
 import { useAuth } from "@/src/context/AuthContext";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./Sidebar.css";
 
 const MENU_ITEMS = [
   { name: "❤️ Support Developer", path: "/support", icon: faHandHoldingHeart, highlight: true },
   { name: "Home", path: "/home", icon: faHome },
+  { name: "Games", path: "/games", icon: faGamepad },
   { name: "News", path: "/news", icon: faNewspaper },
   { name: "Quotes", path: "/quotes", icon: faQuoteLeft },
   { name: "My Collection", path: "/profile", icon: faHeart },
@@ -28,11 +29,21 @@ const MENU_ITEMS = [
   { name: "Specials", path: "/special", icon: faClock },
 ];
 
+const GENRES = [
+  "action", "adventure", "cars", "comedy", "dementia", "demons", "drama", "ecchi",
+  "fantasy", "game", "harem", "historical", "horror", "isekai",
+  "josei", "kids", "magic", "martial-arts", "mecha", "military", "music", "mystery",
+  "parody", "police", "psychological", "romance", "samurai", "school", "sci-fi",
+  "seinen", "shoujo", "shoujo-ai", "shounen", "shounen-ai", "slice-of-life",
+  "space", "sports", "super-power", "supernatural", "thriller", "vampire"
+];
+
 const Sidebar = ({ isOpen, onClose }) => {
   const { language, toggleLanguage } = useLanguage();
   const { isAuthenticated, user } = useAuth();
   const location = useLocation();
   const scrollPosition = useRef(0);
+  const [isGenresExpanded, setIsGenresExpanded] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -146,6 +157,38 @@ const Sidebar = ({ isOpen, onClose }) => {
               </Link>
             ))}
           </nav>
+
+          {/* Genre Section */}
+          <div className="genre-section">
+            <button
+              onClick={() => setIsGenresExpanded(!isGenresExpanded)}
+              className="genre-toggle-button"
+            >
+              <FontAwesomeIcon icon={faTags} className="text-lg w-5" />
+              <span className="font-medium">Genres</span>
+              {isGenresExpanded ? (
+                <FaChevronUp className="text-sm ml-auto" />
+              ) : (
+                <FaChevronDown className="text-sm ml-auto" />
+              )}
+            </button>
+
+            {isGenresExpanded && (
+              <div className="genre-list-container">
+                <div className="genre-list">
+                  {GENRES.map((genre, index) => (
+                    <Link
+                      key={index}
+                      to={`/genre/${genre}`}
+                      className="genre-item"
+                    >
+                      {genre.replace('-', ' ')}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </aside>
     </div>

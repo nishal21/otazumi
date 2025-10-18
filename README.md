@@ -158,6 +158,45 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 - **Third-party Links** - Download sources are provided by external services. Availability and safety depend on those providers; use caution when downloading.
 - **Episode Search & Pagination** - Quickly find episodes using the episode search box and navigate large series with pagination.
 
+### 🎮 Anime Games Platform
+
+- **5 Exciting Games** - Anime Quiz Challenge, Character Memory Game, Anime Trivia Master, Speed Quiz Challenge, and Anime Gallery Quiz
+- **Report Downloads** - Generate and download beautiful result images with watermarks for all games
+- **Social Sharing** - Share game results on social media platforms with custom images
+- **Shuffled Questions** - Randomized question and answer order for fair gameplay
+- **Statistics Tracking** - Track games played, scores, and performance across all games
+- **Mobile Responsive** - Optimized gameplay experience on all devices
+- **Local Storage** - Game progress and stats saved locally, works offline
+- **Consistent UI** - Left-aligned navigation and unified design across all games
+
+#### Game Details
+
+**Anime Quiz Challenge**
+- Test knowledge with character and scene recognition
+- Multiple choice questions with shuffled options
+- Score tracking and result sharing
+
+**Character Memory Game**
+- Match anime character cards in memory challenge
+- Flip cards to find matching pairs
+- Timer and move counter for scoring
+
+**Anime Trivia Master**
+- Answer questions about anime history and characters
+- Timed responses with multiple choice options
+- Comprehensive trivia covering popular series
+
+**Speed Quiz Challenge**
+- Race against time to answer questions quickly
+- Fast-paced gameplay with countdown timer
+- High score challenges and speed bonuses
+
+**Anime Gallery Quiz**
+- Identify anime series from iconic screenshots
+- Scene recognition with shuffled question order
+- Visual quiz format with image-based questions
+
+
 ### ��� Privacy & Security
 - **Encrypted Passwords** - bcrypt hashing with 10 salt rounds
 - **JWT Authentication** - Secure token-based auth
