@@ -25,21 +25,20 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 
 ---
 
-## 🎯 Recent Updates (October 5, 2025)
+## 🎯 Recent Updates (October 18, 2025)
 
 ### 🆕 What's New
 
 **🔧 Technical Improvements**
-- Converted AnimatedHeart component from styled-jsx to Tailwind CSS
 - Removed styled-jsx dependency for better consistency
 - Fixed React warnings about non-boolean jsx attributes
 - Improved component performance and maintainability
+- Enhanced sidebar with mobile safe area support to ensure genre button accessibility on devices with bottom navigation bars
+- Enhanced download modal positioning, better mobile responsiveness, and improved user experience for episode downloads
 
 **🆕 New Pages & Features**
-- Added **Anime Video Downloader** page — search series, browse episodes, and open download links via a modal popup (modal appears below the navbar).
-- Added **MAL / AniList view** button on anime pages — quick link to view the title on MyAnimeList and AniList for additional info and tracking.
-- Launched **News** page — aggregated anime/manga news with categories and thumbnails.
-- Improved **Quotes** page — expanded quote database, better generation UI, and easier sharing/download of quote images.
+- Added **Anime Game Platform** page — Anime Quiz Challenge, Character Memory Game, Anime Trivia Master, Speed Quiz Challenge, and Anime Gallery Quiz.
+
 
 ---
 
