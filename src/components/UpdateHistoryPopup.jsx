@@ -5,6 +5,36 @@ import './UpdateHistoryPopup.css';
 
 const UPDATE_HISTORY = [
   {
+    version: "1.2.2",
+    date: "October 19, 2025",
+    changes: [
+      {
+        type: "added",
+        icon: faPlus,
+        title: "Enhanced Email Security",
+        description: "Implemented Gmail-only email validation to ensure legitimate user accounts and prevent spam registrations"
+      },
+      {
+        type: "added",
+        icon: faPlus,
+        title: "Disposable Email Blocking",
+        description: "Added comprehensive blocking of 1000+ disposable/temporary email services for improved account security"
+      },
+      {
+        type: "improved",
+        icon: faWrench,
+        title: "Cost-Effective Validation",
+        description: "Replaced expensive third-party email verification services with free, instant validation system"
+      },
+      {
+        type: "improved",
+        icon: faWrench,
+        title: "Real-time Email Validation",
+        description: "Enhanced frontend validation with immediate feedback for email format and domain restrictions"
+      }
+    ]
+  },
+  {
     version: "1.2.1",
     date: "October 18, 2025",
     changes: [

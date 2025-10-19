@@ -91,7 +91,7 @@ const ForgotPassword = ({ isOpen, onClose, onBackToLogin }) => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       className="w-full bg-[#27272A] border border-gray-600 text-white rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-blue-500 transition-colors"
-                      placeholder="Enter your email"
+                      placeholder="Enter your Gmail address"
                     />
                   </div>
                 </div>
