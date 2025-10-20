@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export default async function getSearch(keyword, page, filters = {}) {
   const api_url = import.meta.env.VITE_API_URL;
   if (!page) page = 1;
