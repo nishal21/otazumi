@@ -386,11 +386,75 @@ const getFallbackCharacterImages = (count) => {
 };
 
 /**
- * Clear the image cache
+ * Get seasonal anime from Jikan API
+ * @param {number} year - Year (e.g., 2025)
+ * @param {string} season - Season (winter, spring, summer, fall)
+ * @returns {Promise<Array>} Array of seasonal anime data
  */
-export const clearImageCache = () => {
-  imageCache.clear();
-  characterDetailsCache.clear();
+export const getSeasonalAnime = async (year, season) => {
+  const cacheKey = `seasonal_${year}_${season}`;
+
+  // Check cache first
+  if (imageCache.has(cacheKey)) {
+    const cached = imageCache.get(cacheKey);
+    if (Date.now() - cached.timestamp < CACHE_DURATION) {
+      return cached.data;
+    }
+    imageCache.delete(cacheKey);
+  }
+
+  try {
+    const response = await makeJikanRequest(`/seasons/${year}/${season}`);
+
+    if (!response.data || response.data.length === 0) {
+      console.log(`No seasonal anime found for ${season} ${year}`);
+      return [];
+    }
+
+    // Convert Jikan format to our app format
+    const seasonalAnime = response.data.map(anime => ({
+      id: `mal-${anime.mal_id}`,
+      data_id: anime.mal_id.toString(),
+      title: anime.title,
+      japanese_title: anime.title_japanese || anime.title,
+      poster: anime.images?.jpg?.large_image_url || anime.images?.jpg?.image_url,
+      description: anime.synopsis || 'No description available.',
+      tvInfo: {
+        showType: anime.type || 'TV',
+        duration: anime.duration || 'Unknown',
+        quality: 'HD',
+        episodeInfo: {
+          sub: anime.episodes || 0,
+          dub: 0 // Jikan doesn't provide dub info
+        }
+      },
+      genres: anime.genres?.map(g => g.name) || [],
+      status: anime.status || 'Unknown',
+      rating: anime.score ? anime.score.toString() : null,
+      releaseDate: anime.aired?.from ? new Date(anime.aired.from).toISOString().split('T')[0] : null,
+      totalEpisodes: anime.episodes || 0,
+      popularity: anime.popularity || 0,
+      favorites: anime.favorites || 0,
+      year: anime.year || year,
+      season: season
+    }));
+
+    // Sort by popularity (most popular first)
+    seasonalAnime.sort((a, b) => (a.popularity || 999999) - (b.popularity || 999999));
+
+    // Cache the results
+    imageCache.set(cacheKey, {
+      data: seasonalAnime,
+      timestamp: Date.now()
+    });
+
+    console.log(`Fetched ${seasonalAnime.length} anime for ${season} ${year} from Jikan API`);
+    return seasonalAnime;
+
+  } catch (error) {
+    console.error(`Error fetching seasonal anime for ${season} ${year}:`, error);
+    return [];
+  }
 };
 
 /**

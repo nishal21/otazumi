@@ -252,7 +252,55 @@ const FAQ_DATA = {
       answer: "Yes! Each news item includes a 'Read more →' link that takes you directly to the full article on the original news source website."
     }
   ],
-  'Anime Games': [
+  'Anime Comparison Tool': [
+    {
+      question: "How do I use the Anime Comparison Tool?",
+      answer: "Navigate to 'Anime Compare' in the sidebar menu. Search for two anime titles using the search bars, then click on results to select them. The tool will display both anime side-by-side with detailed information including ratings, episodes, status, and genres. It provides comparison results and recommendations based on your preferences."
+    },
+    {
+      question: "What data sources does the comparison tool use?",
+      answer: "The tool primarily uses MyAnimeList (MAL) API for accurate anime data, with AniList as a fallback. For best results, try searching with Japanese titles since MAL often provides more accurate results for anime with different English translations."
+    },
+    {
+      question: "How does the episode comparison work for ongoing series?",
+      answer: "For ongoing series, the tool shows 'Ongoing (X+ eps)' and handles comparisons intelligently. It recognizes when series are still airing and provides appropriate recommendations, suggesting completed series when one anime is ongoing."
+    },
+    {
+      question: "Can I compare any two anime?",
+      answer: "Yes! You can compare any two anime from the extensive database. The tool works with both completed and ongoing series, providing fair comparisons regardless of their current status."
+    },
+    {
+      question: "What information does the comparison show?",
+      answer: "The comparison displays ratings, episode counts, release years, genres, studios, and status. It provides winner indicators for ratings and episodes, along with personalized recommendations based on whether you prefer shorter/longer series or completed vs ongoing shows."
+    }
+  ],
+  'Seasonal Anime Calendar': [
+    {
+      question: "How do I access the Seasonal Anime Calendar?",
+      answer: "Navigate to 'Seasonal Calendar' in the sidebar menu. You can also find a preview section on the homepage after the 'Estimated Schedule' section, where you can click items to view the full calendar."
+    },
+    {
+      question: "What seasons and years are available?",
+      answer: "The calendar covers anime from 2020 to 2026, with all four seasons: Winter (January-March), Spring (April-June), Summer (July-September), and Fall (October-December). You can navigate between different years and seasons using the dropdown menus."
+    },
+    {
+      question: "How is the seasonal data sourced?",
+      answer: "The calendar uses MyAnimeList (MAL) API to fetch accurate seasonal anime data, ensuring you get the most up-to-date and comprehensive information about anime releases for each season."
+    },
+    {
+      question: "What information is shown for each anime?",
+      answer: "Each anime displays its title, poster image, release year, type (TV, Movie, OVA, etc.), total episodes, and status (Ongoing, Completed, etc.). Status badges are color-coded for easy identification."
+    },
+    {
+      question: "Can I filter or search within seasons?",
+      answer: "Currently, the calendar shows all anime for the selected season. You can click on any anime to view its detailed information page. The homepage preview shows a curated selection of seasonal anime."
+    },
+    {
+      question: "How often is the seasonal data updated?",
+      answer: "The data is fetched in real-time from MAL API, so you'll always see the latest information. New anime are added as they're announced, and episode counts are updated as series progress."
+    }
+  ],
+  'Games': [
     {
       question: "What games are available on Otazumi?",
       answer: "We offer 5 exciting anime-themed games: Anime Quiz Challenge (character and scene recognition), Character Memory Game (match anime character cards), Anime Trivia Master (questions about anime history and characters), Speed Quiz Challenge (fast-paced timed questions), and Anime Gallery Quiz (identify anime from screenshots)."

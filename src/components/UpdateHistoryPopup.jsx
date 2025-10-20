@@ -5,6 +5,54 @@ import './UpdateHistoryPopup.css';
 
 const UPDATE_HISTORY = [
   {
+    version: "1.2.3",
+    date: "October 20, 2025",
+    changes: [
+      {
+        type: "added",
+        icon: faPlus,
+        title: "Anime Comparison Tool",
+        description: "New dedicated page for comparing two anime side-by-side with MAL API integration, winner indicators, and personalized recommendations"
+      },
+      {
+        type: "added",
+        icon: faPlus,
+        title: "Seasonal Anime Calendar",
+        description: "Complete seasonal calendar with year/season navigation (2020-2026), MAL data integration, and homepage preview section"
+      },
+      {
+        type: "added",
+        icon: faPlus,
+        title: "AniList & MAL Support Blocks",
+        description: "Added support sections for AniList (Patreon/PayPal) and MyAnimeList (Membership) on the enhanced support developer page"
+      },
+      {
+        type: "improved",
+        icon: faWrench,
+        title: "Smart Episode Comparison",
+        description: "Enhanced comparison logic to intelligently handle ongoing vs completed series with appropriate recommendations"
+      },
+      {
+        type: "improved",
+        icon: faWrench,
+        title: "Mobile UI Enhancements",
+        description: "Fixed search bar width issues and VS divider positioning on small screens for better mobile experience"
+      },
+      {
+        type: "added",
+        icon: faPlus,
+        title: "Japanese Title Search Tip",
+        description: "Added helpful disclaimer encouraging users to search with Japanese titles for better MAL API results"
+      },
+      {
+        type: "improved",
+        icon: faWrench,
+        title: "Ongoing Series Display",
+        description: "Enhanced display format for ongoing anime showing 'Ongoing (X+ eps)' instead of unavailable data"
+      }
+    ]
+  },
+  {
     version: "1.2.2",
     date: "October 19, 2025",
     changes: [

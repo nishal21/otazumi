@@ -19,7 +19,51 @@ If you enjoy using Otazumi, please consider supporting the development:
 
 ## [Unreleased]
 
-### Added - October 2, 2025
+### Added - October 20, 2025
+
+#### 🎯 Anime Comparison Tool
+- **New Page**: Dedicated anime comparison page at `/anime-compare`
+- **Side-by-Side Comparison**: Compare two anime with detailed information cards
+- **MAL API Integration**: Primary data source with AniList fallback for accurate anime details
+- **Smart Episode Comparison**: Handles ongoing vs completed series intelligently
+- **Rating & Statistics Display**: Shows ratings, episodes, status, genres, and more
+- **Search with Japanese Titles**: Disclaimer encouraging Japanese title searches for better MAL results
+- **Responsive Design**: Optimized layout for mobile and desktop
+- **Comparison Results**: Winner indicators for ratings and episode counts
+- **Recommendation Engine**: Suggests which anime to watch based on preferences
+
+#### 📅 Seasonal Anime Calendar
+- **New Page**: Seasonal calendar page at `/seasonal-calendar`
+- **Year & Season Navigation**: Browse anime by year (2020-2026) and season (Winter, Spring, Summer, Fall)
+- **MAL API Integration**: Fetches accurate seasonal anime data with status badges
+- **Episode Information**: Displays total episodes with proper data handling
+- **Status Badges**: Color-coded status indicators (Ongoing, Completed, etc.)
+- **Anime Details Preview**: Click items to view detailed information
+- **Homepage Integration**: Short preview section on homepage after "Estimated Schedule"
+- **Responsive Grid Layout**: Adapts to different screen sizes
+- **Loading States**: Smooth loading animations and error handling
+
+#### ❤️ Enhanced Support Developer Page
+- **AniList Support Blocks**: Added Patreon and PayPal donation options for AniList
+- **MAL Membership Block**: Added MyAnimeList membership support option
+- **External Platform Section**: Dedicated section for supporting data source platforms
+- **Visual Distinction**: Different styling for external platform support vs direct developer support
+- **Platform Recognition**: Acknowledges the platforms that power Otazumi's features
+
+#### 🎨 UI/UX Improvements
+- **Mobile Search Bar Width**: Fixed search bars to use full width on small screens
+- **VS Divider Positioning**: Corrected VS text centering on mobile devices
+- **Search Results Z-Index**: Fixed dropdown layering issues on comparison page
+- **Ongoing Series Handling**: Special display for ongoing anime (shows "Ongoing (X+ eps)")
+- **Episode Comparison Logic**: Improved logic for comparing ongoing vs completed series
+- **Recommendation Text**: Cleaner, less redundant recommendation messages
+
+#### 🔧 Technical Enhancements
+- **Rate Limiting**: Added retry logic with exponential backoff for MAL API calls
+- **Caching System**: Implemented search result caching to reduce API calls
+- **Error Handling**: Better error messages and fallback mechanisms
+- **JSX Optimization**: Converted template literals to proper JSX for better React performance
+- **CSS Organization**: Improved mobile responsive design with explicit ordering
 
 #### 🎨 Avatar System Enhancements
 - **75 Anime Character Avatars**: Expanded from 20 to 75 unique anime character-inspired avatars

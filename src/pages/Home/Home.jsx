@@ -11,6 +11,7 @@ import Schedule from "@/src/components/schedule/Schedule";
 import ContinueWatching from "@/src/components/continue/ContinueWatching";
 import TabbedAnimeSection from "@/src/components/tabbed-anime/TabbedAnimeSection";
 import PWAInstallPrompt from "@/src/components/pwa-install/PWAInstallPrompt";
+import SeasonalCalendarPreview from "@/src/components/seasonal-calendar-preview/SeasonalCalendarPreview";
 
 function Home() {
   const { homeInfo, homeInfoLoading, error } = useHomeInfo();
@@ -65,6 +66,7 @@ function Home() {
               limit={12}
             />
             <Schedule className="mt-8" />
+            <SeasonalCalendarPreview />
             <TabbedAnimeSection 
               topAiring={homeInfo.top_airing}
               mostFavorite={homeInfo.most_favorite}

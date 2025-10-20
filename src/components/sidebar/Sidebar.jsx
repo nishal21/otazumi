@@ -1,6 +1,6 @@
 import { FaChevronLeft, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart, faChartBar, faNewspaper, faQuoteLeft, faGamepad, faDownload, faTags } from "@fortawesome/free-solid-svg-icons";
+import { faFilm, faRandom, faHome, faClock, faFire, faTv, faPlay, faCirclePlay, faFilePen, faUser, faHeart, faClosedCaptioning, faHandHoldingHeart, faChartBar, faNewspaper, faQuoteLeft, faGamepad, faDownload, faTags, faExchangeAlt, faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "@/src/context/LanguageContext";
 import { useAuth } from "@/src/context/AuthContext";
 import { useEffect, useRef, useState } from "react";
@@ -11,6 +11,8 @@ const MENU_ITEMS = [
   { name: "❤️ Support Developer", path: "/support", icon: faHandHoldingHeart, highlight: true },
   { name: "Home", path: "/home", icon: faHome },
   { name: "Games", path: "/games", icon: faGamepad },
+  { name: "Compare Anime", path: "/compare", icon: faExchangeAlt },
+  { name: "Seasonal Calendar", path: "/seasonal-calendar", icon: faCalendar },
   { name: "News", path: "/news", icon: faNewspaper },
   { name: "Quotes", path: "/quotes", icon: faQuoteLeft },
   { name: "My Collection", path: "/profile", icon: faHeart },

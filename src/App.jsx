@@ -40,6 +40,8 @@ import AnimeTrivia from "./pages/games/anime-trivia/AnimeTrivia";
 import SpeedQuiz from "./pages/games/speed-quiz/SpeedQuiz";
 import AnimeGallery from "./pages/games/anime-gallery/AnimeGallery";
 import UpdateHistoryPopup from "./components/UpdateHistoryPopup";
+import AnimeCompare from "./pages/anime-compare/AnimeCompare";
+import SeasonalCalendar from "./pages/seasonal-calendar/SeasonalCalendar";
 
 function App() {
   const location = useLocation();
@@ -91,6 +93,8 @@ function App() {
             <Route path="/games/anime-trivia" element={<AnimeTrivia />} />
             <Route path="/games/speed-quiz" element={<SpeedQuiz />} />
             <Route path="/games/anime-gallery" element={<AnimeGallery />} />
+            <Route path="/compare" element={<AnimeCompare />} />
+            <Route path="/seasonal-calendar" element={<SeasonalCalendar />} />
             {/* Render category routes */}
             {categoryRoutes.map((path) => (
               <Route

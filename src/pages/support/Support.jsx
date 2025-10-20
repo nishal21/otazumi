@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Coffee, DollarSign, Github } from 'lucide-react';
+import { Heart, Coffee, DollarSign, Github, Star, CreditCard } from 'lucide-react';
 
 const Support = () => {
   const supportOptions = [
@@ -30,6 +30,36 @@ const Support = () => {
       url: 'https://ko-fi.com/demon_king',
       color: 'from-red-500 to-pink-600',
       buttonColor: 'bg-red-500 hover:bg-red-600'
+    }
+  ];
+
+  const externalSupportOptions = [
+    {
+      id: 4,
+      name: 'AniList Patreon',
+      description: 'Support AniList development',
+      icon: Star,
+      url: 'https://www.patreon.com/ani_chart_list',
+      color: 'from-blue-500 to-cyan-600',
+      buttonColor: 'bg-blue-500 hover:bg-blue-600'
+    },
+    {
+      id: 5,
+      name: 'AniList PayPal',
+      description: 'Donate to AniList via PayPal',
+      icon: CreditCard,
+      url: 'https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=6L7RAUZWC9ZTQ&ssrt=1760943016208',
+      color: 'from-cyan-500 to-blue-600',
+      buttonColor: 'bg-cyan-500 hover:bg-cyan-600'
+    },
+    {
+      id: 6,
+      name: 'MAL Membership',
+      description: 'Support MyAnimeList with membership',
+      icon: Heart,
+      url: 'https://myanimelist.net/membership',
+      color: 'from-purple-500 to-pink-600',
+      buttonColor: 'bg-purple-500 hover:bg-purple-600'
     }
   ];
 
@@ -85,6 +115,49 @@ const Support = () => {
             );
           })}
         </div>
+
+        {/* External Platform Support */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mb-12"
+        >
+          <h2 className="text-2xl font-bold mb-6 text-center text-purple-400">
+            Support External Platforms
+          </h2>
+          <p className="text-center text-gray-300 mb-8">
+            Show your appreciation to the platforms that power Otazumi's data and features
+          </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {externalSupportOptions.map((option, index) => {
+              const Icon = option.icon;
+              return (
+                <motion.div
+                  key={option.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: (index + 3) * 0.1 }}
+                  className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 hover:border-gray-600 transition-all"
+                >
+                  <div className={`bg-gradient-to-r ${option.color} w-16 h-16 rounded-xl flex items-center justify-center mb-4`}>
+                    <Icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">{option.name}</h3>
+                  <p className="text-gray-400 mb-4">{option.description}</p>
+                  <a
+                    href={option.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`block text-center ${option.buttonColor} text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-105`}
+                  >
+                    Support Now
+                  </a>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
 
         {/* Why Support Section */}
         <motion.div

@@ -25,19 +25,36 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 
 ---
 
-## 🎯 Recent Updates (October 18, 2025)
+## 🎯 Recent Updates (October 20, 2025)
 
 ### 🆕 What's New
 
-**🔧 Technical Improvements**
-- Removed styled-jsx dependency for better consistency
-- Fixed React warnings about non-boolean jsx attributes
-- Improved component performance and maintainability
-- Enhanced sidebar with mobile safe area support to ensure genre button accessibility on devices with bottom navigation bars
-- Enhanced download modal positioning, better mobile responsiveness, and improved user experience for episode downloads
+**🎯 Anime Comparison Tool**
+- New dedicated page for comparing two anime side-by-side
+- MAL API integration with AniList fallback for accurate data
+- Smart comparison logic for ongoing vs completed series
+- Winner indicators and personalized recommendations
+- Responsive design with mobile-optimized search bars
 
-**🆕 New Pages & Features**
-- Added **Anime Game Platform** page — Anime Quiz Challenge, Character Memory Game, Anime Trivia Master, Speed Quiz Challenge, and Anime Gallery Quiz.
+**📅 Seasonal Anime Calendar**
+- Complete seasonal calendar with year/season navigation (2020-2026)
+- MAL API integration for accurate seasonal data
+- Status badges and episode information
+- Homepage preview section for quick access
+- Click-through to detailed anime information
+
+**❤️ Enhanced Support Developer Page**
+- Added AniList Patreon and PayPal support blocks
+- Added MyAnimeList membership support option
+- Dedicated section for supporting data source platforms
+- Visual distinction between developer and platform support
+
+**� UI/UX Improvements**
+- Fixed mobile search bar width issues
+- Corrected VS divider positioning on small screens
+- Improved search results dropdown layering
+- Enhanced ongoing series display with "Ongoing (X+ eps)" format
+- Cleaner recommendation text in comparison tool
 
 
 ---
@@ -55,6 +72,16 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 - **Latest Updates** - Stay current with new episodes and releases
 - **A-Z Listing** - Browse complete anime catalog alphabetically
 - **Genre Categories** - Explore anime by genre, type, and status
+
+### ⚖️ Anime Comparison Tool
+- **Side-by-Side Comparison** - Compare any two anime with detailed information cards
+- **MAL API Integration** - Primary data source with AniList fallback for accuracy
+- **Smart Episode Logic** - Handles ongoing vs completed series intelligently
+- **Winner Indicators** - Visual indicators for ratings and episode comparisons
+- **Personalized Recommendations** - Suggests which anime to watch based on preferences
+- **Japanese Title Search** - Tip to search with Japanese titles for better MAL results
+- **Responsive Design** - Optimized for mobile and desktop viewing
+- **Comprehensive Data** - Shows ratings, episodes, genres, studios, and status
 
 ### 💬 Anime Quotes Platform
 - **Comprehensive Quote Database** - Access thousands of anime quotes from popular series
@@ -77,7 +104,15 @@ A modern, feature-rich anime streaming web application built with React, Vite, a
 - **External Links** - Direct links to full articles on source websites
 - **CORS Proxy Support** - Reliable news fetching with proxy integration
 
-### 📥 Subtitle Download System
+### � Seasonal Anime Calendar
+- **Year & Season Navigation** - Browse anime by year (2020-2026) and season (Winter, Spring, Summer, Fall)
+- **MAL API Integration** - Accurate seasonal anime data with real-time updates
+- **Status Indicators** - Color-coded badges for Ongoing, Completed, and other statuses
+- **Episode Information** - Total episode counts with ongoing series handling
+- **Homepage Preview** - Quick access section on homepage after Estimated Schedule
+- **Detailed Views** - Click any anime for comprehensive information
+- **Responsive Layout** - Optimized grid layout for all screen sizes
+- **Comprehensive Coverage** - Complete seasonal anime listings with thumbnails
 - **Search & Select** - Find anime and choose specific episodes
 - **8 Languages Available** - English, Arabic, Spanish, French, German, Italian, Portuguese, Russian
 - **Bulk Download** - Download multiple episodes at once with progress tracking
@@ -540,6 +575,26 @@ npm run lint         # Run ESLint to check code quality
 - Click "Read more" to visit the full article on the source website
 - Stay informed about industry updates, releases, and announcements
 
+### 8. Compare Anime Side-by-Side
+- Navigate to "Anime Compare" in the sidebar menu
+- Search for two anime titles using the dedicated search bars
+- **Tip**: Try searching with Japanese titles for better MAL API results
+- View detailed comparison with ratings, episodes, genres, and status
+- See winner indicators for ratings and episode counts
+- Get personalized recommendations based on your preferences
+- Smart handling of ongoing vs completed series
+- Responsive design works perfectly on mobile devices
+
+### 9. Explore Seasonal Anime Calendar
+- Visit "Seasonal Calendar" in the sidebar menu
+- Browse anime by year (2020-2026) and season (Winter, Spring, Summer, Fall)
+- View homepage preview section after "Estimated Schedule"
+- See accurate seasonal data from MyAnimeList API
+- Check status badges (Ongoing, Completed) and episode counts
+- Click any anime for detailed information and episodes
+- Responsive grid layout adapts to all screen sizes
+- Stay updated with the latest seasonal anime releases
+
 ## 🤝 Contributing
 
 We welcome contributions! Here's how:
@@ -613,6 +668,13 @@ If you enjoy Otazumi, consider supporting the developer:
 ## 🚀 Roadmap
 
 ### ✅ Recently Added (October 2025)
+- [x] **Anime Comparison Tool** - Side-by-side anime comparison with MAL API integration
+- [x] **Seasonal Anime Calendar** - Browse anime by year and season with MAL data
+- [x] **Enhanced Support Page** - Added AniList and MAL support blocks
+- [x] **Smart Episode Comparison** - Handles ongoing vs completed series intelligently
+- [x] **Mobile UI Fixes** - Corrected search bar width and VS divider positioning
+- [x] **Japanese Title Search Tip** - Disclaimer for better MAL API results
+- [x] **Improved Recommendation Logic** - Better suggestions for ongoing series
 - [x] **Statistics Dashboard** - Comprehensive watch history analytics
 - [x] **Auto Watch History Recording** - Tracks every episode automatically
 - [x] **Progress Tracking** - Updates every 30 seconds during playback

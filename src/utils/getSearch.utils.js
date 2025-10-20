@@ -1,6 +1,4 @@
-import axios from "axios";
-
-const getSearch = async (keyword, page, filters = {}) => {
+export default async function getSearch(keyword, page, filters = {}) {
   const api_url = import.meta.env.VITE_API_URL;
   if (!page) page = 1;
 
@@ -33,11 +31,16 @@ const getSearch = async (keyword, page, filters = {}) => {
     const response = await axios.get(
       `${api_url}/search?${params.toString()}`
     );
-    return response.data.results;
+    // Return the correct structure: { data: [...], totalPage: n }
+    return {
+      data: response.data.results.data || [],
+      totalPage: response.data.results.totalPage || 1
+    };
   } catch (err) {
     console.error("Error fetching search results:", err);
-    return err;
+    return {
+      data: [],
+      totalPage: 1
+    };
   }
 };
-
-export default getSearch;
