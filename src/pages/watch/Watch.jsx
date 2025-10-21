@@ -507,7 +507,7 @@ export default function Watch() {
               <div className="bg-[#141414] rounded-lg p-2 sm:p-4">
                 <CommentSection
                   malId={animeInfo.malId}
-                  episodeChapterNumber={1}
+                  episodeNumber={1}
                   mediaType="anime"
                 />
               </div>
