@@ -66,6 +66,12 @@ function Footer() {
                 Privacy Policy
               </Link>
               <Link
+                to="/code-of-conduct"
+                className="text-sm text-white/60 hover:text-white transition-colors"
+              >
+                Code of Conduct
+              </Link>
+              <Link
                 to="/dmca"
                 className="text-sm text-white/60 hover:text-white transition-colors"
               >
@@ -105,6 +111,14 @@ function Footer() {
             
             {/* Support Links */}
             <div className="flex gap-4 flex-wrap justify-center sm:justify-start mt-4 pt-4 border-t border-white/5">
+              {/* Netlify Badge */}
+              <a
+                href="https://www.netlify.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="https://www.netlify.com/assets/badges/netlify-badge-color-accent.svg" alt="Deploys by Netlify" />
+              </a>
               {/* DMCA Badge */}
               <a
                 href="//www.dmca.com/Protection/Status.aspx?ID=f45f82d3-f541-4754-a9a8-a4983ee5e643&refurl=https://otazumi.page/"

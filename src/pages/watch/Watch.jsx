@@ -503,7 +503,7 @@ export default function Watch() {
             </div>
 
             {/* Comments Section */}
-            {animeInfo?.malId && (
+            {animeInfo?.malId && activeEpisodeNum && (
               <div className="bg-[#141414] rounded-lg p-2 sm:p-4">
                 <CommentSection
                   malId={animeInfo.malId}

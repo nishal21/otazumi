@@ -8,10 +8,10 @@ const CommentSection = ({ malId, aniListId, episodeNumber, mediaType = 'anime' }
     };
 
     if (malId) {
-      config.MAL_ID = Number(malId);
+      config.MAL_ID = String(malId);
     }
     if (aniListId) {
-      config.AniList_ID = Number(aniListId);
+      config.AniList_ID = String(aniListId);
     }
 
     // Only include episodeChapterNumber if provided

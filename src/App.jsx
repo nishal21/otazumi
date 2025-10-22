@@ -22,6 +22,7 @@ import Terms from "./pages/terms/Terms";
 import DMCA from "./pages/dmca/DMCA";
 import Contact from "./pages/contact/Contact";
 import Privacy from "./pages/privacy/Privacy";
+import CodeOfConduct from "./pages/code-of-conduct/CodeOfConduct";
 import ResetPassword from "./pages/resetPassword/ResetPassword";
 import VerifyEmail from "./pages/verifyEmail/VerifyEmail";
 import FAQ from "./pages/faq/FAQ";
@@ -75,6 +76,7 @@ function App() {
             <Route path="/terms-of-service" element={<Terms />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/dmca" element={<DMCA />} />
+            <Route path="/code-of-conduct" element={<CodeOfConduct />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/reset-password" element={<ResetPassword />} />
