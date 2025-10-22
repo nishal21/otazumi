@@ -503,13 +503,13 @@ export default function Watch() {
             </div>
 
             {/* Comments Section */}
-            {animeInfo.malId && (
-             <div className="container mx-auto py-12">
-             <CommentSection
-              malId={animeInfo.malId}
-             episodeNumber={1}
-             mediaType="anime"
-              />
+            {animeInfo?.malId && activeEpisodeNum && (
+              <div className="bg-[#141414] rounded-lg p-2 sm:p-4">
+                <CommentSection
+                  malId={animeInfo.malId}
+                  episodeNumber={activeEpisodeNum}
+                  mediaType="anime"
+                />
               </div>
             )}
 
