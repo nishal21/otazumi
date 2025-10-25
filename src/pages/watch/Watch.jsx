@@ -502,16 +502,7 @@ export default function Watch() {
               </div>
             </div>
 
-            {/* Comments Section */}
-            {animeInfo.malId && (
-            <div className="container mx-auto py-12">
-            <CommentSection
-            malId={animeInfo.malId}
-            episodeNumber={1}
-            mediaType="anime"
-            />
-            </div>
-            )}
+          
 
             {/* Desktop-only Seasons Section */}
             {seasons?.length > 0 && (
