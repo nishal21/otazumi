@@ -21,7 +21,6 @@ import useWatchControl from "@/src/hooks/useWatchControl";
 import Player from "@/src/components/player/Player";
 import IframePlayer from "@/src/components/player/IframePlayer";
 import AnimeActions from "@/src/components/anime-actions/AnimeActions";
-import CommentSection from "@/src/components/CommentSection/CommentSection";
 
 export default function Watch() {
   const location = useLocation();
