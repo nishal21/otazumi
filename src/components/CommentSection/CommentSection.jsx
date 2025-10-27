@@ -14,9 +14,12 @@ const CommentSection = ({ malId, aniListId, episodeNumber, mediaType = 'anime' }
       config.AniList_ID = String(aniListId);
     }
 
-    // Only include episodeChapterNumber if provided
-    if (episodeNumber !== undefined) {
+    // Set episodeChapterNumber - required for all comments
+    if (episodeNumber !== undefined && episodeNumber !== null && episodeNumber !== '') {
       config.episodeChapterNumber = String(episodeNumber);
+    } else {
+      // For anime-level comments (no specific episode), set to "0"
+      config.episodeChapterNumber = "0";
     }
 
     window.theAnimeCommunityConfig = config;

@@ -125,7 +125,7 @@ function Topten({ data, className }) {
                       }}
                       onMouseLeave={handleMouseLeave}
                     >
-                      <Qtip id={item.id} />
+                      <Qtip id={item.id} ranking={index + 1} />
                     </div>
                   )}
 

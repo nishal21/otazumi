@@ -101,6 +101,29 @@ const Schedule = () => {
     }
   };
 
+  const formatScheduleTime = (timeString) => {
+    if (!timeString || timeString === "N/A") return "N/A";
+
+    try {
+      // Parse the time string (assuming format like "HH:MM" or "HH:MM:SS")
+      const [hours, minutes] = timeString.split(':').map(Number);
+      
+      // Create a date object for today with the given time
+      const now = new Date();
+      const scheduleTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes || 0);
+      
+      // Format as 12-hour time with AM/PM
+      return scheduleTime.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    } catch (error) {
+      console.error('Error formatting time:', error);
+      return timeString; // Fallback to original string
+    }
+  };
+
   const toggleShowAll = () => {
     setShowAll(!showAll);
   };
@@ -172,11 +195,11 @@ const Schedule = () => {
                 </SwiperSlide>
               ))}
           </Swiper>
-          <button className="next absolute top-1/2 right-[-12px] transform -translate-y-1/2 flex justify-center items-center cursor-pointer">
-            <FaChevronRight className="text-[12px]" />
+          <button className="next absolute top-1/2 right-[-12px] transform -translate-y-1/2 flex justify-center items-center cursor-pointer bg-black hover:bg-gray-800 p-2 rounded-full transition-colors">
+            <FaChevronRight className="text-[12px] text-white" />
           </button>
-          <button className="prev absolute top-1/2 left-[-12px] transform -translate-y-1/2 flex justify-center items-center cursor-pointer">
-            <FaChevronLeft className="text-[12px]" />
+          <button className="prev absolute top-1/2 left-[-12px] transform -translate-y-1/2 flex justify-center items-center cursor-pointer bg-black hover:bg-gray-800 p-2 rounded-full transition-colors">
+            <FaChevronLeft className="text-[12px] text-white" />
           </button>
         </div>
       </div>
@@ -203,12 +226,27 @@ const Schedule = () => {
             <Link
               to={`/${item.id}`}
               key={idx}
-              className="w-full flex justify-between py-3 border-zinc-800 border-b-[1px] group cursor-pointer hover:bg-zinc-900/50 px-2 transition-all duration-200 max-[325px]:py-2"
+              className="w-full flex justify-between py-3 border-zinc-800 border-b-[1px] group cursor-pointer hover:bg-black px-2 transition-all duration-200 max-[325px]:py-2"
             >
-              <div className="flex items-center max-w-[500px] gap-x-4 max-[400px]:gap-x-2">
-                <div className="text-base font-medium text-zinc-500 group-hover:text-white transition-all duration-200 max-[600px]:text-[14px] max-[275px]:text-[12px]">
-                  {item.time || "N/A"}
+              <div className="flex items-center max-w-[500px] gap-x-3 max-[400px]:gap-x-2">
+                <div className="w-[70px] text-right text-base font-semibold text-zinc-400 group-hover:text-white transition-all duration-200 max-[600px]:text-[14px] max-[600px]:w-[60px] max-[275px]:text-[12px] max-[275px]:w-[50px]">
+                  {formatScheduleTime(item.time)}
                 </div>
+                <div className="w-px h-8 bg-zinc-600 group-hover:bg-zinc-500 transition-colors"></div>
+                {item.poster ? (
+                  <img
+                    src={item.poster}
+                    alt={`${item.title} poster`}
+                    className="w-[40px] h-[50px] object-cover rounded-md flex-shrink-0 max-[400px]:w-[35px] max-[400px]:h-[45px] max-[275px]:w-[30px] max-[275px]:h-[40px]"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <div className="w-[40px] h-[50px] bg-zinc-700 rounded-md flex-shrink-0 flex items-center justify-center max-[400px]:w-[35px] max-[400px]:h-[45px] max-[275px]:w-[30px] max-[275px]:h-[40px]">
+                    <span className="text-xs text-zinc-500">📺</span>
+                  </div>
+                )}
                 <h3 className="text-[16px] font-medium line-clamp-1 group-hover:text-white transition-all duration-200 max-[600px]:text-[14px] max-[275px]:text-[12px]">
                   {item.title || "N/A"}
                 </h3>

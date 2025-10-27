@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
-function Qtip({ id }) {
+function Qtip({ id, ranking }) {
   const [qtip, setQtip] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,7 +19,10 @@ function Qtip({ id }) {
     const fetchQtipInfo = async () => {
       setLoading(true);
       try {
-        const data = await getQtip(id);
+        let data = await getQtip(id);
+        if (Array.isArray(data)) {
+          data = data[0];
+        }
         setQtip(data);
       } catch (err) {
         console.error("Error fetching anime info:", err);
@@ -33,52 +36,59 @@ function Qtip({ id }) {
 
   return (
     <div className="w-[320px] h-fit rounded-xl p-4 flex justify-center items-center bg-[#3e3c50] bg-opacity-70 backdrop-blur-[10px] z-50">
-      {loading || error || !qtip ? (
+      {loading ? (
+        <BouncingLoader />
+      ) : error ? (
+        <div className="text-white text-center">
+          <p>Failed to load anime info</p>
+          <p className="text-xs text-gray-400 mt-1">{error.message}</p>
+        </div>
+      ) : !qtip ? (
         <BouncingLoader />
       ) : (
         <div className="w-full flex flex-col justify-start gap-y-2">
           <h1 className="text-xl font-semibold text-white text-[13px] leading-6">
-            {qtip.title}
+            {ranking ? `${ranking}. ` : ""}{qtip?.title || qtip?.title_english || qtip?.name || 'Unknown Title'}
           </h1>
           <div className="w-full flex items-center relative mt-2">
             {qtip?.rating && (
               <div className="flex gap-x-2 items-center">
                 <FontAwesomeIcon icon={faStar} className="text-[#ffc107]" />
-                <p className="text-[#b7b7b8]">{qtip.rating}</p>
+            {qtip?.rating || qtip?.score || qtip?.animeInfo?.["MAL Score"]}
               </div>
             )}
             <div className="flex ml-4 gap-x-[1px] overflow-hidden rounded-md items-center h-fit">
-              {qtip?.quality && (
+              {qtip?.quality || qtip?.animeInfo?.tvInfo?.quality ? (
                 <div className="bg-[#ffbade] px-[7px] w-fit flex justify-center items-center py-[1px] text-black">
-                  <p className="text-[12px] font-semibold">{qtip.quality}</p>
+                  <p className="text-[12px] font-semibold">{qtip.quality || qtip.animeInfo?.tvInfo?.quality}</p>
                 </div>
-              )}
+              ) : null}
               <div className="flex gap-x-[1px] w-fit items-center py-[1px]">
-                {qtip?.subCount && (
+                {qtip?.subCount || qtip?.animeInfo?.tvInfo?.sub ? (
                   <div className="flex gap-x-1 justify-center items-center bg-[#B0E3AF] px-[7px] text-black">
                     <FontAwesomeIcon
                       icon={faClosedCaptioning}
                       className="text-[13px]"
                     />
-                    <p className="text-[13px] font-semibold">{qtip.subCount}</p>
+                    <p className="text-[13px] font-semibold">{qtip.subCount || qtip.animeInfo?.tvInfo?.sub}</p>
                   </div>
-                )}
-                {qtip?.dubCount && (
+                ) : null}
+                {qtip?.dubCount || qtip?.animeInfo?.tvInfo?.dub ? (
                   <div className="flex gap-x-1 justify-center items-center bg-[#B9E7FF] px-[7px] text-black">
                     <FontAwesomeIcon
                       icon={faMicrophone}
                       className="text-[13px]"
                     />
-                    <p className="text-[13px] font-semibold">{qtip.dubCount}</p>
+                    <p className="text-[13px] font-semibold">{qtip.dubCount || qtip.animeInfo?.tvInfo?.dub}</p>
                   </div>
-                )}
-                {qtip?.episodeCount && (
+                ) : null}
+                {qtip?.episodeCount || qtip?.episodes ? (
                   <div className="flex gap-x-1 justify-center items-center bg-[#a199a3] px-[7px] text-black">
                     <p className="text-[13px] font-semibold">
-                      {qtip.episodeCount}
+                      {qtip.episodeCount || qtip.episodes}
                     </p>
                   </div>
-                )}
+                ) : null}
               </div>
               {qtip?.type && (
                 <div className="absolute right-0 top-0 justify-center items-center rounded-sm bg-[#ffbade] px-[6px] text-black">
@@ -87,64 +97,64 @@ function Qtip({ id }) {
               )}
             </div>
           </div>
-          {qtip?.description && (
+          {qtip?.description || qtip?.synopsis || qtip?.animeInfo?.Overview ? (
             <p className="text-[#d7d7d8] text-[13px] leading-4 font-light line-clamp-3 mt-1">
-              {qtip.description}
+              {qtip.description || qtip.synopsis || qtip.animeInfo?.Overview}
             </p>
-          )}
+          ) : null}
           <div className="flex flex-col mt-1">
-            {qtip?.japaneseTitle && (
+            {qtip?.japaneseTitle || qtip?.title_japanese || qtip?.japanese_title ? (
               <div className="leading-4">
                 <span className="text-[#b7b7b8] text-[13px]">
                   Japanese:&nbsp;
                 </span>
-                <span className="text-[13px]">{qtip.japaneseTitle}</span>
+                <span className="text-[13px]">{qtip.japaneseTitle || qtip.title_japanese || qtip.japanese_title}</span>
               </div>
-            )}
-            {qtip?.Synonyms && (
+            ) : null}
+            {qtip?.Synonyms || qtip?.animeInfo?.Synonyms ? (
               <div className="leading-4">
                 <span className="text-[#b7b7b8] text-[13px]">
                   Synonyms:&nbsp;
                 </span>
-                <span className="text-[13px]">{qtip.Synonyms}</span>
+                <span className="text-[13px]">{qtip.Synonyms || qtip.animeInfo?.Synonyms}</span>
               </div>
-            )}
-            {qtip?.airedDate && (
+            ) : null}
+            {qtip?.airedDate || qtip?.aired?.from || qtip?.aired?.string || qtip?.animeInfo?.Aired ? (
               <div className="leading-4">
                 <span className="text-[#b7b7b8] text-[13px]">Aired:&nbsp;</span>
-                <span className="text-[13px]">{qtip.airedDate}</span>
+                <span className="text-[13px]">{qtip.airedDate || qtip.aired?.from || qtip.aired?.string || qtip.animeInfo?.Aired}</span>
               </div>
-            )}
-            {qtip?.status && (
+            ) : null}
+            {qtip?.status || qtip?.animeInfo?.Status ? (
               <div className="leading-4">
                 <span className="text-[#b7b7b8] text-[13px]">
                   Status:&nbsp;
                 </span>
-                <span className="text-[13px]">{qtip.status}</span>
+                <span className="text-[13px]">{qtip.status || qtip.animeInfo?.Status}</span>
               </div>
-            )}
-            {qtip?.genres && (
+            ) : null}
+            {qtip?.genres && qtip.genres.length > 0 || qtip?.animeInfo?.Genres && qtip.animeInfo.Genres.length > 0 ? (
               <div className="leading-4 flex flex-wrap text-wrap">
                 <span className="text-[#b7b7b8] text-[13px]">
                   Genres:&nbsp;
                 </span>
-                {qtip.genres.map((genre, index) => (
+                {(qtip.genres || qtip.animeInfo?.Genres || []).map((genre, index) => (
                   <Link
-                    to={`/genre/${genre}`}
+                    to={`/genre/${typeof genre === 'string' ? genre : genre.name || genre}`}
                     key={index}
                     className="text-[13px] hover:text-[#ffbade]"
                   >
                     <span>
-                      {genre}
-                      {index === qtip.genres.length - 1 ? "" : ","}&nbsp;
+                      {typeof genre === 'string' ? genre : genre.name || genre}
+                      {index === (qtip.genres || qtip.animeInfo?.Genres || []).length - 1 ? "" : ","}&nbsp;
                     </span>
                   </Link>
                 ))}
               </div>
-            )}
+            ) : null}
           </div>
           <Link
-            to={qtip.watchLink}
+            to={`/watch/${id}`}
             className="w-[80%] flex mt-4 justify-center items-center gap-x-2 bg-[#ffbade] py-[9px] rounded-3xl"
           >
             <FontAwesomeIcon icon={faPlay} className="text-[14px] text-black" />

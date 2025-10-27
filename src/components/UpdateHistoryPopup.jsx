@@ -5,6 +5,42 @@ import './UpdateHistoryPopup.css';
 
 const UPDATE_HISTORY = [
   {
+    version: "1.2.4",
+    date: "October 28, 2025",
+    changes: [
+      {
+        type: "improved",
+        icon: faWrench,
+        title: "Enhanced Schedule Component",
+        description: "Added MAL poster images, 12-hour time format with AM/PM, deep black backgrounds, and improved navigation arrows"
+      },
+      {
+        type: "improved",
+        icon: faWrench,
+        title: "Advanced Qtip Popups",
+        description: "Enhanced hover tooltips with ranking display, better field mapping for anime data, and improved error handling"
+      },
+      {
+        type: "fixed",
+        icon: faBug,
+        title: "Comment Section Fixes",
+        description: "Resolved comment functionality for both anime info pages and watch pages with proper episode/chapter handling"
+      },
+      {
+        type: "improved",
+        icon: faWrench,
+        title: "Schedule Time Display",
+        description: "Times now display in user's local timezone with elegant 12-hour format and perfect alignment"
+      },
+      {
+        type: "added",
+        icon: faPlus,
+        title: "MAL Data Integration",
+        description: "Schedule now fetches complete anime information including posters directly from MyAnimeList API"
+      }
+    ]
+  },
+  {
     version: "1.2.3",
     date: "October 20, 2025",
     changes: [

@@ -852,11 +852,12 @@ function AnimeInfo({ random = false }) {
       )}
 
       {/* Comments Section */}
-      {animeInfo.malId && (
+      {(animeInfo.malId || animeInfo.anilistId) && (
         <div className="container mx-auto py-12">
           <CommentSection
             malId={animeInfo.malId}
-            episodeNumber={1}
+            aniListId={animeInfo.anilistId}
+            episodeNumber={null}
             mediaType="anime"
           />
         </div>

@@ -501,7 +501,17 @@ export default function Watch() {
               </div>
             </div>
 
-          
+            {/* Comments Section */}
+            {(animeInfo?.malId || animeInfo?.anilistId) && activeEpisodeNum && (
+              <div className="bg-[#141414] rounded-lg p-2 sm:p-4">
+                <CommentSection
+                  malId={animeInfo.malId}
+                  aniListId={animeInfo.anilistId}
+                  episodeNumber={activeEpisodeNum}
+                  mediaType="anime"
+                />
+              </div>
+            )}
 
             {/* Desktop-only Seasons Section */}
             {seasons?.length > 0 && (
