@@ -12,7 +12,7 @@ export default defineConfig({
       strategies: 'generateSW',
       manifest: false,
       workbox: {
-        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3 MB
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [
           /^\/_/, // Exclude internal routes
@@ -52,6 +52,22 @@ export default defineConfig({
       }
     })
   ],
+  build: {
+    chunkSizeWarningLimit: 1000, // Increase warning limit to 1000 kB
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['@heroui/react', 'framer-motion', 'swiper', 'react-icons', '@fortawesome/react-fontawesome'],
+          'video-vendor': ['artplayer', 'artplayer-plugin-chapter', 'artplayer-plugin-hls-control', 'hls.js', 'vidstack', '@vidstack/react', 'plyr-react'],
+          'utils-vendor': ['axios', 'clsx', 'tailwind-merge', 'class-variance-authority'],
+          'animation-vendor': ['framer-motion'],
+          'firebase-vendor': ['firebase'],
+        }
+      }
+    }
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./"),
