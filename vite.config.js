@@ -59,11 +59,10 @@ export default defineConfig({
         manualChunks: {
           // Vendor chunks
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': ['@heroui/react', 'framer-motion', 'swiper', 'react-icons', '@fortawesome/react-fontawesome'],
+          'ui-vendor': ['@heroui/react', 'swiper', 'react-icons', '@fortawesome/react-fontawesome'],
           'video-vendor': ['artplayer', 'artplayer-plugin-chapter', 'artplayer-plugin-hls-control', 'hls.js', 'vidstack', '@vidstack/react', 'plyr-react'],
           'utils-vendor': ['axios', 'clsx', 'tailwind-merge', 'class-variance-authority'],
           'animation-vendor': ['framer-motion'],
-          'firebase-vendor': ['firebase'],
         }
       }
     }
